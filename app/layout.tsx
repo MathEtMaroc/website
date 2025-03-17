@@ -28,14 +28,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} antialiased`}
+      className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} font-sans antialiased`}
     >
-      <body className="flex min-h-screen w-full flex-col items-start font-sans">
+      <body>
         <div className="flex w-full flex-col bg-[url('/paper.jpg')] bg-repeat">
-          <main className="flex h-[2000px] w-full flex-col bg-white/60">
-            <Banner />
+          <main className="flex h-2000 w-full flex-col bg-white/60">
             <Navbar />
             {children}
+            <Banner />
           </main>
         </div>
       </body>

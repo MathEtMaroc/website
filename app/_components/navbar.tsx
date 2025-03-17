@@ -10,9 +10,11 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
+import useScroll from '~/app/utils/useScroll';
 import BracketsEllipsesIcon from '../../public/icons/brackets-ellipses.svg';
 import BuildingIcon from '../../public/icons/building.svg';
 import CalendarIcon from '../../public/icons/calendar.svg';
@@ -22,6 +24,49 @@ import PresentationChartIcon from '../../public/icons/presentation-chart.svg';
 import StarsIcon from '../../public/icons/stars.svg';
 import SunriseIcon from '../../public/icons/sunrise.svg';
 import TrophyIcon from '../../public/icons/trophy.svg';
+import { cn } from '../utils/cn';
+
+const dropdownVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+    filter: 'blur(2px)',
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+  },
+};
+
+const mobileMenuVariants = {
+  hidden: (isSm: boolean) =>
+    isSm ? { opacity: 0, scale: 0.95, y: 20 } : { x: '100%' },
+  visible: (isSm: boolean) =>
+    isSm ? { opacity: 1, scale: 1, y: 0 } : { x: 0 },
+};
+
+const accordionContentVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+    filter: 'blur(2px)',
+    y: -10,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+    y: 0,
+  },
+};
+
+const dropdownButtonStyles =
+  'group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none transition-colors hover:text-gray-900 focus:text-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-md px-2 py-1';
+const mobileNavLinkStyles =
+  'flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900 transition-colors hover:bg-gray-50 hover:text-primary-600 active:bg-gray-100 active:text-primary-700';
+const mobileAccordionTriggerStyles =
+  'group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900 transition-colors hover:bg-gray-50 hover:text-primary-600 active:bg-gray-100 active:text-primary-700';
 
 const actions = [
   {
@@ -85,39 +130,186 @@ const divisions = [
   },
 ];
 
-export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState<string | null>(null);
-  const [initialRender, setInitialRender] = useState(true);
-  const [activeAccordion, setActiveAccordion] = useState<string | null>(
-    'actions'
+function ActionItem({
+  item,
+  className,
+  tabIndex = 0,
+}: {
+  item: (typeof actions)[0];
+  className?: string;
+  tabIndex?: number;
+}) {
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        'group flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50 active:bg-gray-100',
+        className
+      )}
+      tabIndex={tabIndex}
+    >
+      <div className="relative h-7 w-7 overflow-hidden">
+        <item.icon
+          aria-hidden="true"
+          className="absolute top-[2px] left-[2px] size-6 text-primary-800 transition-colors group-hover:text-primary-600"
+        />
+      </div>
+      <div className="flex flex-1 flex-col gap-1">
+        <span className="block font-semibold text-gray-900 text-lg transition-colors group-hover:text-primary-600">
+          {item.name}
+        </span>
+        <p className="text-base text-gray-600">{item.description}</p>
+      </div>
+    </Link>
   );
+}
+
+function DivisionListItem({
+  item,
+  className,
+  tabIndex = 0,
+}: {
+  item: (typeof divisions)[0];
+  className?: string;
+  tabIndex?: number;
+}) {
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        'group flex gap-x-3 rounded-lg p-4 transition-colors hover:bg-gray-50 active:bg-gray-100',
+        className
+      )}
+      tabIndex={tabIndex}
+    >
+      <div className="flex size-12 flex-none items-center justify-center rounded-full bg-primary-50 transition-colors group-hover:bg-primary-100">
+        <item.icon
+          aria-hidden="true"
+          className="size-6 text-primary-800 transition-colors group-hover:text-primary-600"
+        />
+      </div>
+      <div className="flex-auto">
+        <span className="block font-semibold text-gray-900 text-lg transition-colors group-hover:text-primary-600">
+          {item.name}
+        </span>
+        <p className="mt-1 text-base text-gray-600">{item.description}</p>
+      </div>
+    </Link>
+  );
+}
+
+export function Navbar() {
+  const [mobileState, setMobileState] = useState({
+    isOpen: false,
+    initialRender: true,
+    activeAccordion: '',
+  });
+  const [activeDesktopItem, setActiveDesktopItem] = useState<string | null>(
+    null
+  );
+  const [mouseLeaveTimeoutId, setMouseLeaveTimeoutId] =
+    useState<NodeJS.Timeout | null>(null);
+
+  const programsButtonRef = React.useRef<HTMLButtonElement>(null);
+  const divisionsButtonRef = React.useRef<HTMLButtonElement>(null);
+  const programsDropdownRef = React.useRef<HTMLDivElement>(null);
+  const divisionsDropdownRef = React.useRef<HTMLDivElement>(null);
+  const lastFocusedElementRef = React.useRef<HTMLElement | null>(null);
 
   const isSm = useMediaQuery({ query: '(max-width: 640px)' });
 
-  // Refs for menu items to get their positions
-  const actionsRef = useRef<HTMLDivElement>(null);
-  const divisionsRef = useRef<HTMLDivElement>(null);
-  const aboutRef = useRef<HTMLDivElement>(null);
+  const scrolled = useScroll(100);
 
-  // Reset initialRender when mobile menu closes
-  useEffect(() => {
-    if (!mobileMenuOpen) {
-      setInitialRender(true);
-    }
-  }, [mobileMenuOpen]);
+  const handleMobileMenuChange = (isOpen: boolean) => {
+    setMobileState((prev) => ({
+      ...prev,
+      isOpen,
+      initialRender: isOpen ? prev.initialRender : true,
+    }));
+  };
 
-  // Handle accordion changes
   const handleAccordionChange = (value: string) => {
-    if (value && value !== activeAccordion) {
-      setActiveAccordion(value);
-      setInitialRender(false);
+    if (value && value !== mobileState.activeAccordion) {
+      setMobileState((prev) => ({
+        ...prev,
+        activeAccordion: value,
+        initialRender: false,
+      }));
     }
   };
 
+  const handleMouseEnter = (item: string) => {
+    if (mouseLeaveTimeoutId) {
+      clearTimeout(mouseLeaveTimeoutId);
+      setMouseLeaveTimeoutId(null);
+    }
+    setActiveDesktopItem(item);
+  };
+
+  const handleMouseLeave = () => {
+    const timeoutId = setTimeout(() => {
+      setActiveDesktopItem(null);
+    }, 150);
+
+    setMouseLeaveTimeoutId(timeoutId);
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent,
+    type: 'actions' | 'divisions'
+  ) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setActiveDesktopItem(activeDesktopItem === type ? null : type);
+
+      lastFocusedElementRef.current = e.currentTarget as HTMLElement;
+    } else if (e.key === 'Escape' && activeDesktopItem === type) {
+      e.preventDefault();
+      setActiveDesktopItem(null);
+    }
+  };
+
+  React.useEffect(() => {
+    const handleFocusOut = (e: FocusEvent) => {
+      if (activeDesktopItem) {
+        const dropdownRef =
+          activeDesktopItem === 'actions'
+            ? programsDropdownRef.current
+            : divisionsDropdownRef.current;
+
+        const relatedTarget = e.relatedTarget as Node;
+
+        if (
+          dropdownRef &&
+          !dropdownRef.contains(relatedTarget) &&
+          relatedTarget !== programsButtonRef.current &&
+          relatedTarget !== divisionsButtonRef.current
+        ) {
+          setActiveDesktopItem(null);
+        }
+      }
+    };
+
+    document.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      document.removeEventListener('focusout', handleFocusOut);
+    };
+  }, [activeDesktopItem]);
+
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full flex-col items-center justify-center bg-transparent">
-      <nav className="flex w-full max-w-7xl items-center justify-between p-6 lg:px-8">
+    <header
+      className={cn(
+        'sticky top-0 z-40 flex h-20 w-full flex-col items-center justify-center',
+        scrolled
+          ? 'border-gray-200/50 bg-white/80 shadow-2xl shadow-black/5 backdrop-blur-sm'
+          : 'bg-transparent'
+      )}
+    >
+      <nav
+        className="flex w-full max-w-7xl items-center justify-between p-6 lg:px-8"
+        aria-label="Main navigation"
+      >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Math Maroc</span>
@@ -135,70 +327,91 @@ export function Navbar() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            onClick={() => handleMobileMenuChange(true)}
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
+            aria-label="Open main menu"
           >
-            <span className="sr-only">Open main menu</span>
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
           <nav
-            ref={actionsRef}
             className="relative"
-            onMouseEnter={() => setActiveItem('actions')}
-            onMouseLeave={() => setActiveItem(null)}
+            onMouseEnter={() => handleMouseEnter('actions')}
+            onMouseLeave={handleMouseLeave}
           >
             <button
+              ref={programsButtonRef}
               type="button"
-              className="group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none"
+              className={dropdownButtonStyles}
+              aria-expanded={activeDesktopItem === 'actions'}
+              aria-controls="programs-dropdown"
+              id="programs-menu-button"
+              onClick={() =>
+                setActiveDesktopItem(
+                  activeDesktopItem === 'actions' ? null : 'actions'
+                )
+              }
+              onKeyDown={(e) => handleKeyDown(e, 'actions')}
             >
               Our Programs
               <ChevronDownIcon
                 aria-hidden="true"
-                className="size-5 flex-none text-gray-600 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                className={cn(
+                  'size-5 flex-none text-gray-600 transition-transform duration-200 group-hover:text-gray-900',
+                  activeDesktopItem === 'actions' && 'rotate-180'
+                )}
               />
             </button>
 
             <AnimatePresence>
-              {activeItem === 'actions' && (
+              {activeDesktopItem === 'actions' && (
                 <motion.div
-                  initial={{
-                    opacity: 0,
-                    scale: 0.95,
-                    filter: 'blur(2px)',
-                  }}
-                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                  exit={{ opacity: 0, scale: 0.95, filter: 'blur(2px)' }}
+                  ref={programsDropdownRef}
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
                   transition={{ duration: 0.25 }}
-                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden rounded-xl bg-white shadow-[0px_2px_2px_-1px_rgba(10,13,18,0.04),0px_4px_6px_-2px_rgba(10,13,18,0.03),0px_12px_16px_-4px_rgba(10,13,18,0.08)] outline outline-gray-200 outline-offset-[-1px]"
+                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden rounded-xl bg-white shadow-lg"
+                  id="programs-dropdown"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="programs-menu-button"
+                  onMouseEnter={() => {
+                    if (mouseLeaveTimeoutId) {
+                      clearTimeout(mouseLeaveTimeoutId);
+                      setMouseLeaveTimeoutId(null);
+                    }
+                  }}
+                  onMouseLeave={handleMouseLeave}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      e.preventDefault();
+                      setActiveDesktopItem(null);
+                      programsButtonRef.current?.focus();
+                    } else if (
+                      e.key === 'Tab' &&
+                      !e.shiftKey &&
+                      e.target === e.currentTarget.querySelector('a:last-child')
+                    ) {
+                      setActiveDesktopItem(null);
+                    } else if (
+                      e.key === 'Tab' &&
+                      e.shiftKey &&
+                      e.target ===
+                        e.currentTarget.querySelector('a:first-child')
+                    ) {
+                      e.preventDefault();
+                      setActiveDesktopItem(null);
+                      programsButtonRef.current?.focus();
+                    }
+                  }}
                 >
                   <div className="flex flex-col gap-0.5 p-3">
                     {actions.map((item) => (
-                      <div
-                        key={item.name}
-                        className="group relative flex items-start gap-3 rounded-lg p-3 hover:bg-gray-50"
-                      >
-                        <div className="relative h-7 w-7 overflow-hidden">
-                          <item.icon
-                            aria-hidden="true"
-                            className="absolute top-[2px] left-[2px] size-6 text-primary-800"
-                          />
-                        </div>
-                        <div className="flex flex-1 flex-col gap-1">
-                          <Link
-                            href={item.href}
-                            className="block font-semibold text-gray-900 text-lg"
-                          >
-                            {item.name}
-                            <span className="absolute inset-0" />
-                          </Link>
-                          <p className="text-base text-gray-600">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
+                      <ActionItem key={item.name} item={item} />
                     ))}
                   </div>
                 </motion.div>
@@ -207,60 +420,81 @@ export function Navbar() {
           </nav>
 
           <nav
-            ref={divisionsRef}
             className="relative"
-            onMouseEnter={() => setActiveItem('divisions')}
-            onMouseLeave={() => setActiveItem(null)}
+            onMouseEnter={() => handleMouseEnter('divisions')}
+            onMouseLeave={handleMouseLeave}
           >
             <button
+              ref={divisionsButtonRef}
               type="button"
-              className="group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none"
+              className={dropdownButtonStyles}
+              aria-expanded={activeDesktopItem === 'divisions'}
+              aria-controls="divisions-dropdown"
+              id="divisions-menu-button"
+              onClick={() =>
+                setActiveDesktopItem(
+                  activeDesktopItem === 'divisions' ? null : 'divisions'
+                )
+              }
+              onKeyDown={(e) => handleKeyDown(e, 'divisions')}
             >
               Our Divisions
               <ChevronDownIcon
                 aria-hidden="true"
-                className="size-5 flex-none text-gray-600 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                className={cn(
+                  'size-5 flex-none text-gray-600 transition-transform duration-200 group-hover:text-gray-900',
+                  activeDesktopItem === 'divisions' && 'rotate-180'
+                )}
               />
             </button>
 
             <AnimatePresence>
-              {activeItem === 'divisions' && (
+              {activeDesktopItem === 'divisions' && (
                 <motion.div
-                  initial={{
-                    opacity: 0,
-                    scale: 0.95,
-                    filter: 'blur(2px)',
-                  }}
-                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                  exit={{ opacity: 0, scale: 0.95, filter: 'blur(2px)' }}
+                  ref={divisionsDropdownRef}
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
                   transition={{ duration: 0.25 }}
                   className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5"
+                  id="divisions-dropdown"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="divisions-menu-button"
+                  onMouseEnter={() => {
+                    if (mouseLeaveTimeoutId) {
+                      clearTimeout(mouseLeaveTimeoutId);
+                      setMouseLeaveTimeoutId(null);
+                    }
+                  }}
+                  onMouseLeave={handleMouseLeave}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      e.preventDefault();
+                      setActiveDesktopItem(null);
+                      divisionsButtonRef.current?.focus();
+                    } else if (
+                      e.key === 'Tab' &&
+                      !e.shiftKey &&
+                      e.target === e.currentTarget.querySelector('a:last-child')
+                    ) {
+                      setActiveDesktopItem(null);
+                    } else if (
+                      e.key === 'Tab' &&
+                      e.shiftKey &&
+                      e.target ===
+                        e.currentTarget.querySelector('a:first-child')
+                    ) {
+                      e.preventDefault();
+                      setActiveDesktopItem(null);
+                      divisionsButtonRef.current?.focus();
+                    }
+                  }}
                 >
                   <div className="p-4">
                     {divisions.map((item) => (
-                      <div
-                        key={item.name}
-                        className="group relative flex gap-x-3 rounded-lg p-4 hover:bg-gray-50"
-                      >
-                        <div className="flex size-12 flex-none items-center justify-center rounded-full bg-primary-50">
-                          <item.icon
-                            aria-hidden="true"
-                            className="size-6 text-primary-800"
-                          />
-                        </div>
-                        <div className="flex-auto">
-                          <Link
-                            href={item.href}
-                            className="block font-semibold text-gray-900 text-lg"
-                          >
-                            {item.name}
-                            <span className="absolute inset-0" />
-                          </Link>
-                          <p className="mt-1 text-base text-gray-600">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
+                      <DivisionListItem key={item.name} item={item} />
                     ))}
                   </div>
                 </motion.div>
@@ -268,20 +502,20 @@ export function Navbar() {
             </AnimatePresence>
           </nav>
 
-          <nav ref={aboutRef} className="relative">
-            <Link
-              href="/about"
-              className="font-semibold text-base text-gray-600"
-            >
+          <div className="relative">
+            <Link href="/about" className={dropdownButtonStyles}>
               Who We Are
             </Link>
-          </nav>
+          </div>
         </div>
 
         {/* Mobile menu */}
         <AnimatePresence>
-          {mobileMenuOpen && (
-            <Dialog.Root open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          {mobileState.isOpen && (
+            <Dialog.Root
+              open={mobileState.isOpen}
+              onOpenChange={handleMobileMenuChange}
+            >
               <Dialog.Portal forceMount>
                 <Dialog.Overlay asChild>
                   <motion.div
@@ -294,23 +528,22 @@ export function Navbar() {
                 </Dialog.Overlay>
                 <Dialog.Content asChild>
                   <motion.div
-                    initial={
-                      isSm ? { opacity: 0, scale: 0.95, y: 20 } : { x: '100%' }
-                    }
-                    animate={isSm ? { opacity: 1, scale: 1, y: 0 } : { x: 0 }}
-                    exit={
-                      isSm ? { opacity: 0, scale: 0.95, y: 20 } : { x: '100%' }
-                    }
+                    custom={isSm}
+                    variants={mobileMenuVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
                     transition={
                       isSm
                         ? { type: 'spring', bounce: 0.2, duration: 0.5 }
                         : { type: 'spring', bounce: 0.1, duration: 0.4 }
                     }
-                    className={`fixed z-50 overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10 ${
+                    className={cn(
+                      'fixed z-50 overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
                       isSm
                         ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh] rounded-2xl shadow-xl'
                         : 'inset-y-0 right-0 w-full sm:max-w-sm'
-                    }`}
+                    )}
                   >
                     <Dialog.Title className="sr-only">
                       Navigation Menu
@@ -327,8 +560,10 @@ export function Navbar() {
                           className="h-12 w-auto"
                         />
                       </Link>
-                      <Dialog.Close className="rounded-md p-2.5 text-gray-700">
-                        <span className="sr-only">Close menu</span>
+                      <Dialog.Close
+                        className="rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
+                        aria-label="Close menu"
+                      >
                         <XMarkIcon aria-hidden="true" className="size-6" />
                       </Dialog.Close>
                     </div>
@@ -338,53 +573,44 @@ export function Navbar() {
                           <Accordion.Root
                             type="single"
                             collapsible
-                            defaultValue="actions"
                             onValueChange={handleAccordionChange}
                           >
                             <div className="space-y-2">
                               <Link
                                 href="/"
-                                className="mb-2 flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900"
+                                className={cn('mb-2', mobileNavLinkStyles)}
                               >
                                 Home
                               </Link>
 
                               <Accordion.Item value="actions" className="mb-2">
-                                <Accordion.Trigger className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900">
-                                  Our Programs
-                                  <ChevronDownIcon
-                                    aria-hidden="true"
-                                    className="size-5 flex-none text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-180"
-                                  />
-                                </Accordion.Trigger>
+                                <Accordion.Header>
+                                  <Accordion.Trigger
+                                    className={mobileAccordionTriggerStyles}
+                                  >
+                                    Our Programs
+                                    <ChevronDownIcon
+                                      aria-hidden="true"
+                                      className="size-5 flex-none text-gray-400 transition-transform duration-200 group-hover:text-primary-600 group-data-[state=open]:rotate-180"
+                                    />
+                                  </Accordion.Trigger>
+                                </Accordion.Header>
                                 <Accordion.Content asChild>
                                   <motion.div
                                     initial={
-                                      initialRender ||
-                                      activeAccordion === 'actions'
+                                      mobileState.initialRender ||
+                                      mobileState.activeAccordion === 'actions'
                                         ? false
-                                        : {
-                                            opacity: 0,
-                                            scale: 0.95,
-                                            filter: 'blur(4px)',
-                                            y: -10,
-                                          }
+                                        : accordionContentVariants.hidden
                                     }
-                                    animate={{
-                                      opacity: 1,
-                                      scale: 1,
-                                      filter: 'blur(0px)',
-                                      y: 0,
-                                    }}
-                                    exit={{
-                                      opacity: 0,
-                                      scale: 0.95,
-                                      filter: 'blur(4px)',
-                                      y: -10,
-                                    }}
+                                    animate={accordionContentVariants.visible}
+                                    exit={accordionContentVariants.hidden}
                                     onAnimationComplete={() => {
-                                      if (initialRender) {
-                                        setInitialRender(false);
+                                      if (mobileState.initialRender) {
+                                        setMobileState((prev) => ({
+                                          ...prev,
+                                          initialRender: false,
+                                        }));
                                       }
                                     }}
                                     transition={{
@@ -398,28 +624,7 @@ export function Navbar() {
                                     className="mt-2 space-y-1 overflow-hidden p-2"
                                   >
                                     {actions.map((item) => (
-                                      <div
-                                        key={item.name}
-                                        className="flex items-start gap-3 rounded-lg p-3 hover:bg-gray-50"
-                                      >
-                                        <div className="relative h-7 w-7 overflow-hidden">
-                                          <item.icon
-                                            aria-hidden="true"
-                                            className="absolute top-[2px] left-[2px] size-6 text-primary-800"
-                                          />
-                                        </div>
-                                        <div className="flex flex-1 flex-col gap-1">
-                                          <Link
-                                            href={item.href}
-                                            className="block font-semibold text-gray-900 text-lg"
-                                          >
-                                            {item.name}
-                                          </Link>
-                                          <p className="text-base text-gray-600">
-                                            {item.description}
-                                          </p>
-                                        </div>
-                                      </div>
+                                      <ActionItem key={item.name} item={item} />
                                     ))}
                                   </motion.div>
                                 </Accordion.Content>
@@ -429,41 +634,34 @@ export function Navbar() {
                                 value="divisions"
                                 className="mb-2"
                               >
-                                <Accordion.Trigger className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900">
-                                  Our Divisions
-                                  <ChevronDownIcon
-                                    aria-hidden="true"
-                                    className="size-5 flex-none text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-180"
-                                  />
-                                </Accordion.Trigger>
+                                <Accordion.Header>
+                                  <Accordion.Trigger
+                                    className={mobileAccordionTriggerStyles}
+                                  >
+                                    Our Divisions
+                                    <ChevronDownIcon
+                                      aria-hidden="true"
+                                      className="size-5 flex-none text-gray-400 transition-transform duration-200 group-hover:text-primary-600 group-data-[state=open]:rotate-180"
+                                    />
+                                  </Accordion.Trigger>
+                                </Accordion.Header>
                                 <Accordion.Content asChild>
                                   <motion.div
                                     initial={
-                                      initialRender ||
-                                      activeAccordion === 'divisions'
+                                      mobileState.initialRender ||
+                                      mobileState.activeAccordion ===
+                                        'divisions'
                                         ? false
-                                        : {
-                                            opacity: 0,
-                                            scale: 0.95,
-                                            filter: 'blur(4px)',
-                                            y: -10,
-                                          }
+                                        : accordionContentVariants.hidden
                                     }
-                                    animate={{
-                                      opacity: 1,
-                                      scale: 1,
-                                      filter: 'blur(0px)',
-                                      y: 0,
-                                    }}
-                                    exit={{
-                                      opacity: 0,
-                                      scale: 0.95,
-                                      filter: 'blur(4px)',
-                                      y: -10,
-                                    }}
+                                    animate={accordionContentVariants.visible}
+                                    exit={accordionContentVariants.hidden}
                                     onAnimationComplete={() => {
-                                      if (initialRender) {
-                                        setInitialRender(false);
+                                      if (mobileState.initialRender) {
+                                        setMobileState((prev) => ({
+                                          ...prev,
+                                          initialRender: false,
+                                        }));
                                       }
                                     }}
                                     transition={{
@@ -477,28 +675,7 @@ export function Navbar() {
                                     className="mt-2 space-y-1 overflow-hidden p-2"
                                   >
                                     {divisions.map((item) => (
-                                      <div
-                                        key={item.name}
-                                        className="flex items-start gap-3 rounded-lg p-3 hover:bg-gray-50"
-                                      >
-                                        <div className="relative h-7 w-7 overflow-hidden">
-                                          <item.icon
-                                            aria-hidden="true"
-                                            className="absolute top-[2px] left-[2px] size-6 text-primary-800"
-                                          />
-                                        </div>
-                                        <div className="flex flex-1 flex-col gap-1">
-                                          <Link
-                                            href={item.href}
-                                            className="block font-semibold text-gray-900 text-lg"
-                                          >
-                                            {item.name}
-                                          </Link>
-                                          <p className="text-base text-gray-600">
-                                            {item.description}
-                                          </p>
-                                        </div>
-                                      </div>
+                                      <ActionItem key={item.name} item={item} />
                                     ))}
                                   </motion.div>
                                 </Accordion.Content>
@@ -507,7 +684,7 @@ export function Navbar() {
                               <div className="mt-2">
                                 <Link
                                   href="/about"
-                                  className="flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900"
+                                  className={mobileNavLinkStyles}
                                 >
                                   Who We Are
                                 </Link>
