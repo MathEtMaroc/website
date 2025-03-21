@@ -72,32 +72,32 @@ const actions = [
   {
     name: 'Math & Maroc Competition',
     description: 'Mathematics competition for university students',
-    href: '/competition',
+    href: '#',
     icon: TrophyIcon,
   },
   {
     name: 'MTYM',
     description: 'Mathematics research competition for high school students',
-    href: '/mtym',
+    href: '#',
     icon: StarsIcon,
   },
   {
     name: 'Think AI Hackathon',
     description: 'Artificial intelligence competition for university students',
-    href: '/hackathon',
+    href: '#',
     icon: BracketsEllipsesIcon,
   },
   {
     name: 'Summer Camp',
     description:
       'A week-long camp for middle school students focused on mathematics and science',
-    href: '/summer-camp',
+    href: '#',
     icon: SunriseIcon,
   },
   {
     name: 'Moroccan day of mathematics',
     description: 'The largest mathematics event in Morocco',
-    href: '/moroccan-day',
+    href: '#',
     icon: CalendarIcon,
   },
 ];
@@ -106,26 +106,26 @@ const divisions = [
   {
     name: 'Olympiads',
     description: "Maths' Olympiads preparation",
-    href: '/olympiads',
+    href: '#',
     icon: InfinityIcon,
   },
   {
     name: 'Orientation',
     description:
       'Making content to give more insight to young Moroccans about their career prospects',
-    href: '/orientation',
+    href: '#',
     icon: FlagIcon,
   },
   {
     name: 'Conferences',
     description: 'Mathematical conferences in person and online',
-    href: '/conferences',
+    href: '#',
     icon: PresentationChartIcon,
   },
   {
     name: 'Prepa',
     description: 'Initiatives to help CPGE students all over Morocco',
-    href: '/prepa',
+    href: '#',
     icon: BuildingIcon,
   },
 ];
@@ -503,7 +503,7 @@ export function Navbar() {
           </nav>
 
           <div className="relative">
-            <Link href="/about" className={dropdownButtonStyles}>
+            <Link href="#" className={dropdownButtonStyles}>
               Who We Are
             </Link>
           </div>
@@ -682,10 +682,7 @@ export function Navbar() {
                               </Accordion.Item>
 
                               <div className="mt-2">
-                                <Link
-                                  href="/about"
-                                  className={mobileNavLinkStyles}
-                                >
+                                <Link href="#" className={mobileNavLinkStyles}>
                                   Who We Are
                                 </Link>
                               </div>
