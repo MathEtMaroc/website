@@ -7,14 +7,16 @@ import {
 } from '@heroicons/react/24/outline';
 import * as Accordion from '@radix-ui/react-accordion';
 import * as Dialog from '@radix-ui/react-dialog';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
+import { useMotionTemplate, useTransform } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
+import useBoundedScroll from '~/app/utils/use-bounded-scroll';
 
-import useScroll from '~/app/utils/useScroll';
+import { cn } from '~/app/utils/cn';
 import BracketsEllipsesIcon from '../../public/icons/brackets-ellipses.svg';
 import BuildingIcon from '../../public/icons/building.svg';
 import CalendarIcon from '../../public/icons/calendar.svg';
@@ -24,13 +26,12 @@ import PresentationChartIcon from '../../public/icons/presentation-chart.svg';
 import StarsIcon from '../../public/icons/stars.svg';
 import SunriseIcon from '../../public/icons/sunrise.svg';
 import TrophyIcon from '../../public/icons/trophy.svg';
-import { cn } from '../utils/cn';
 
 const dropdownVariants = {
   hidden: {
     opacity: 0,
     scale: 0.95,
-    filter: 'blur(2px)',
+    filter: 'blur(4px)',
   },
   visible: {
     opacity: 1,
@@ -50,7 +51,7 @@ const accordionContentVariants = {
   hidden: {
     opacity: 0,
     scale: 0.95,
-    filter: 'blur(2px)',
+    filter: 'blur(4px)',
     y: -10,
   },
   visible: {
@@ -218,7 +219,8 @@ export function Navbar() {
 
   const isSm = useMediaQuery({ query: '(max-width: 640px)' });
 
-  const scrolled = useScroll(100);
+  const { immediateScrollProgress, scrollYBoundedProgressDelayed } =
+    useBoundedScroll(100);
 
   const handleMobileMenuChange = (isOpen: boolean) => {
     setMobileState((prev) => ({
@@ -298,29 +300,77 @@ export function Navbar() {
   }, [activeDesktopItem]);
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-40 flex h-20 w-full flex-col items-center justify-center',
-        scrolled
-          ? 'border-gray-200/50 bg-white/80 shadow-2xl shadow-black/5 backdrop-blur-sm'
-          : 'bg-transparent'
-      )}
+    <motion.header
+      style={{
+        height: useTransform(
+          scrollYBoundedProgressDelayed,
+          [0, 1],
+          ['5rem', '3.5rem']
+        ),
+        backgroundColor: useMotionTemplate`rgba(255, 255, 255, ${useTransform(
+          immediateScrollProgress,
+          [0, 1],
+          [0, 0.6]
+        )})`,
+        backdropFilter: useMotionTemplate`blur(${useTransform(
+          immediateScrollProgress,
+          [0, 1],
+          [0, 6]
+        )}px)`,
+        boxShadow: useMotionTemplate`0 4px 6px -1px rgba(0, 0, 0, ${useTransform(
+          immediateScrollProgress,
+          [0, 1],
+          [0, 0.05]
+        )}), 0 2px 4px -1px rgba(0, 0, 0, ${useTransform(
+          immediateScrollProgress,
+          [0, 1],
+          [0, 0.05]
+        )})`,
+        borderBottom: useMotionTemplate`1px solid rgba(229, 231, 235, ${useTransform(
+          immediateScrollProgress,
+          [0, 1],
+          [0, 0.5]
+        )})`,
+      }}
+      className="sticky top-0 z-40 flex w-full flex-col items-center justify-center transition-all duration-150"
     >
-      <nav
-        className="flex w-full max-w-7xl items-center justify-between p-6 lg:px-8"
+      <motion.nav
+        style={{
+          paddingTop: useTransform(
+            scrollYBoundedProgressDelayed,
+            [0, 1],
+            ['1.5rem', '0.5rem']
+          ),
+          paddingBottom: useTransform(
+            scrollYBoundedProgressDelayed,
+            [0, 1],
+            ['1.5rem', '0.5rem']
+          ),
+        }}
+        className="flex w-full max-w-7xl items-center justify-between px-6 lg:px-8"
         aria-label="Main navigation"
       >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Math Maroc</span>
-            <Image
-              alt="Math Maroc Logo"
-              src="/logo.webp"
-              width={136}
-              height={48}
-              priority
-              className="h-12 w-auto"
-            />
+            <motion.div
+              style={{
+                scale: useTransform(
+                  scrollYBoundedProgressDelayed,
+                  [0, 1],
+                  [1, 0.85]
+                ),
+              }}
+            >
+              <Image
+                alt="Math Maroc Logo"
+                src="/logo.webp"
+                width={136}
+                height={48}
+                priority
+                className="h-12 w-auto"
+              />
+            </motion.div>
           </Link>
         </div>
 
@@ -697,7 +747,7 @@ export function Navbar() {
             </Dialog.Root>
           )}
         </AnimatePresence>
-      </nav>
-    </header>
+      </motion.nav>
+    </motion.header>
   );
 }

@@ -7,7 +7,7 @@ export default function Page() {
             <h1 className="h-fit w-full max-w-176 text-pretty font-semibold text-4xl text-primary-950 tracking-tighter md:text-5xl">
               Unlocking the scientific potential of Moroccan youth
             </h1>
-            <p className="h-fit text-gray-600 text-lg md:text-right md:text-xl">
+            <p className="h-fit text-pretty text-gray-600 text-lg md:text-right md:text-xl">
               1st Moroccan non-profit math related educational association
             </p>
           </div>
