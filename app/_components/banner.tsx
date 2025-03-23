@@ -13,7 +13,7 @@ export function Banner() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 1000) {
+      if (scrollPosition > 600) {
         setHasScrolledEnough(true);
       } else {
         setHasScrolledEnough(false);
