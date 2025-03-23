@@ -66,7 +66,7 @@ export default function BounceCardsSection() {
         title: 'Morocco Delegation at IMO',
         subtitle: 'Oslo, 2022',
       },
-      baseSize: { width: 420, height: 240 },
+      baseSize: { width: 380, height: 220 },
       baseRotation: 12,
       zIndex: 1,
     },
@@ -149,16 +149,16 @@ export default function BounceCardsSection() {
 
     if (isXL) {
       // Extra large screens (≥1280px) - more compact layout with smaller images
-      xPositions = [-550, -370, -90, 230, 370, 550]; // Reduced spacing between cards
-      yPositions = [-10, 30, -50, 50, 75, 15]; // Slightly adjusted Y positions
-      containerHeight = 550; // Slightly reduced container height
-      scale = 0.95; // Reduced scale from 1.08 to make images smaller
-    } else if (isLG) {
-      // Large screens (1024px-1279px)
-      xPositions = [-520, -280, -50, 180, 350, 500];
-      yPositions = [-10, 20, -50, 50, 75, 15];
-      containerHeight = 540;
+      xPositions = [-525, -370, -90, 230, 370, 525];
+      yPositions = [-10, 30, -50, 50, 75, 15];
+      containerHeight = 550;
       scale = 1;
+    } else if (isLG) {
+      // Large screens (1024px-1279px) - all images slightly smaller
+      xPositions = [-460, -280, -50, 180, 350, 480];
+      yPositions = [-10, 20, -50, 50, 75, 15];
+      containerHeight = 520;
+      scale = 0.92;
     } else if (isMD) {
       // Medium screens (768px-1023px)
       xPositions = [-340, -190, -30, 140, 260, 350];
@@ -539,57 +539,65 @@ function BounceCards({
 
         // Screen-size responsive positioning for different cards
         if (hoveredIndex === 0) {
-          // Card 1: Move right on hover (reduced movement)
-          const cardWidth = card.offsetWidth;
+          // Card 1: Move right on hover - based on containerHeight
           let moveAmount: number;
-          if (cardWidth > 400) {
-            moveAmount = 60; // Reduced from 180
-          } else if (cardWidth < 250) {
-            moveAmount = 40; // Reduced from 120
+          if (containerHeight >= 520) {
+            moveAmount = 100; // For XL and LG screens
+          } else if (containerHeight >= 470) {
+            moveAmount = 70; // For MD screens
           } else {
-            moveAmount = 50; // Reduced from 100
+            moveAmount = 30; // For SM and smaller screens
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 1) {
-          // Card 6: Move left on hover (reduced movement)
-          const cardWidth = card.offsetWidth;
+          // Card 6: Move left on hover - based on containerHeight
           let moveAmount: number;
-          if (cardWidth > 400) {
-            moveAmount = -60; // Reduced from -200
-          } else if (cardWidth < 250) {
-            moveAmount = -50; // Reduced from -180
+          if (containerHeight >= 520) {
+            moveAmount = -60; // For XL and LG screens
+          } else if (containerHeight >= 470) {
+            moveAmount = -45; // For MD screens
+          } else if (containerHeight >= 400) {
+            moveAmount = -30; // For SM screens
           } else {
-            moveAmount = -55; // Reduced from -160
+            moveAmount = -20; // For XS screens
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 2) {
-          // Card 5: Move left on hover (reduced movement)
-          const cardWidth = card.offsetWidth;
+          // Card 5: Move left on hover - based on containerHeight
           let moveAmount: number;
-          if (cardWidth > 400) {
-            moveAmount = -50; // Reduced from -120
-          } else if (cardWidth < 250) {
-            moveAmount = -40; // Reduced from -100
+          if (containerHeight >= 520) {
+            moveAmount = -50; // For XL and LG screens
+          } else if (containerHeight >= 470) {
+            moveAmount = -40; // For MD screens
+          } else if (containerHeight >= 400) {
+            moveAmount = -25; // For SM screens
           } else {
-            moveAmount = -45; // Reduced from -90
+            moveAmount = -15; // For XS screens
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 3) {
-          // Card 4: Slight left movement
-          const cardWidth = card.offsetWidth;
+          // Card 4: Slight left movement - based on containerHeight
           let moveAmount: number;
-          if (cardWidth > 400) {
-            moveAmount = -50; // Slightly reduced
-          } else if (cardWidth < 250) {
-            moveAmount = -40; // Slightly reduced
+          if (containerHeight >= 520) {
+            moveAmount = -50; // For XL and LG screens
+          } else if (containerHeight >= 470) {
+            moveAmount = -35; // For MD screens
+          } else if (containerHeight >= 400) {
+            moveAmount = -20; // For SM screens
           } else {
-            moveAmount = -35; // Slightly reduced
+            moveAmount = -10; // For XS screens
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === 2) {
-          // Card 3: Minimal left movement (center card)
-          const cardWidth = card.offsetWidth;
-          const moveAmount = cardWidth > 400 ? -25 : -15; // Slightly reduced
+          // Card 3: Minimal left movement (center card) - based on containerHeight
+          let moveAmount: number;
+          if (containerHeight >= 520) {
+            moveAmount = -25; // For XL and LG screens
+          } else if (containerHeight >= 470) {
+            moveAmount = -20; // For MD screens
+          } else {
+            moveAmount = -10; // For SM and smaller screens
+          }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         }
 
@@ -605,16 +613,17 @@ function BounceCards({
       } else {
         // Handle non-hovered cards (pushed away)
         const direction = i < hoveredIndex ? -1 : 1;
-        const cardWidth = card?.offsetWidth || 400;
 
-        // Screen-size responsive push intensity (reduced values)
+        // Screen-size responsive push intensity based on containerHeight
         let pushIntensity: number;
-        if (cardWidth > 400) {
-          pushIntensity = 80; // Reduced from 150
-        } else if (cardWidth < 250) {
-          pushIntensity = 70; // Reduced from 140
+        if (containerHeight >= 520) {
+          pushIntensity = 80; // For XL and LG screens
+        } else if (containerHeight >= 470) {
+          pushIntensity = 65; // For MD screens
+        } else if (containerHeight >= 400) {
+          pushIntensity = 50; // For SM screens
         } else {
-          pushIntensity = 75; // Reduced from 130
+          pushIntensity = 40; // For XS screens
         }
 
         // Push cards farther based on distance from hovered card
@@ -646,6 +655,7 @@ function BounceCards({
     getNoRotationTransform,
     moveTowardCenter,
     getPushedTransform,
+    containerHeight,
   ]);
 
   // Define event handlers after the functions they use - but don't include function references in deps
@@ -775,7 +785,7 @@ function BounceCards({
     <div
       role="img"
       ref={containerRef}
-      className={`relative flex items-center justify-center ${className}`}
+      className={cn('relative flex items-center justify-center', className)}
       style={{
         width: containerWidth,
         height: containerHeight,
@@ -836,7 +846,10 @@ function BounceCards({
                   <div className="flex flex-col items-start gap-0.5 font-krypton">
                     {/* Caption title - larger when no subtitle */}
                     <motion.p
-                      className={`font-semibold ${cardData.caption.subtitle ? 'text-sm' : 'text-base'} text-white`}
+                      className={cn(
+                        'font-semibold text-white',
+                        cardData.caption.subtitle ? 'text-sm' : 'text-base'
+                      )}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: hoveredIndex === idx ? 1 : 0,
@@ -884,7 +897,10 @@ function BounceCards({
               ref={(el) => {
                 cardsRef.current[idx] = el;
               }}
-              className={`card card-${idx} absolute cursor-pointer overflow-hidden border-8 border-white`}
+              className={cn(
+                `card card-${idx}`,
+                'absolute cursor-pointer overflow-hidden border-8 border-white'
+              )}
               style={commonStyle}
               onMouseEnter={() => handleMouseEnter(idx)}
               onMouseLeave={handleMouseLeave}
@@ -911,7 +927,10 @@ function BounceCards({
             ref={(el) => {
               cardsRef.current[idx] = el;
             }}
-            className={`card card-${idx} absolute overflow-hidden border-8 border-white`}
+            className={cn(
+              `card card-${idx}`,
+              'absolute overflow-hidden border-8 border-white'
+            )}
             style={commonStyle}
             onMouseEnter={() => handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
