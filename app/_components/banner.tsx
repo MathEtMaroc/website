@@ -8,41 +8,121 @@ import { useMediaQuery } from 'react-responsive';
 export function Banner() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [hasScrolledEnough, setHasScrolledEnough] = useState<boolean>(false);
-  const isSm = useMediaQuery({ query: '(max-width: 640px)' });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      if (scrollPosition > 600) {
-        setHasScrolledEnough(true);
-      } else {
-        setHasScrolledEnough(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const isSm = useMediaQuery(
+    { query: '(max-width: 640px)' },
+    undefined,
+    (match) => {
+      // This callback ensures we only use the media query result after client-side hydration
+      if (mounted) {
+        if (match) {
+          // For small screens, visibility depends on scroll
+          setIsVisible(hasScrolledEnough);
+        } else {
+          // For larger screens, always visible
+          setIsVisible(true);
+        }
       }
-    };
+    }
+  );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Update visibility based on screen size and scroll position
+  // Set mounted to true after initial client-side render to avoid hydration mismatch
   useEffect(() => {
-    setIsVisible(isSm && hasScrolledEnough);
-  }, [isSm, hasScrolledEnough]);
+    setMounted(true);
+
+    // Initial visibility based on screen size
+    if (!isSm) {
+      setIsVisible(true);
+    }
+  }, [isSm]);
+
+  useEffect(() => {
+    // Only set up scroll listener for small screens and after mounting
+    if (isSm && mounted) {
+      const handleScroll = () => {
+        const scrollPosition = window.scrollY;
+        setHasScrolledEnough(scrollPosition > 350);
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial scroll position
+
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [isSm, mounted]);
+
+  // Update visibility for small screens based on scroll position (only after mounting)
+  useEffect(() => {
+    if (isSm && mounted) {
+      setIsVisible(hasScrolledEnough);
+    }
+  }, [isSm, hasScrolledEnough, mounted]);
+
+  // Different animation variants based on screen size
+  const mobileAnimationVariants = {
+    initial: {
+      opacity: 0,
+      y: 40,
+      scale: 1,
+      filter: 'blur(2px)',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: 'blur(0px)',
+    },
+    exit: {
+      opacity: 0,
+      y: 20,
+      scale: 1,
+      filter: 'blur(2px)',
+    },
+  };
+
+  const desktopAnimationVariants = {
+    initial: {
+      opacity: 0,
+      y: 20,
+      filter: 'blur(4px)',
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+    },
+    exit: {
+      opacity: 0,
+      y: 10,
+      filter: 'blur(4px)',
+    },
+  };
+
+  // Avoid rendering until client-side hydration is complete
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-35 sm:hidden">
+        <div
+          className={`pointer-events-none fixed inset-x-0 bottom-0 ${isSm ? 'z-35' : 'sm:flex sm:justify-center sm:px-6 sm:pb-5 lg:px-8'}`}
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: 10, filter: 'blur(2px)' }}
+            variants={isSm ? mobileAnimationVariants : desktopAnimationVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             transition={{
-              type: 'spring',
-              bounce: 0.2,
-              duration: 1,
+              type: 'tween',
+              ease: 'easeOut',
+              duration: 0.6,
+              ...(isSm ? {} : { delay: 1.8 }),
             }}
-            className="pointer-events-auto flex items-center justify-between gap-x-6 bg-primary-950 px-6 py-2.5"
+            className={`pointer-events-auto flex items-center justify-between gap-x-6 bg-primary-950 px-6 py-2.5 ${
+              isSm ? '' : 'sm:rounded-xl sm:py-3 sm:pr-3.5 sm:pl-4'
+            }`}
           >
             <p className="text-sm/6 text-white">
               <a

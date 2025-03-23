@@ -148,11 +148,11 @@ export default function BounceCardsSection() {
     let scale = 1;
 
     if (isXL) {
-      // Extra large screens (≥1280px)
-      xPositions = [-670, -400, -100, 270, 400, 630];
-      yPositions = [-10, 30, -60, 60, 85, 20];
-      containerHeight = 580;
-      scale = 1.08;
+      // Extra large screens (≥1280px) - more compact layout with smaller images
+      xPositions = [-550, -370, -90, 230, 370, 550]; // Reduced spacing between cards
+      yPositions = [-10, 30, -50, 50, 75, 15]; // Slightly adjusted Y positions
+      containerHeight = 550; // Slightly reduced container height
+      scale = 0.95; // Reduced scale from 1.08 to make images smaller
     } else if (isLG) {
       // Large screens (1024px-1279px)
       xPositions = [-520, -280, -50, 180, 350, 500];
@@ -218,7 +218,11 @@ export default function BounceCardsSection() {
 
   return (
     <section className="flex w-full justify-center">
-      <div className="w-full max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8 xl:overflow-x-visible">
+      <div
+        className={cn(
+          'w-full max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8 xl:overflow-visible'
+        )}
+      >
         <div
           className={cn(isXL ? '' : 'mx-auto', 'relative')}
           style={{ width: isXL ? '100%' : '95%' }}
@@ -535,39 +539,39 @@ function BounceCards({
 
         // Screen-size responsive positioning for different cards
         if (hoveredIndex === 0) {
-          // Card 1: Move significantly right on XL screens
+          // Card 1: Move right on hover (reduced movement)
           const cardWidth = card.offsetWidth;
           let moveAmount: number;
           if (cardWidth > 400) {
-            moveAmount = 280;
+            moveAmount = 60; // Reduced from 180
           } else if (cardWidth < 250) {
-            moveAmount = 160;
+            moveAmount = 40; // Reduced from 120
           } else {
-            moveAmount = 140;
+            moveAmount = 50; // Reduced from 100
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 1) {
-          // Card 6: Move left on hover
+          // Card 6: Move left on hover (reduced movement)
           const cardWidth = card.offsetWidth;
           let moveAmount: number;
           if (cardWidth > 400) {
-            moveAmount = -200;
+            moveAmount = -60; // Reduced from -200
           } else if (cardWidth < 250) {
-            moveAmount = -180;
+            moveAmount = -50; // Reduced from -180
           } else {
-            moveAmount = -160;
+            moveAmount = -55; // Reduced from -160
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 2) {
-          // Card 5: Move left on hover
+          // Card 5: Move left on hover (reduced movement)
           const cardWidth = card.offsetWidth;
           let moveAmount: number;
           if (cardWidth > 400) {
-            moveAmount = -120;
+            moveAmount = -50; // Reduced from -120
           } else if (cardWidth < 250) {
-            moveAmount = -100;
+            moveAmount = -40; // Reduced from -100
           } else {
-            moveAmount = -90;
+            moveAmount = -45; // Reduced from -90
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === images.length - 3) {
@@ -575,17 +579,17 @@ function BounceCards({
           const cardWidth = card.offsetWidth;
           let moveAmount: number;
           if (cardWidth > 400) {
-            moveAmount = -80;
+            moveAmount = -50; // Slightly reduced
           } else if (cardWidth < 250) {
-            moveAmount = -60;
+            moveAmount = -40; // Slightly reduced
           } else {
-            moveAmount = -40;
+            moveAmount = -35; // Slightly reduced
           }
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         } else if (hoveredIndex === 2) {
           // Card 3: Minimal left movement (center card)
           const cardWidth = card.offsetWidth;
-          const moveAmount = cardWidth > 400 ? -30 : -20;
+          const moveAmount = cardWidth > 400 ? -25 : -15; // Slightly reduced
           finalTransform = moveTowardCenter(finalTransform, moveAmount);
         }
 
@@ -603,19 +607,20 @@ function BounceCards({
         const direction = i < hoveredIndex ? -1 : 1;
         const cardWidth = card?.offsetWidth || 400;
 
-        // Screen-size responsive push intensity
+        // Screen-size responsive push intensity (reduced values)
         let pushIntensity: number;
         if (cardWidth > 400) {
-          pushIntensity = 150;
+          pushIntensity = 80; // Reduced from 150
         } else if (cardWidth < 250) {
-          pushIntensity = 140;
+          pushIntensity = 70; // Reduced from 140
         } else {
-          pushIntensity = 130;
+          pushIntensity = 75; // Reduced from 130
         }
 
         // Push cards farther based on distance from hovered card
         const distance = Math.abs(hoveredIndex - i);
-        const offset = direction * (pushIntensity + distance * 10);
+        // Cap the maximum push distance
+        const offset = direction * Math.min(pushIntensity + distance * 8, 120);
         const pushedTransform = getPushedTransform(baseTransform, offset);
 
         // Add slight delay based on distance for cascading effect
