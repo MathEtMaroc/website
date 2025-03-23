@@ -2,15 +2,37 @@
 
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 export function Banner() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [hasScrolledEnough, setHasScrolledEnough] = useState<boolean>(false);
+  const isSm = useMediaQuery({ query: '(max-width: 640px)' });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 1000) {
+        setHasScrolledEnough(true);
+      } else {
+        setHasScrolledEnough(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Update visibility based on screen size and scroll position
+  useEffect(() => {
+    setIsVisible(isSm && hasScrolledEnough);
+  }, [isSm, hasScrolledEnough]);
 
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 sm:flex sm:justify-center sm:px-6 sm:pb-5 lg:px-8">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-35 sm:hidden">
           <motion.div
             initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -19,9 +41,8 @@ export function Banner() {
               type: 'spring',
               bounce: 0.2,
               duration: 1,
-              delay: 1,
             }}
-            className="pointer-events-auto flex items-center justify-between gap-x-6 bg-primary-950 px-6 py-2.5 sm:rounded-xl sm:py-3 sm:pr-3.5 sm:pl-4"
+            className="pointer-events-auto flex items-center justify-between gap-x-6 bg-primary-950 px-6 py-2.5"
           >
             <p className="text-sm/6 text-white">
               <a

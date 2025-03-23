@@ -220,7 +220,7 @@ export function Navbar() {
   const isSm = useMediaQuery({ query: '(max-width: 640px)' });
 
   const { immediateScrollProgress, scrollYBoundedProgressDelayed } =
-    useBoundedScroll(100);
+    useBoundedScroll(80);
 
   const handleMobileMenuChange = (isOpen: boolean) => {
     setMobileState((prev) => ({
