@@ -2,6 +2,7 @@
 
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
@@ -9,22 +10,7 @@ export function Banner() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [hasScrolledEnough, setHasScrolledEnough] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
-  const isSm = useMediaQuery(
-    { query: '(max-width: 640px)' },
-    undefined,
-    (match) => {
-      // This callback ensures we only use the media query result after client-side hydration
-      if (mounted) {
-        if (match) {
-          // For small screens, visibility depends on scroll
-          setIsVisible(hasScrolledEnough);
-        } else {
-          // For larger screens, always visible
-          setIsVisible(true);
-        }
-      }
-    }
-  );
+  const isSm = useMediaQuery({ query: '(max-width: 640px)' });
 
   // Set mounted to true after initial client-side render to avoid hydration mismatch
   useEffect(() => {
@@ -37,11 +23,14 @@ export function Banner() {
   }, [isSm]);
 
   useEffect(() => {
-    // Only set up scroll listener for small screens and after mounting
-    if (isSm && mounted) {
+    // Only set up scroll listener after mounting
+    if (mounted) {
       const handleScroll = () => {
         const scrollPosition = window.scrollY;
-        setHasScrolledEnough(scrollPosition > 350);
+        // Mobile threshold: 1500px, Desktop threshold: 550px
+        setHasScrolledEnough(
+          isSm ? scrollPosition > 1500 : scrollPosition > 550
+        );
       };
 
       window.addEventListener('scroll', handleScroll);
@@ -53,10 +42,10 @@ export function Banner() {
 
   // Update visibility for small screens based on scroll position (only after mounting)
   useEffect(() => {
-    if (isSm && mounted) {
+    if (mounted) {
       setIsVisible(hasScrolledEnough);
     }
-  }, [isSm, hasScrolledEnough, mounted]);
+  }, [hasScrolledEnough, mounted]);
 
   // Different animation variants based on screen size
   const mobileAnimationVariants = {
@@ -125,11 +114,11 @@ export function Banner() {
             }`}
           >
             <p className="text-sm/6 text-white">
-              <a
+              <Link
                 href="/"
-                className="group outline-none transition-colors focus-visible:rounded focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-primary-950"
+                className="group relative inline-block hover:underline focus-visible:underline focus-visible:outline-0"
               >
-                <strong className="font-semibold group-hover:underline group-focus-visible:underline">
+                <strong className="font-semibold">
                   Moroccan Day of Mathematics 2025
                 </strong>
                 <svg
@@ -142,11 +131,11 @@ export function Banner() {
                 Join us in Ifrane from June 11 – 16&nbsp;
                 <span
                   aria-hidden="true"
-                  className="transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5"
+                  className="transition-transform group-focus-visible:translate-x-0.5"
                 >
                   &rarr;
                 </span>
-              </a>
+              </Link>
             </p>
             <button
               type="button"

@@ -101,7 +101,7 @@ export default function BounceCardsSection() {
       },
       baseSize: { width: 320, height: 240 },
       baseRotation: -5,
-      zIndex: 3,
+      zIndex: 4,
     },
     {
       id: 4,
@@ -112,7 +112,7 @@ export default function BounceCardsSection() {
       },
       baseSize: { width: 280, height: 240 },
       baseRotation: 10,
-      zIndex: 4,
+      zIndex: 3,
     },
     {
       id: 5,
@@ -123,7 +123,7 @@ export default function BounceCardsSection() {
       },
       link: '/test',
       baseSize: { width: 280, height: 280 },
-      baseRotation: -7,
+      baseRotation: -10,
       zIndex: 0,
     },
   ];
@@ -150,19 +150,19 @@ export default function BounceCardsSection() {
     if (isXL) {
       // Extra large screens (≥1280px) - more compact layout with smaller images
       xPositions = [-525, -370, -90, 230, 370, 525];
-      yPositions = [-10, 30, -50, 50, 75, 15];
+      yPositions = [-10, 30, -70, 50, 75, 15];
       containerHeight = 550;
       scale = 1;
     } else if (isLG) {
       // Large screens (1024px-1279px) - all images slightly smaller
       xPositions = [-460, -280, -50, 180, 350, 480];
-      yPositions = [-10, 20, -50, 50, 75, 15];
+      yPositions = [-10, 20, -70, 50, 75, 15];
       containerHeight = 520;
       scale = 0.92;
     } else if (isMD) {
       // Medium screens (768px-1023px)
       xPositions = [-340, -190, -30, 140, 260, 350];
-      yPositions = [-10, 30, -60, 60, 65, 15];
+      yPositions = [-10, 30, -80, 60, 65, 15];
       containerHeight = 470;
       scale = 0.85;
     } else if (isSM) {
@@ -725,7 +725,7 @@ function BounceCards({
     cardsRef.current = new Array(images.length).fill(null);
   }, [images.length]);
 
-  // Manual hover management to fix first hover issue
+  // Manual hover management to fix first hover issue and transition between different card types
   useEffect(() => {
     if (!isInitialized || !enableHover) {
       return;
@@ -888,38 +888,7 @@ function BounceCards({
           </>
         );
 
-        // Conditionally render as link or div based on whether link is provided
-        if (cardData.link) {
-          return (
-            <div
-              role="img"
-              key={cardData.id}
-              ref={(el) => {
-                cardsRef.current[idx] = el;
-              }}
-              className={cn(
-                `card card-${idx}`,
-                'absolute cursor-pointer overflow-hidden border-8 border-white'
-              )}
-              style={commonStyle}
-              onMouseEnter={() => handleMouseEnter(idx)}
-              onMouseLeave={handleMouseLeave}
-              onTouchStart={() => handleMouseEnter(idx)}
-            >
-              <Link
-                href={cardData.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block h-full w-full"
-                aria-label={`View details about ${cardData.caption.title}`}
-              >
-                {cardContent}
-              </Link>
-            </div>
-          );
-        }
-
-        // No link - render regular div
+        // Create card wrapper with consistent structure, but different content for links
         return (
           <div
             key={cardData.id}
@@ -929,14 +898,27 @@ function BounceCards({
             }}
             className={cn(
               `card card-${idx}`,
-              'absolute overflow-hidden border-8 border-white'
+              'absolute overflow-hidden border-8 border-white',
+              cardData.link ? 'cursor-pointer' : ''
             )}
             style={commonStyle}
             onMouseEnter={() => handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
             onTouchStart={() => handleMouseEnter(idx)}
           >
-            {cardContent}
+            {cardData.link ? (
+              <Link
+                href={cardData.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pointer-events-none block h-full w-full"
+                aria-label={`View details about ${cardData.caption.title}`}
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              cardContent
+            )}
           </div>
         );
       })}

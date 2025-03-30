@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} font-sans antialiased`}
+      className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} scroll-smooth font-sans antialiased`}
     >
       <body>
         <div className="flex w-full flex-col bg-[url('/paper.jpg')] bg-repeat">
