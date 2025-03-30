@@ -59,8 +59,7 @@ const mobileMenuVariants = {
 
 /**
  * Animation variants for accordion content in mobile menu
- * Handles smooth appearance with opacity and height changes only,
- * with optimized transitions for maximum smoothness
+ * Handles smooth appearance with opacity and height changes
  */
 const accordionContentVariants = {
   hidden: {
@@ -117,9 +116,9 @@ const transitionBlurEffect = {
 const dropdownButtonStyles =
   'group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none transition-colors hover:text-gray-900 focus:text-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-md px-2 py-1';
 const mobileNavLinkStyles =
-  'flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900 transition-colors hover:bg-gray-50 hover:text-primary-600 active:bg-gray-100 active:text-primary-700';
+  'flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:text-primary-600 hover:shadow-sm';
 const mobileAccordionTriggerStyles =
-  'group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900 transition-colors hover:bg-gray-50 hover:text-primary-600 active:bg-gray-100 active:text-primary-700';
+  'group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:text-primary-600 hover:shadow-sm';
 
 const actions = [
   {
@@ -196,7 +195,7 @@ function ActionItem({
     <Link
       href={item.href}
       className={cn(
-        'group flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50 active:bg-gray-100',
+        'group flex items-start gap-3 rounded-lg p-3 transition-all hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
         className
       )}
       tabIndex={tabIndex}
@@ -230,7 +229,7 @@ function DivisionListItem({
     <Link
       href={item.href}
       className={cn(
-        'group flex gap-x-3 rounded-lg p-4 transition-colors hover:bg-gray-50 active:bg-gray-100',
+        'group flex gap-x-3 rounded-lg p-4 transition-all hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
         className
       )}
       tabIndex={tabIndex}
@@ -251,6 +250,15 @@ function DivisionListItem({
   );
 }
 
+/**
+ * Main Navbar component with responsive behavior and glassmorphic effects
+ * Features:
+ * - Adaptive size and appearance based on scroll position
+ * - Dropdown menus for Programs and Divisions
+ * - Mobile-responsive design with animated slide-in menu
+ * - Keyboard navigation support
+ * - Glassmorphic effect that intensifies on scroll
+ */
 export function Navbar() {
   // State for tracking mobile menu and accordion state
   const [mobileState, setMobileState] = useState({
@@ -276,6 +284,70 @@ export function Navbar() {
   // Animation values for navbar resizing on scroll
   const { immediateScrollProgress, scrollYBoundedProgressDelayed } =
     useBoundedScroll(80);
+
+  // Motion values for glassmorphic effect based on scroll position
+  const bgOpacityProgress = useTransform(
+    immediateScrollProgress,
+    [0, 0.05, 0.15, 1],
+    [1, 0.98, 0.97, 0.95]
+  );
+
+  const blurPixelsProgress = useTransform(
+    immediateScrollProgress,
+    [0, 0.05, 0.15, 1],
+    [4, 10, 16, 25]
+  );
+
+  const borderOpacityProgress = useTransform(
+    immediateScrollProgress,
+    [0, 0.1, 1],
+    [0.05, 0.1, 0.5]
+  );
+
+  const shadowOpacityProgress = useTransform(
+    immediateScrollProgress,
+    [0, 0.1, 1],
+    [0.07, 0.12, 0.18]
+  );
+
+  const shadowSmallOpacityProgress = useTransform(
+    immediateScrollProgress,
+    [0, 0.1, 1],
+    [0.04, 0.07, 0.12]
+  );
+
+  // Motion templates for dropdown styling
+  const dropdownBackground = useMotionTemplate`rgba(255, 255, 255, ${bgOpacityProgress})`;
+  const dropdownBlur = useMotionTemplate`blur(${blurPixelsProgress}px)`;
+  const dropdownBorderColor = useMotionTemplate`rgba(229, 231, 235, ${borderOpacityProgress})`;
+  const dropdownShadow = useMotionTemplate`0 4px 24px -2px rgba(0, 0, 0, ${shadowOpacityProgress}), 0 2px 8px -1px rgba(0, 0, 0, ${shadowSmallOpacityProgress})`;
+
+  // Memoized styles to prevent unnecessary re-renders
+  const dropdownStyles = React.useMemo(
+    () => ({
+      backgroundColor: dropdownBackground,
+      backdropFilter: dropdownBlur,
+      borderColor: dropdownBorderColor,
+      boxShadow: dropdownShadow,
+    }),
+    [dropdownBackground, dropdownBlur, dropdownBorderColor, dropdownShadow]
+  );
+
+  const mobileMenuStyles = React.useMemo(
+    () => ({
+      backgroundColor: dropdownBackground,
+      backdropFilter: dropdownBlur,
+      borderColor: dropdownBorderColor,
+      boxShadow: isSm ? dropdownShadow : 'none',
+    }),
+    [
+      dropdownBackground,
+      dropdownBlur,
+      dropdownBorderColor,
+      dropdownShadow,
+      isSm,
+    ]
+  );
 
   /**
    * Handles opening and closing the mobile menu
@@ -482,7 +554,8 @@ export function Navbar() {
                   animate="visible"
                   exit="hidden"
                   transition={{ duration: 0.25 }}
-                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden rounded-xl bg-white shadow-lg"
+                  style={dropdownStyles}
+                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden rounded-xl border"
                   id="programs-dropdown"
                   role="menu"
                   aria-orientation="vertical"
@@ -565,7 +638,8 @@ export function Navbar() {
                   animate="visible"
                   exit="hidden"
                   transition={{ duration: 0.25 }}
-                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5"
+                  style={dropdownStyles}
+                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden rounded-xl border ring-1 ring-gray-900/5"
                   id="divisions-dropdown"
                   role="menu"
                   aria-orientation="vertical"
@@ -646,10 +720,11 @@ export function Navbar() {
                         ? { type: 'spring', bounce: 0.2, duration: 0.5 }
                         : { type: 'spring', bounce: 0.1, duration: 0.4 }
                     }
+                    style={mobileMenuStyles}
                     className={cn(
-                      'fixed z-50 overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
+                      'fixed z-50 overflow-y-auto border px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
                       isSm
-                        ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh] rounded-2xl shadow-xl'
+                        ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh] rounded-2xl'
                         : 'inset-y-0 right-0 w-full sm:max-w-sm'
                     )}
                   >
