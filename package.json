@@ -13,7 +13,6 @@
     "@heroicons/react": "^2.2.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-e552027-20250112",
     "clsx": "^2.1.1",
-    "gsap": "^3.12.7",
     "motion": "^12.6.2",
     "next": "15.2.2",
     "radix-ui": "^1.1.3",

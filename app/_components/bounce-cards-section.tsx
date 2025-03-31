@@ -1,14 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { cn } from '~/app/utils/cn';
 
-// Regex constants for transform manipulation
+// Transform manipulation regexes
 const ROTATE_REGEX = /rotate\([\s\S]*?\)/;
 const TRANSLATE_REGEX = /translate\(([-0-9.]+)px/;
 const TRANSLATE_Y_REGEX = /translate\([^,]+,\s*([^)]+)\)/;
@@ -28,7 +26,6 @@ interface Card {
   id: number; // Unique identifier (index)
   imageSrc: string; // Path to image file
   caption: Caption; // Title and optional subtitle
-  link?: string; // Optional URL to navigate to when card is clicked
   baseSize: {
     // Base size before scaling
     width: number;
@@ -87,7 +84,6 @@ export default function BounceCardsSection() {
       caption: {
         title: 'Podcast : Study in the US',
       },
-      link: 'https://youtu.be/OG-XbsHcRFM',
       baseSize: { width: 450, height: 280 },
       baseRotation: 4,
       zIndex: 5,
@@ -121,7 +117,6 @@ export default function BounceCardsSection() {
         title: 'Title',
         subtitle: 'Location, 20XX',
       },
-      link: '/test',
       baseSize: { width: 280, height: 280 },
       baseRotation: -10,
       zIndex: 0,
@@ -233,9 +228,8 @@ export default function BounceCardsSection() {
             cardSizes={cardSizes}
             containerWidth={'100%'}
             containerHeight={containerHeight}
-            animationDelay={0.3}
-            animationStagger={0.08}
-            easeType="elastic.out(1, 0.5)"
+            animationDelay={0.1}
+            animationStagger={0.1}
             transformStyles={transformStyles}
             zIndexOrder={zIndexOrder}
             enableHover={true}
@@ -259,7 +253,6 @@ interface BounceCardsProps {
   containerHeight: number;
   animationDelay: number;
   animationStagger: number;
-  easeType: string;
   transformStyles: string[];
   zIndexOrder: number[];
   enableHover: boolean;
@@ -278,119 +271,29 @@ function BounceCards({
   containerWidth = 400,
   containerHeight = 400,
   animationDelay = 0.5,
-  animationStagger = 0.06,
-  easeType = 'elastic.out(1, 0.8)',
+  animationStagger = 0.08,
   transformStyles,
   zIndexOrder,
   enableHover = false,
   cards,
 }: BounceCardsProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [animationComplete, setAnimationComplete] = useState(false);
   const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Initial animation when component mounts
+  // Set animation complete after a short delay
   useEffect(() => {
-    // Ensure references are reset when the component mounts
-    cardsRef.current = new Array(images.length).fill(null);
+    const totalAnimationTime =
+      animationDelay + animationStagger * cards.length + 0.5;
 
-    // Animate cards in with stagger effect
-    gsap.fromTo(
-      '.card',
-      { scale: 0, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        stagger: animationStagger,
-        ease: easeType,
-        delay: animationDelay,
-        onComplete: () => {
-          // Mark animations as initialized after initial animations complete
-          setIsInitialized(true);
-        },
-      }
-    );
+    const timeout = setTimeout(() => {
+      setAnimationComplete(true);
+    }, totalAnimationTime * 1000);
 
-    // Cleanup GSAP animations on unmount
-    return () => {
-      gsap.killTweensOf('.card');
-    };
-  }, [animationDelay, animationStagger, easeType, images.length]);
+    return () => clearTimeout(timeout);
+  }, [animationDelay, animationStagger, cards.length]);
 
-  // Pre-initialize transform states for all cards to ensure first hover works
-  useEffect(() => {
-    if (isInitialized && enableHover) {
-      // Set initial transform values for all cards
-      cardsRef.current.forEach((card, idx) => {
-        if (!card) {
-          return;
-        }
-        // Store the original transform as a data attribute for reference
-        card.dataset.originalTransform = transformStyles[idx] || 'none';
-        // Explicitly set initial transform via GSAP to ensure proper animation tracking
-        gsap.set(card, {
-          transform: transformStyles[idx] || 'none',
-          scale: 1,
-          immediateRender: true,
-        });
-      });
-    }
-  }, [isInitialized, enableHover, transformStyles]);
-
-  // Manage z-index when a card is hovered
-  useEffect(() => {
-    if (hoveredIndex === null) {
-      return;
-    }
-
-    // Bring hovered card to front, push others back based on distance
-    cardsRef.current.forEach((card, idx) => {
-      if (!card) {
-        return;
-      }
-
-      if (idx === hoveredIndex) {
-        // Hovered card gets highest z-index (below navbar z-40)
-        gsap.set(card, { zIndex: 25 });
-      } else {
-        // Cards further from hovered card get progressively lower z-indices
-        const distance = Math.abs(hoveredIndex - idx);
-        gsap.set(card, { zIndex: 15 - distance * 2 });
-      }
-    });
-  }, [hoveredIndex]);
-
-  // Reset z-index ordering when no card is hovered
-  useEffect(() => {
-    if (hoveredIndex !== null) {
-      return;
-    }
-
-    cardsRef.current.forEach((card, idx) => {
-      if (!card) {
-        return;
-      }
-
-      let zIndex: number;
-      if (zIndexOrder && zIndexOrder.length === images.length) {
-        // Use provided custom z-index order
-        const priority = zIndexOrder[idx];
-        zIndex = 10 + priority * 2;
-      } else {
-        // Default: center cards have higher z-index
-        const centerDistance = Math.abs((images.length - 1) / 2 - idx);
-        zIndex = 10 - centerDistance * 2;
-      }
-
-      gsap.set(card, { zIndex });
-    });
-  }, [hoveredIndex, images.length, zIndexOrder]);
-
-  /**
-   * Removes rotation from transform string and adds 0deg rotation
-   */
   const getNoRotationTransform = useCallback((transformStr: string): string => {
     if (ROTATE_REGEX.test(transformStr)) {
       return transformStr.replace(ROTATE_REGEX, 'rotate(0deg)');
@@ -403,19 +306,14 @@ function BounceCards({
     return `${transformStr} rotate(0deg)`;
   }, []);
 
-  /**
-   * Adjusts the X translation to move an element toward the center
-   */
   const moveTowardCenter = useCallback(
     (transformStr: string, moveAmount: number): string => {
-      // Extract current X translation value if it exists
       const match = transformStr.match(TRANSLATE_REGEX);
 
       if (match) {
         const currentX = Number.parseFloat(match[1]);
         const newX = currentX + moveAmount;
 
-        // Preserve the y-translation if it exists
         if (transformStr.includes(',')) {
           return transformStr.replace(TRANSLATE_REGEX, `translate(${newX}px`);
         }
@@ -423,20 +321,15 @@ function BounceCards({
         return transformStr.replace(TRANSLATE_REGEX, `translate(${newX}px`);
       }
 
-      // If no translation exists, add one
       if (transformStr === 'none') {
         return `translate(${moveAmount}px, 0px)`;
       }
 
-      // Add translation to existing transform
       return `${transformStr} translate(${moveAmount}px, 0px)`;
     },
     []
   );
 
-  /**
-   * Adds X offset to an existing transform string
-   */
   const getPushedTransform = useCallback(
     (baseTransform: string, offsetX: number): string => {
       const match = baseTransform.match(TRANSLATE_REGEX);
@@ -445,7 +338,6 @@ function BounceCards({
         const currentX = Number.parseFloat(match[1]);
         const newX = currentX + offsetX;
 
-        // Preserve the y-translation if it exists
         if (baseTransform.includes(',')) {
           const yMatch = baseTransform.match(TRANSLATE_Y_REGEX);
           if (yMatch) {
@@ -468,243 +360,142 @@ function BounceCards({
     []
   );
 
-  /**
-   * Manages card movements when a card is hovered
-   * Now just sets the hoveredIndex state, actual animations are handled by the hover effect
-   */
-  const _pushSiblings = (hoveredIdx: number) => {
-    if (!enableHover || !isInitialized) {
-      return;
-    }
-
-    setHoveredIndex(hoveredIdx);
-    // Animation now handled by the useEffect watching hoveredIndex
-  };
-
-  /**
-   * Resets all cards to their original positions and scales
-   * Now just clears the hoveredIndex state, actual animations are handled by the hover effect
-   */
-  const _resetSiblings = () => {
-    if (!enableHover || !isInitialized) {
-      return;
-    }
-
-    setHoveredIndex(null);
-    // Animation now handled by the useEffect watching hoveredIndex
-  };
-
-  // Enhanced effect to handle hover animations based on hoveredIndex changes
-  useEffect(() => {
-    // Skip if not initialized or hover not enabled
-    if (!isInitialized || !enableHover) {
-      return;
-    }
-
-    // If no card is hovered, reset all cards to original positions
-    if (hoveredIndex === null) {
-      cardsRef.current.forEach((card, i) => {
-        if (!card) {
-          return;
-        }
-
-        gsap.killTweensOf(card);
-        const baseTransform = transformStyles[i] || 'none';
-
-        gsap.to(card, {
-          transform: baseTransform,
-          scale: 1,
-          duration: 0.4,
-          ease: 'back.out(1.4)',
-          overwrite: 'auto',
-          immediateRender: false,
-        });
-      });
-      return;
-    }
-
-    // Handle the hover animation for all cards based on which one is hovered
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity:
-    cardsRef.current.forEach((card, i) => {
-      if (!card) {
-        return;
+  // Helper function to calculate zIndex without nested ternaries
+  const getZIndex = useCallback(
+    (hoveredIdx: number | null, cardIdx: number, baseZIndex: number) => {
+      if (hoveredIdx === null) {
+        return 10 + baseZIndex * 2;
       }
 
-      gsap.killTweensOf(card);
-      const baseTransform = transformStyles[i] || 'none';
+      if (hoveredIdx === cardIdx) {
+        return 25;
+      }
 
-      if (i === hoveredIndex) {
-        // Handle the hovered card
-        let finalTransform = getNoRotationTransform(baseTransform);
+      return 15 - Math.abs(hoveredIdx - cardIdx) * 2;
+    },
+    []
+  );
 
-        // Screen-size responsive positioning for different cards
-        if (hoveredIndex === 0) {
-          // Card 1: Move right on hover - based on containerHeight
-          let moveAmount: number;
-          if (containerHeight >= 520) {
-            moveAmount = 100; // For XL and LG screens
-          } else if (containerHeight >= 470) {
-            moveAmount = 70; // For MD screens
-          } else {
-            moveAmount = 30; // For SM and smaller screens
-          }
-          finalTransform = moveTowardCenter(finalTransform, moveAmount);
-        } else if (hoveredIndex === images.length - 1) {
-          // Card 6: Move left on hover - based on containerHeight
-          let moveAmount: number;
-          if (containerHeight >= 520) {
-            moveAmount = -60; // For XL and LG screens
-          } else if (containerHeight >= 470) {
-            moveAmount = -45; // For MD screens
-          } else if (containerHeight >= 400) {
-            moveAmount = -30; // For SM screens
-          } else {
-            moveAmount = -20; // For XS screens
-          }
-          finalTransform = moveTowardCenter(finalTransform, moveAmount);
-        } else if (hoveredIndex === images.length - 2) {
-          // Card 5: Move left on hover - based on containerHeight
-          let moveAmount: number;
-          if (containerHeight >= 520) {
-            moveAmount = -50; // For XL and LG screens
-          } else if (containerHeight >= 470) {
-            moveAmount = -40; // For MD screens
-          } else if (containerHeight >= 400) {
-            moveAmount = -25; // For SM screens
-          } else {
-            moveAmount = -15; // For XS screens
-          }
-          finalTransform = moveTowardCenter(finalTransform, moveAmount);
-        } else if (hoveredIndex === images.length - 3) {
-          // Card 4: Slight left movement - based on containerHeight
-          let moveAmount: number;
-          if (containerHeight >= 520) {
-            moveAmount = -50; // For XL and LG screens
-          } else if (containerHeight >= 470) {
-            moveAmount = -35; // For MD screens
-          } else if (containerHeight >= 400) {
-            moveAmount = -20; // For SM screens
-          } else {
-            moveAmount = -10; // For XS screens
-          }
-          finalTransform = moveTowardCenter(finalTransform, moveAmount);
-        } else if (hoveredIndex === 2) {
-          // Card 3: Minimal left movement (center card) - based on containerHeight
-          let moveAmount: number;
-          if (containerHeight >= 520) {
-            moveAmount = -25; // For XL and LG screens
-          } else if (containerHeight >= 470) {
-            moveAmount = -20; // For MD screens
-          } else {
-            moveAmount = -10; // For SM and smaller screens
-          }
-          finalTransform = moveTowardCenter(finalTransform, moveAmount);
-        }
+  // Function to determine the transform for a hovered card
+  const getTransformForHoveredCard = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <>
+    (hoveredIdx: number, baseTransform: string) => {
+      let finalTransform = getNoRotationTransform(baseTransform);
 
-        // Animate the hovered card
-        gsap.to(card, {
-          transform: finalTransform,
-          scale: 1.05,
-          duration: 0.4,
-          ease: 'back.out(1.4)',
-          overwrite: 'auto',
-          immediateRender: false,
-        });
-      } else {
-        // Handle non-hovered cards (pushed away)
-        const direction = i < hoveredIndex ? -1 : 1;
-
-        // Screen-size responsive push intensity based on containerHeight
-        let pushIntensity: number;
+      // Position adjustments based on which card is hovered
+      if (hoveredIdx === 0) {
+        let moveAmount = 30;
         if (containerHeight >= 520) {
-          pushIntensity = 80; // For XL and LG screens
+          moveAmount = 100;
         } else if (containerHeight >= 470) {
-          pushIntensity = 65; // For MD screens
-        } else if (containerHeight >= 400) {
-          pushIntensity = 50; // For SM screens
-        } else {
-          pushIntensity = 40; // For XS screens
+          moveAmount = 70;
         }
-
-        // Push cards farther based on distance from hovered card
-        const distance = Math.abs(hoveredIndex - i);
-        // Cap the maximum push distance
-        const offset = direction * Math.min(pushIntensity + distance * 8, 120);
-        const pushedTransform = getPushedTransform(baseTransform, offset);
-
-        // Add slight delay based on distance for cascading effect
-        const delay = distance * 0.05;
-
-        gsap.to(card, {
-          transform: pushedTransform,
-          scale: 0.97,
-          duration: 0.4,
-          ease: 'back.out(1.3)',
-          delay,
-          overwrite: 'auto',
-          immediateRender: false,
-        });
+        finalTransform = moveTowardCenter(finalTransform, moveAmount);
+      } else if (hoveredIdx === images.length - 1) {
+        let moveAmount = -20;
+        if (containerHeight >= 520) {
+          moveAmount = -60;
+        } else if (containerHeight >= 470) {
+          moveAmount = -45;
+        } else if (containerHeight >= 400) {
+          moveAmount = -30;
+        }
+        finalTransform = moveTowardCenter(finalTransform, moveAmount);
+      } else if (hoveredIdx === images.length - 2) {
+        let moveAmount = -15;
+        if (containerHeight >= 520) {
+          moveAmount = -50;
+        } else if (containerHeight >= 470) {
+          moveAmount = -40;
+        } else if (containerHeight >= 400) {
+          moveAmount = -25;
+        }
+        finalTransform = moveTowardCenter(finalTransform, moveAmount);
+      } else if (hoveredIdx === images.length - 3) {
+        let moveAmount = -10;
+        if (containerHeight >= 520) {
+          moveAmount = -50;
+        } else if (containerHeight >= 470) {
+          moveAmount = -35;
+        } else if (containerHeight >= 400) {
+          moveAmount = -20;
+        }
+        finalTransform = moveTowardCenter(finalTransform, moveAmount);
+      } else if (hoveredIdx === 2) {
+        let moveAmount = -10;
+        if (containerHeight >= 520) {
+          moveAmount = -25;
+        } else if (containerHeight >= 470) {
+          moveAmount = -20;
+        }
+        finalTransform = moveTowardCenter(finalTransform, moveAmount);
       }
-    });
-  }, [
-    hoveredIndex,
-    isInitialized,
-    enableHover,
-    images.length,
-    transformStyles,
-    getNoRotationTransform,
-    moveTowardCenter,
-    getPushedTransform,
-    containerHeight,
-  ]);
 
-  // Define event handlers after the functions they use - but don't include function references in deps
+      return finalTransform;
+    },
+    [containerHeight, images.length, getNoRotationTransform, moveTowardCenter]
+  );
+
+  // Helper function to calculate transform without nested ternaries
+  const getCardTransform = useCallback(
+    (hoveredIdx: number | null, cardIdx: number, baseTransform: string) => {
+      if (hoveredIdx === null) {
+        return baseTransform;
+      }
+
+      if (hoveredIdx === cardIdx) {
+        return getTransformForHoveredCard(cardIdx, baseTransform);
+      }
+
+      // Calculate push amount based on container height
+      let pushBase = 40;
+      if (containerHeight >= 520) {
+        pushBase = 80;
+      } else if (containerHeight >= 470) {
+        pushBase = 65;
+      } else if (containerHeight >= 400) {
+        pushBase = 50;
+      }
+
+      const direction = cardIdx < hoveredIdx ? -1 : 1;
+      const distance = Math.min(
+        pushBase + Math.abs(hoveredIdx - cardIdx) * 8,
+        120
+      );
+
+      return getPushedTransform(baseTransform, direction * distance);
+    },
+    [containerHeight, getTransformForHoveredCard, getPushedTransform]
+  );
+
   const handleMouseEnter = useCallback(
     (idx: number) => {
-      // Clear any pending reset timeout
       if (resetTimeoutRef.current) {
         clearTimeout(resetTimeoutRef.current);
         resetTimeoutRef.current = null;
       }
 
-      // Only process if we're initialized
-      if (!isInitialized) {
+      if (!animationComplete || !enableHover) {
         return;
       }
 
       setHoveredIndex(idx);
-
-      // Inline the pushSiblings logic instead of calling the function
-      if (!enableHover || !isInitialized) {
-        return;
-      }
-
-      // Rest of pushSiblings logic is handled implicitly through the effects
-      // that react to hoveredIndex changes
     },
-    [isInitialized, enableHover]
+    [animationComplete, enableHover]
   );
 
   const handleMouseLeave = useCallback(() => {
-    // Only process if we're initialized
-    if (!isInitialized) {
+    if (!animationComplete || !enableHover) {
       return;
     }
 
-    // Short delay prevents flickering during transitions between cards
     resetTimeoutRef.current = setTimeout(() => {
-      // Inline the core resetSiblings logic
-      if (!enableHover || !isInitialized) {
-        return;
-      }
       setHoveredIndex(null);
-      // Rest handled by effects
     }, 50);
-  }, [isInitialized, enableHover]);
+  }, [animationComplete, enableHover]);
 
   const handleContainerMouseLeave = useCallback(() => {
-    // Only process if we're initialized
-    if (!isInitialized) {
+    if (!animationComplete || !enableHover) {
       return;
     }
 
@@ -713,73 +504,8 @@ function BounceCards({
       resetTimeoutRef.current = null;
     }
 
-    // Inline just the essential part of resetSiblings
-    if (enableHover && isInitialized) {
-      setHoveredIndex(null);
-    }
-  }, [isInitialized, enableHover]);
-
-  // Create refs for all cards together up front
-  useEffect(() => {
-    // Initialize empty refs array of correct length
-    cardsRef.current = new Array(images.length).fill(null);
-  }, [images.length]);
-
-  // Manual hover management to fix first hover issue and transition between different card types
-  useEffect(() => {
-    if (!isInitialized || !enableHover) {
-      return;
-    }
-
-    // Force GSAP to recognize the initial state for proper animation
-    const elements = cardsRef.current;
-    const handlers: (() => void)[] = [];
-
-    elements.forEach((element, idx) => {
-      if (!element) {
-        return;
-      }
-
-      // Apply clear transform once to ensure GSAP has a baseline
-      gsap.set(element, { clearProps: 'transform' });
-      gsap.set(element, {
-        transform: transformStyles[idx] || 'none',
-        scale: 1,
-      });
-
-      // Create handlers with proper closure for each card
-      const enterHandler = () => handleMouseEnter(idx);
-      const leaveHandler = handleMouseLeave;
-
-      // Store handlers for cleanup
-      handlers.push(enterHandler);
-      handlers.push(leaveHandler);
-
-      // Add event listeners directly to ensure they're properly attached
-      element.addEventListener('mouseenter', enterHandler);
-      element.addEventListener('mouseleave', leaveHandler);
-    });
-
-    // Clean up all event listeners on unmount or when dependencies change
-    return () => {
-      elements.forEach((element, idx) => {
-        if (!element) {
-          return;
-        }
-        // Only remove event listeners if the element exists and the handlers were created
-        if (idx * 2 < handlers.length && idx * 2 + 1 < handlers.length) {
-          element.removeEventListener('mouseenter', handlers[idx * 2]);
-          element.removeEventListener('mouseleave', handlers[idx * 2 + 1]);
-        }
-      });
-    };
-  }, [
-    isInitialized,
-    enableHover,
-    transformStyles,
-    handleMouseEnter,
-    handleMouseLeave,
-  ]);
+    setHoveredIndex(null);
+  }, [animationComplete, enableHover]);
 
   return (
     <div
@@ -792,26 +518,59 @@ function BounceCards({
       }}
       onMouseLeave={handleContainerMouseLeave}
     >
-      {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: */}
+      {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <> */}
       {cards.map((cardData, idx) => {
         const cardSize = cardSizes[idx];
+        const baseTransform = transformStyles[idx] || 'none';
+        const delay = animationDelay + idx * animationStagger;
 
-        // Calculate initial z-index based on card data
-        const initialZIndex = 10 + cardData.zIndex * 2;
-
-        // Common styling and behavior props without the role and ref
-        const commonStyle = {
-          width: `${cardSize.width}px`,
-          height: `${cardSize.height}px`,
-          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-          transform: transformStyles[idx] || 'none',
-          zIndex: initialZIndex,
-          transition: 'box-shadow 0.3s ease',
-        };
-
-        // Card content that's the same regardless of wrapping element
-        const cardContent = (
-          <>
+        return (
+          <motion.div
+            key={cardData.id}
+            initial={{
+              opacity: 0,
+              filter: 'blur(4px)',
+              zIndex: cardData.zIndex,
+            }}
+            animate={{
+              transform: getCardTransform(hoveredIndex, idx, baseTransform),
+              opacity: 1,
+              filter: 'blur(0px)',
+              zIndex: getZIndex(hoveredIndex, idx, zIndexOrder[idx]),
+            }}
+            transition={{
+              transform: {
+                type: 'spring',
+                damping: animationComplete ? 25 : 12,
+                stiffness: animationComplete ? 300 : 120,
+                mass: animationComplete ? 1 : 1.2,
+                delay: animationComplete ? 0 : delay,
+                velocity: animationComplete ? 0 : 2,
+              },
+              filter: {
+                duration: 0.4,
+                delay: animationComplete ? 0 : delay,
+              },
+              opacity: {
+                duration: 0.6,
+                delay: animationComplete ? 0 : delay,
+              },
+              zIndex: { delay: 0.05 },
+            }}
+            className={cn(
+              `card card-${idx}`,
+              'absolute overflow-hidden border-8 border-white'
+            )}
+            style={{
+              width: `${cardSize.width}px`,
+              height: `${cardSize.height}px`,
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              transformOrigin: 'center center',
+            }}
+            onMouseEnter={() => handleMouseEnter(idx)}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={() => handleMouseEnter(idx)}
+          >
             <Image
               key={`image-${cardData.id}`}
               className="h-full w-full object-cover"
@@ -831,7 +590,7 @@ function BounceCards({
                   animate={{
                     opacity: hoveredIndex === idx ? 1 : 0,
                   }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
                 />
                 {/* Animated caption container */}
                 <motion.div
@@ -850,15 +609,17 @@ function BounceCards({
                         'font-semibold text-white',
                         cardData.caption.subtitle ? 'text-sm' : 'text-base'
                       )}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
                       animate={{
                         opacity: hoveredIndex === idx ? 1 : 0,
                         y: hoveredIndex === idx ? 0 : 10,
+                        scale: hoveredIndex === idx ? 1 : 0.9,
                       }}
                       transition={{
-                        duration: 0.3,
-                        ease: 'easeOut',
-                        delay: 0.1,
+                        type: 'spring',
+                        damping: 10,
+                        stiffness: 140,
+                        delay: hoveredIndex === idx ? 0.1 : 0,
                       }}
                     >
                       {cardData.caption.title}
@@ -867,15 +628,17 @@ function BounceCards({
                     {cardData.caption.subtitle && (
                       <motion.span
                         className="text-xs text-zinc-300"
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.9 }}
                         animate={{
                           opacity: hoveredIndex === idx ? 1 : 0,
                           y: hoveredIndex === idx ? 0 : 8,
+                          scale: hoveredIndex === idx ? 1 : 0.9,
                         }}
                         transition={{
-                          duration: 0.3,
-                          ease: 'easeOut',
-                          delay: 0.2,
+                          type: 'spring',
+                          damping: 8,
+                          stiffness: 120,
+                          delay: hoveredIndex === idx ? 0.2 : 0,
                         }}
                       >
                         {cardData.caption.subtitle}
@@ -885,41 +648,7 @@ function BounceCards({
                 </motion.div>
               </>
             )}
-          </>
-        );
-
-        // Create card wrapper with consistent structure, but different content for links
-        return (
-          <div
-            key={cardData.id}
-            role="img"
-            ref={(el) => {
-              cardsRef.current[idx] = el;
-            }}
-            className={cn(
-              `card card-${idx}`,
-              'absolute overflow-hidden border-8 border-white',
-              cardData.link ? 'cursor-pointer' : ''
-            )}
-            style={commonStyle}
-            onMouseEnter={() => handleMouseEnter(idx)}
-            onMouseLeave={handleMouseLeave}
-            onTouchStart={() => handleMouseEnter(idx)}
-          >
-            {cardData.link ? (
-              <Link
-                href={cardData.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pointer-events-none block h-full w-full"
-                aria-label={`View details about ${cardData.caption.title}`}
-              >
-                {cardContent}
-              </Link>
-            ) : (
-              cardContent
-            )}
-          </div>
+          </motion.div>
         );
       })}
     </div>
