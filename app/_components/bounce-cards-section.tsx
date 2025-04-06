@@ -90,7 +90,7 @@ export default function BounceCardsSection() {
     },
     {
       id: 3,
-      imageSrc: '/images/defilement/4.JPG',
+      imageSrc: '/images/defilement/4.jpg',
       caption: {
         title: 'Title',
         subtitle: 'Location, 20XX',
@@ -101,7 +101,7 @@ export default function BounceCardsSection() {
     },
     {
       id: 4,
-      imageSrc: '/images/defilement/6.JPG',
+      imageSrc: '/images/defilement/6.jpg',
       caption: {
         title: 'Title',
         subtitle: 'Location, 20XX',
@@ -112,7 +112,7 @@ export default function BounceCardsSection() {
     },
     {
       id: 5,
-      imageSrc: '/images/defilement/5.JPG',
+      imageSrc: '/images/defilement/5.jpg',
       caption: {
         title: 'Title',
         subtitle: 'Location, 20XX',
@@ -214,29 +214,22 @@ export default function BounceCardsSection() {
   return (
     <section className="flex w-full justify-center">
       <div
-        className={cn(
-          'w-full max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8 xl:overflow-visible'
-        )}
+        className={cn('w-full max-w-7xl overflow-hidden xl:overflow-visible')}
       >
-        <div
-          className={cn(isXL ? '' : 'mx-auto', 'relative')}
-          style={{ width: isXL ? '100%' : '95%' }}
-        >
-          <BounceCards
-            className="w-full"
-            images={imageSources}
-            cardSizes={cardSizes}
-            containerWidth={'100%'}
-            containerHeight={containerHeight}
-            animationDelay={0.1}
-            animationStagger={0.1}
-            transformStyles={transformStyles}
-            zIndexOrder={zIndexOrder}
-            enableHover={true}
-            imageCaptions={imageCaptions}
-            cards={cards}
-          />
-        </div>
+        <BounceCards
+          className="w-full"
+          images={imageSources}
+          cardSizes={cardSizes}
+          containerWidth={'100%'}
+          containerHeight={containerHeight}
+          animationDelay={0.1}
+          animationStagger={0.1}
+          transformStyles={transformStyles}
+          zIndexOrder={zIndexOrder}
+          enableHover={true}
+          imageCaptions={imageCaptions}
+          cards={cards}
+        />
       </div>
     </section>
   );
@@ -577,8 +570,8 @@ function BounceCards({
               src={cardData.imageSrc}
               alt={cardData.caption.title}
               fill
+              priority
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{ objectFit: 'cover' }}
             />
             {cardData.caption && (
               <>
