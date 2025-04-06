@@ -1,10 +1,5 @@
 'use client';
 
-import {
-  Bars3Icon,
-  ChevronDownIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
 import * as Accordion from '@radix-ui/react-accordion';
 import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'motion/react';
@@ -20,12 +15,15 @@ import { cn } from '~/app/utils/cn';
 import BracketsEllipsesIcon from '../../public/icons/brackets-ellipses.svg';
 import BuildingIcon from '../../public/icons/building.svg';
 import CalendarIcon from '../../public/icons/calendar.svg';
+import ChevronDownIcon from '../../public/icons/chevron-down.svg';
 import FlagIcon from '../../public/icons/flag.svg';
 import InfinityIcon from '../../public/icons/infinity.svg';
+import MenuIcon from '../../public/icons/menu.svg';
 import PresentationChartIcon from '../../public/icons/presentation-chart.svg';
 import StarsIcon from '../../public/icons/stars.svg';
 import SunriseIcon from '../../public/icons/sunrise.svg';
 import TrophyIcon from '../../public/icons/trophy.svg';
+import XCloseIcon from '../../public/icons/x-close.svg';
 
 /**
  * Animation variants for desktop dropdown menus
@@ -91,24 +89,6 @@ const accordionContentVariants = {
         duration: 0.2,
         delay: 0.1,
       },
-    },
-  },
-};
-
-// Blur effect to apply to accordion content during transitions
-const transitionBlurEffect = {
-  opening: {
-    filter: ['blur(4px)', 'blur(0px)'],
-    transition: {
-      duration: 0.25,
-      ease: 'easeOut',
-    },
-  },
-  closing: {
-    filter: ['blur(0px)', 'blur(4px)'],
-    transition: {
-      duration: 0.15,
-      ease: 'easeIn',
     },
   },
 };
@@ -575,7 +555,7 @@ export function Navbar() {
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
             aria-label="Open main menu"
           >
-            <Bars3Icon aria-hidden="true" className="size-6" />
+            <MenuIcon aria-hidden="true" className="size-6" />
           </button>
         </div>
 
@@ -821,7 +801,7 @@ export function Navbar() {
                         className="rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
                         aria-label="Close menu"
                       >
-                        <XMarkIcon aria-hidden="true" className="size-6" />
+                        <XCloseIcon aria-hidden="true" className="size-6" />
                       </Dialog.Close>
                     </div>
 

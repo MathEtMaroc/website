@@ -10,7 +10,6 @@
     "format": "ultracite format"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-e993439-20250328",
     "clsx": "^2.1.1",
     "motion": "^12.6.3",

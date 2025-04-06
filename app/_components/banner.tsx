@@ -1,10 +1,10 @@
 'use client';
 
-import { XMarkIcon } from '@heroicons/react/20/solid';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import XCloseIcon from '../../public/icons/x-close.svg';
 
 export function Banner() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -143,7 +143,7 @@ export function Banner() {
               onClick={() => setIsVisible(false)}
             >
               <span className="sr-only">Dismiss</span>
-              <XMarkIcon aria-hidden="true" className="size-5" />
+              <XCloseIcon aria-hidden="true" className="size-5" />
             </button>
           </motion.div>
         </div>
