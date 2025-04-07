@@ -6,22 +6,26 @@ import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import BounceCardsSection from './_components/bounce-cards-section';
 
-const partners: { name: string; image: string }[] = [
+const partners: { name: string; image: string; href: string }[] = [
   {
     name: 'Adria',
     image: '/images/partners/adria.png',
+    href: '#',
   },
   {
     name: 'UM6P',
     image: '/images/partners/um6p.svg',
+    href: '#',
   },
   {
     name: 'Evasan',
     image: '/images/partners/evasan.png',
+    href: '#',
   },
   {
     name: 'Royal Air Maroc',
     image: '/images/partners/ram.svg',
+    href: '#',
   },
 ];
 
@@ -148,14 +152,30 @@ export default function Page() {
           </div>
           <ul className="grid min-w-fit grid-cols-2 gap-x-8 gap-y-4 sm:gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-0 lg:grid-cols-2 lg:gap-10 lg:gap-x-8 xl:gap-x-12 xl:gap-y-16">
             {partners.map((partner) => (
-              <li key={partner.name}>
-                <Image
-                  src={partner.image}
-                  alt={partner.name}
-                  width={440}
-                  height={96}
-                  className="h-20 w-full object-contain brightness-20 grayscale invert"
-                />
+              <li
+                key={partner.name}
+                className="flex items-center justify-center"
+              >
+                <Link
+                  href={partner.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative block"
+                >
+                  <Image
+                    src={partner.image}
+                    alt={partner.name}
+                    width={440}
+                    height={80}
+                    className="h-20 w-auto object-contain brightness-0 invert transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px]"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-transparent p-2 text-center">
+                    <div className="inline-flex items-center font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      Visit Site
+                      <ArrowRightIcon className="ml-1.5 size-4" />
+                    </div>
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
