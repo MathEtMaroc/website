@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Activity } from '~/app/_components/activity';
+import AnimatedStat from '~/app/_components/animated-stat';
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import BounceCardsSection from './_components/bounce-cards-section';
@@ -42,8 +43,8 @@ const stats: { title: string; number: number; suffix?: string }[] = [
   },
   {
     title: 'Followers on social media',
-    number: 50,
-    suffix: 'k+',
+    number: 50000,
+    suffix: '+',
   },
 ];
 
@@ -175,18 +176,15 @@ export default function Page() {
               </div>
               <dl className="grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-y-16 lg:gap-x-8 lg:gap-y-12">
                 {stats.map((stat) => (
-                  <div
+                  <AnimatedStat
                     key={stat.title}
+                    title={stat.title}
+                    targetValue={stat.number}
+                    suffix={stat.suffix}
                     className="flex flex-col items-start gap-y-3 lg:gap-y-5"
-                  >
-                    <dt className="text-pretty font-semibold text-gray-900 text-lg">
-                      {stat.title}
-                    </dt>
-                    <dd className="font-krypton font-semibold text-5xl text-primary-800 tracking-tighter md:text-6xl">
-                      {stat.number}
-                      {stat.suffix}
-                    </dd>
-                  </div>
+                    ddClassName="font-krypton font-semibold text-5xl text-primary-800 tracking-tighter md:text-6xl"
+                    springOptions={{ bounce: 0, duration: 5000 }}
+                  />
                 ))}
               </dl>
             </div>
