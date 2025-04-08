@@ -2,7 +2,6 @@ import { Caveat, Geist } from 'next/font/google';
 import localFont from 'next/font/local';
 import type React from 'react';
 import './globals.css';
-import { Banner } from '~/app/_components/banner';
 import { Navbar } from '~/app/_components/navbar';
 
 const geistSans = Geist({
@@ -35,7 +34,7 @@ export default function RootLayout({
           <main className="flex w-full flex-col bg-white/60 pb-100">
             <Navbar />
             {children}
-            <Banner />
+            {/* <Banner /> */}
           </main>
         </div>
       </body>

@@ -27,9 +27,8 @@ export function Banner() {
     if (mounted) {
       const handleScroll = () => {
         const scrollPosition = window.scrollY;
-        // Mobile threshold: 1500px, Desktop threshold: 550px
         setHasScrolledEnough(
-          isSm ? scrollPosition > 1500 : scrollPosition > 550
+          isSm ? scrollPosition > 2500 : scrollPosition > 1500
         );
       };
 

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity } from '~/app/_components/activity';
 import AnimatedStat from '~/app/_components/animated-stat';
+import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import BounceCardsSection from './_components/bounce-cards-section';
@@ -52,6 +52,46 @@ const stats: { title: string; number: number; suffix?: string }[] = [
   },
 ];
 
+const activities = [
+  {
+    title: 'Moroccan Day of Mathematics',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel.',
+    linkText: 'Explore MDM',
+    linkHref: '/',
+    imageSrc: '/images/activities/mdm.png',
+    imageAlt: 'Moroccan Day of Mathematics',
+    highlight: 'coming later this year !',
+  },
+  {
+    title: 'Moroccan Tournament of Young Mathematicians',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel.',
+    linkText: 'Explore MTYM',
+    linkHref: '/',
+    imageSrc: '/images/activities/mtym.jpg',
+    imageAlt: 'Moroccan Tournament of Young Mathematicians',
+  },
+  {
+    title: 'Maths & Maroc Competition',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel.',
+    linkText: 'Explore MMC',
+    linkHref: '/',
+    imageSrc: '/images/activities/mmc.jpg',
+    imageAlt: 'Maths & Maroc Competition',
+  },
+  {
+    title: 'Summer Camp',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel.',
+    linkText: 'Explore Summer Camp',
+    linkHref: '/',
+    imageSrc: '/images/activities/summer-camp.jpg',
+    imageAlt: 'Summer Camp',
+  },
+];
+
 export default function Page() {
   return (
     <main>
@@ -69,57 +109,11 @@ export default function Page() {
       {/* Bounce Cards Section */}
       <BounceCardsSection />
       {/* Activities Section */}
-      <section className="flex w-full flex-col items-center gap-12 overflow-hidden pt-12 md:gap-16 md:pt-24">
-        <div className="flex w-full max-w-7xl flex-col items-center px-8">
-          <div className="flex w-full max-w-3xl flex-col items-center gap-5">
-            <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
-              What activities can Math & Maroc offer you?
-            </h2>
-            <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
-              Explore some of the various activities we offer for students of
-              all levels
-            </p>
-          </div>
-        </div>
-        <div className="flex w-full flex-col">
-          <Activity
-            title="Moroccan Day of Mathematics"
-            description="Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum
-            pulvinar in scelerisque aenean non tristique. Aliquet nulla mi
-            mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo
-            commodo elit vel."
-            linkText="Explore MDM"
-            linkHref="/"
-            imageSrc="/images/activities/mdm.png"
-            imageAlt="Moroccan Day of Mathematics"
-            hightlight="coming later this year !"
-          />
-          <Activity
-            title="Moroccan Tournament of Young Mathematicians"
-            description="Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel."
-            linkText="Explore MTYM"
-            linkHref="/"
-            imageSrc="/images/activities/mtym.jpg"
-            imageAlt="Moroccan Tournament of Young Mathematicians"
-          />
-          <Activity
-            title="Maths & Maroc Competition"
-            description="Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel."
-            linkText="Explore MMC"
-            linkHref="/"
-            imageSrc="/images/activities/mmc.jpg"
-            imageAlt="Maths & Maroc Competition"
-          />
-          <Activity
-            title="Summer Camp"
-            description="Lorem ipsum dolor sit amet consectetur. Viverra rutrum vestibulum pulvinar in scelerisque aenean non tristique. Aliquet nulla mi mauris malesuada amet pharetra vel. Imperdiet eu enim sed commodo commodo elit vel."
-            linkText="Explore Summer Camp"
-            linkHref="/"
-            imageSrc="/images/activities/summer-camp.jpg"
-            imageAlt="Summer Camp"
-          />
-        </div>
-      </section>
+      <StackingActivitiesSection
+        title="What activities can Math & Maroc offer you?"
+        subtitle="Explore some of the various activities we offer for students of all levels"
+        activities={activities}
+      />
       {/* Partners Section */}
       <section className="flex w-full flex-col items-center pt-16 lg:pt-24">
         <div className="flex w-full max-w-7xl flex-col items-center gap-y-16 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:flex-row lg:justify-between lg:gap-x-16 lg:gap-y-0 lg:px-16">

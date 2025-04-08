@@ -15,5 +15,5 @@
 
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-caveat: var(--font-caveat), sans-serif;
-  --font-krypton: var(--font-krypton), sans-serif;
+  --font-krypton: var(--font-krypton), monospace;
 }
