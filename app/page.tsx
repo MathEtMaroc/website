@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import AnimatedStat from '~/app/_components/animated-stat';
@@ -5,6 +6,13 @@ import StackingActivitiesSection from '~/app/_components/stacking-activities-sec
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import BounceCardsSection from './_components/bounce-cards-section';
+
+// Define metadata for this page
+export const metadata: Metadata = {
+  title: 'Math & Maroc | Unlocking the scientific potential of Moroccan youth',
+  description:
+    'First Moroccan non-profit math related educational association.',
+};
 
 const partners: { name: string; image: string; href: string }[] = [
   {
@@ -130,14 +138,14 @@ export default function Page() {
             <div className="flex items-center gap-x-6">
               <Link
                 href="#"
-                className="flex items-center gap-x-1.5 bg-primary-500 px-4 py-2.5 font-semibold text-shadow-lg text-white transition-all hover:bg-primary-600 hover:text-shadow-xl hover:shadow-lg"
+                className="flex items-center gap-x-1.5 bg-primary-500 px-5 py-3 font-semibold text-shadow text-white shadow outline-none transition-all hover:bg-primary-600 hover:text-shadow-lg hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               >
                 <span>Become a Partner</span>
                 <HeartHandIcon className="size-5" />
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-x-1.5 font-semibold text-primary-50"
+                className="flex items-center gap-x-1.5 font-semibold text-primary-50 outline-none transition-all hover:text-primary-200 focus:text-primary-200 focus-visible:px-1.5 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               >
                 <span>Contact us</span>
                 <ArrowRightIcon className="size-5" />
@@ -154,14 +162,14 @@ export default function Page() {
                   href={partner.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative block"
+                  className="group relative block outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                 >
                   <Image
                     src={partner.image}
                     alt={partner.name}
                     width={440}
                     height={80}
-                    className="h-20 w-auto object-contain brightness-0 invert transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px]"
+                    className="h-20 w-auto object-contain brightness-0 invert transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px] "
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-transparent p-2 text-center">
                     <div className="inline-flex items-center font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">

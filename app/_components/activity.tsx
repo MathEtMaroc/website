@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '~/app/utils/cn';
@@ -30,8 +28,8 @@ export const Activity = ({
   return (
     <div
       className={cn(
-        'group mx-auto flex w-full max-w-7xl flex-col shadow-xl',
-        isEven ? 'bg-primary-50' : 'bg-primary-900',
+        'group mx-auto flex w-full max-w-7xl flex-col lg:shadow-xl lg:drop-shadow-2xl',
+        isEven ? 'bg-white' : 'bg-primary-900',
         'lg:flex-row',
         isEven ? 'lg:flex-row-reverse' : ''
       )}
@@ -71,9 +69,9 @@ export const Activity = ({
           <Link
             href={linkHref}
             className={cn(
-              'group/link inline-flex w-fit items-center gap-1 rounded-md font-semibold text-base outline-none transition-colors',
+              'group/link inline-flex w-fit items-center gap-1 px-2 py-1 font-semibold text-base outline-none transition-colors',
               isEven
-                ? 'text-primary-800 hover:text-primary-900 focus-visible:ring-2 focus-visible:ring-primary-500'
+                ? 'text-primary-800 hover:text-primary-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2'
                 : 'text-primary-50 hover:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800',
               'sm:text-lg'
             )}

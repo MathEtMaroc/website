@@ -124,11 +124,11 @@ const staggeredContainerVariants = {
 };
 
 const dropdownButtonStyles =
-  'group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none transition-colors hover:text-gray-900 focus:text-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-md px-2 py-1';
+  'group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none transition-colors hover:text-gray-900 focus:text-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 px-2 py-1';
 const mobileNavLinkStyles =
-  'flex w-full items-center rounded-lg py-3 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:text-primary-600';
+  'flex w-full items-center py-3 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:text-primary-600';
 const mobileAccordionTriggerStyles =
-  'group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:text-primary-600';
+  'group flex w-full items-center justify-between py-2 pr-3.5 pl-3 font-semibold text-base/7 text-gray-900 transition-all hover:text-primary-600';
 
 const actions = [
   {
@@ -209,10 +209,11 @@ function ActionItem({
     <Link
       href={item.href}
       className={cn(
-        'group flex items-start gap-3 rounded-lg p-3 transition-all',
+        'group flex items-start gap-3 p-3 transition-all',
         !isMobile &&
           isScrolled &&
           'hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
+        !isMobile && !isScrolled && 'hover:bg-gray-50',
         (isMobile || !isScrolled) && 'hover:text-primary-600',
         className
       )}
@@ -251,10 +252,11 @@ function DivisionListItem({
     <Link
       href={item.href}
       className={cn(
-        'group flex gap-x-3 rounded-lg p-4 transition-all',
+        'group flex gap-x-3 p-4 transition-all',
         !isMobile &&
           isScrolled &&
           'hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
+        !isMobile && !isScrolled && 'hover:bg-gray-50',
         (isMobile || !isScrolled) && 'hover:text-primary-600',
         className
       )}
@@ -535,6 +537,7 @@ export function Navbar() {
                   [1, 0.85]
                 ),
               }}
+              className="focus-visible:outline-2 focus-visible:outline-primary-500"
             >
               <Image
                 alt="Math Maroc Logo"
@@ -552,7 +555,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => handleMobileMenuChange(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
+            className="-m-2.5 inline-flex items-center justify-center p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
             aria-label="Open main menu"
           >
             <MenuIcon aria-hidden="true" className="size-6" />
@@ -599,7 +602,7 @@ export function Navbar() {
                   exit="hidden"
                   transition={{ duration: 0.25 }}
                   style={dropdownStyles}
-                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden rounded-xl border"
+                  className="-translate-x-1/2 absolute left-1/2 z-50 mt-3 w-[26rem] overflow-hidden border"
                   id="programs-dropdown"
                   role="menu"
                   aria-orientation="vertical"
@@ -688,7 +691,7 @@ export function Navbar() {
                   exit="hidden"
                   transition={{ duration: 0.25 }}
                   style={dropdownStyles}
-                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden rounded-xl border ring-1 ring-gray-900/5"
+                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden border ring-1 ring-gray-900/5"
                   id="divisions-dropdown"
                   role="menu"
                   aria-orientation="vertical"
@@ -778,7 +781,7 @@ export function Navbar() {
                     className={cn(
                       'fixed z-50 overflow-y-auto border px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
                       isSm
-                        ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh] rounded-2xl'
+                        ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh]'
                         : 'inset-y-0 right-0 w-full sm:max-w-sm'
                     )}
                   >
@@ -798,7 +801,7 @@ export function Navbar() {
                         />
                       </Link>
                       <Dialog.Close
-                        className="rounded-md p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
+                        className="p-2.5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary-600"
                         aria-label="Close menu"
                       >
                         <XCloseIcon aria-hidden="true" className="size-6" />
