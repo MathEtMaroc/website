@@ -2,7 +2,6 @@
 
 import { cubicBezier, motion, useScroll, useTransform } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Activity } from './activity';
 
 interface ActivityData {
@@ -24,7 +23,6 @@ interface StackingActivitiesSectionProps {
 // Custom easing functions for animations
 const luxuryEaseOut = cubicBezier(0.33, 1, 0.68, 1);
 const silkyEaseInOut = cubicBezier(0.76, 0, 0.24, 1);
-const springyDeceleration = cubicBezier(0.34, 1.56, 0.64, 1);
 const softBounce = cubicBezier(0.22, 1.2, 0.36, 1);
 
 export default function StackingActivitiesSection({
@@ -33,234 +31,170 @@ export default function StackingActivitiesSection({
   activities,
 }: StackingActivitiesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
+  // Add state for client-side rendering check
+  const [isClient, setIsClient] = useState(false);
+  // Track the current active card index to adjust z-indices
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
 
-  // Use react-responsive to check viewport size
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isSmallHeight = useMediaQuery({ maxHeight: 899 });
-  const useSimpleLayout = isMobile || isSmallHeight;
+  // Set isClient to true on component mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Use client-side only media queries
+  const [useSimpleLayout, setUseSimpleLayout] = useState(false);
+
+  // Move media query detection to useEffect to prevent hydration mismatch
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 767;
+      const isSmallHeight = window.innerHeight <= 899;
+      setUseSimpleLayout(isMobile || isSmallHeight);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Fixed height for scroll container in animated mode
+  const SCROLL_CONTAINER_HEIGHT = 8000;
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Calculate the section height based on layout
+  // Update active card based on scroll position
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const calculateHeight = () => {
-        if (useSimpleLayout) {
-          // For simple layout, just enough height for stacked cards
-          return activities.length * 600 + 150;
-        }
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      const cardCount = activities.length;
+      // Calculate which card should be active based on scroll position
+      const segmentSize = 1 / cardCount;
+      const newActiveIndex = Math.min(
+        cardCount - 1,
+        Math.floor(latest / segmentSize)
+      );
+      if (newActiveIndex !== activeCardIndex) {
+        setActiveCardIndex(newActiveIndex);
+      }
+    });
 
-        // For animated layout, we need more scroll room
-        const baseHeight = window.innerHeight * 0.6;
-        const scrollPerCard = 800;
-        return baseHeight + (activities.length - 1) * scrollPerCard + 150;
-      };
-
-      setContainerHeight(calculateHeight());
-
-      const handleResize = () => setContainerHeight(calculateHeight());
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
-  }, [activities.length, useSimpleLayout]);
+    return () => unsubscribe();
+  }, [activities.length, scrollYProgress, activeCardIndex]);
 
   // Create all transforms outside the render loop
   const transformsArray = activities.map((_, index) => {
     const cardCount = activities.length;
-    const segmentSize = 1 / cardCount;
-    const animationSize = segmentSize * 0.65;
 
-    const exactStart = index * segmentSize;
-    const animationEnd = exactStart + animationSize;
-    const nextStart = index < cardCount - 1 ? (index + 1) * segmentSize : 1;
+    // Divide scroll progress evenly between cards
+    const segmentSize = 1 / cardCount;
+
+    // Calculate start and end points for this card's animation
+    const startProgress = index * segmentSize;
+    const midProgress = startProgress + segmentSize * 0.5;
+    const endProgress = (index + 1) * segmentSize;
 
     // Generate unique rotation pattern based on index
     const getRotationPattern = (idx: number) => {
-      switch (idx % 4) {
-        case 0:
-          return {
-            start: '4deg',
-            mid1: '3.5deg',
-            mid2: '3deg',
-            mid3: '2.5deg',
-            end1: '2deg',
-            end2: '1.8deg',
-          };
-        case 1:
-          return {
-            start: '-4deg',
-            mid1: '-3.5deg',
-            mid2: '-3deg',
-            mid3: '-2.5deg',
-            end1: '-2deg',
-            end2: '-1.8deg',
-          };
-        case 2:
-          return {
-            start: '3.5deg',
-            mid1: '3deg',
-            mid2: '2.7deg',
-            mid3: '2.2deg',
-            end1: '1.8deg',
-            end2: '1.5deg',
-          };
-        case 3:
-          return {
-            start: '-3.5deg',
-            mid1: '-3deg',
-            mid2: '-2.7deg',
-            mid3: '-2.2deg',
-            end1: '-1.8deg',
-            end2: '-1.5deg',
-          };
-        default:
-          return {
-            start: '0deg',
-            mid1: '0deg',
-            mid2: '0deg',
-            mid3: '0deg',
-            end1: '0deg',
-            end2: '0deg',
-          };
-      }
+      const baseRotation = idx % 2 === 0 ? 4 : -4;
+      return {
+        start: `${baseRotation}deg`,
+        mid: `${baseRotation * 0.6}deg`,
+        end: `${baseRotation * 0.3}deg`,
+      };
     };
 
     const rotationPattern = getRotationPattern(index);
 
     return {
-      // biome-ignore lint/correctness/useHookAtTopLevel:
-      yTransform: useTransform(
-        scrollYProgress,
-        [exactStart, animationEnd],
-        ['0px', '0px'],
-        { ease: luxuryEaseOut }
-      ),
-      // biome-ignore lint/correctness/useHookAtTopLevel:
       opacityTransform: useTransform(
         scrollYProgress,
         [
-          exactStart,
-          exactStart + animationSize * 0.05,
-          exactStart + animationSize * 0.1,
-          exactStart + animationSize * 0.15,
-          exactStart + animationSize * 0.2,
-          exactStart + animationSize * 0.25,
-          exactStart + animationSize * 0.3,
-          exactStart + animationSize * 0.4,
-          animationEnd,
-          nextStart,
+          startProgress,
+          startProgress + segmentSize * 0.1,
+          startProgress + segmentSize * 0.2,
+          endProgress,
         ],
-        [
-          index === 0 ? 1 : 0,
-          index === 0 ? 1 : 0.15,
-          index === 0 ? 1 : 0.3,
-          index === 0 ? 1 : 0.5,
-          index === 0 ? 1 : 0.7,
-          index === 0 ? 1 : 0.85,
-          index === 0 ? 1 : 0.95,
-          index === 0 ? 1 : 1,
-          1,
-          1,
-        ],
+        [index === 0 ? 1 : 0, index === 0 ? 1 : 0.7, index === 0 ? 1 : 1, 1],
         { ease: silkyEaseInOut }
       ),
-      // biome-ignore lint/correctness/useHookAtTopLevel:
-      blurTransform: useTransform(
-        scrollYProgress,
-        [
-          exactStart,
-          exactStart + animationSize * 0.05,
-          exactStart + animationSize * 0.1,
-          exactStart + animationSize * 0.15,
-          exactStart + animationSize * 0.25,
-          exactStart + animationSize * 0.35,
-        ],
-        [
-          index === 0 ? '0px' : '8px',
-          index === 0 ? '0px' : '6px',
-          index === 0 ? '0px' : '4px',
-          index === 0 ? '0px' : '2px',
-          index === 0 ? '0px' : '1px',
-          '0px',
-        ],
-        { ease: silkyEaseInOut }
-      ),
-      // biome-ignore lint/correctness/useHookAtTopLevel:
       scaleTransform: useTransform(
         scrollYProgress,
         [
-          exactStart,
-          exactStart + animationSize * 0.05,
-          exactStart + animationSize * 0.1,
-          exactStart + animationSize * 0.15,
-          exactStart + animationSize * 0.2,
-          exactStart + animationSize * 0.25,
-          exactStart + animationSize * 0.3,
-          exactStart + animationSize * 0.35,
-          exactStart + animationSize * 0.4,
-          exactStart + animationSize * 0.5,
-          animationEnd,
-          nextStart,
+          startProgress,
+          startProgress + segmentSize * 0.1,
+          startProgress + segmentSize * 0.3,
+          midProgress,
+          endProgress - segmentSize * 0.3,
+          endProgress,
         ],
         [
-          index === 0 ? 1 : 0.7,
-          index === 0 ? 1 : 0.78,
           index === 0 ? 1 : 0.85,
           index === 0 ? 1 : 0.9,
           index === 0 ? 1 : 0.95,
-          index === 0 ? 1 : 0.98,
-          index === 0 ? 1 : 1.0,
-          index === 0 ? 1 : 1.02,
-          index === 0 ? 1 : 1.03,
-          index === 0 ? 1 : 1.02,
-          index === 0 ? 1 : 1.01,
-          index === 0 ? 1 : 1.01,
+          index === 0 ? 1 : 1,
+          index === 0 ? 1 : 1,
+          index === 0 ? 1 : 1,
         ],
         { ease: softBounce }
       ),
-      // biome-ignore lint/correctness/useHookAtTopLevel:
+      blurTransform: useTransform(
+        scrollYProgress,
+        [
+          startProgress,
+          startProgress + segmentSize * 0.1,
+          startProgress + segmentSize * 0.2,
+        ],
+        [index === 0 ? '0px' : '4px', index === 0 ? '0px' : '2px', '0px'],
+        { ease: silkyEaseInOut }
+      ),
       rotateTransform: useTransform(
         scrollYProgress,
         [
-          exactStart,
-          exactStart + animationSize * 0.1,
-          exactStart + animationSize * 0.15,
-          exactStart + animationSize * 0.25,
-          exactStart + animationSize * 0.4,
-          exactStart + animationSize * 0.6,
-          exactStart + animationSize * 0.8,
-          animationEnd,
-          nextStart,
+          startProgress,
+          startProgress + segmentSize * 0.2,
+          midProgress,
+          endProgress,
         ],
         [
           index === 0 ? '0deg' : rotationPattern.start,
-          index === 0 ? '0deg' : rotationPattern.mid1,
-          index === 0 ? '0deg' : rotationPattern.mid1,
-          index === 0 ? '0deg' : rotationPattern.mid2,
-          index === 0 ? '0deg' : rotationPattern.mid3,
-          index === 0 ? '0deg' : rotationPattern.end1,
-          index === 0 ? '0deg' : rotationPattern.end2,
-          index === 0 ? '0deg' : rotationPattern.end2,
-          index === 0 ? '0deg' : rotationPattern.end2,
+          index === 0 ? '0deg' : rotationPattern.mid,
+          index === 0 ? '0deg' : rotationPattern.end,
+          index === 0 ? '0deg' : rotationPattern.end,
         ],
-        { ease: springyDeceleration }
+        { ease: luxuryEaseOut }
       ),
     };
   });
 
+  // Initial server-side render with skeleton/placeholder
+  if (!isClient) {
+    return (
+      <section className="relative w-full pt-16 md:pt-24">
+        <div className="flex flex-col items-center">
+          <div className="mb-8 flex w-full max-w-7xl flex-col items-center">
+            <div className="flex w-full max-w-3xl flex-col items-center gap-5 px-4">
+              <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
+                {title}
+              </h2>
+              <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
+                {subtitle}
+              </p>
+            </div>
+          </div>
+          <div className="h-64 w-full animate-pulse bg-gray-100" />
+        </div>
+      </section>
+    );
+  }
+
   if (useSimpleLayout) {
     return (
-      <section
-        className="relative w-full pt-16 md:pt-24"
-        style={{ height: 'auto' }}
-      >
+      <section className="relative w-full pt-16 md:pt-24">
         <div className="flex flex-col items-center">
-          <div className="mb-12 flex w-full max-w-7xl flex-col items-center">
-            <div className="mb-8 flex w-full max-w-3xl flex-col items-center gap-5">
+          <div className="mb-8 flex w-full max-w-7xl flex-col items-center">
+            <div className="flex w-full max-w-3xl flex-col items-center gap-5 px-4">
               <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
                 {title}
               </h2>
@@ -270,7 +204,7 @@ export default function StackingActivitiesSection({
             </div>
           </div>
 
-          {/* Activity cards stacked directly with no styling */}
+          {/* Activity cards stacked without gaps */}
           <div className="flex w-full max-w-7xl flex-col">
             {activities.map((activity, index) => {
               const isEven = index % 2 === 1;
@@ -290,8 +224,6 @@ export default function StackingActivitiesSection({
               );
             })}
           </div>
-
-          <div className="h-24" aria-hidden="true" />
         </div>
       </section>
     );
@@ -302,9 +234,8 @@ export default function StackingActivitiesSection({
       ref={containerRef}
       className="relative w-full scroll-mt-16 pt-16 md:pt-24"
       style={{
-        height: `${containerHeight}px`,
+        height: `${SCROLL_CONTAINER_HEIGHT}px`,
         scrollSnapAlign: 'start',
-        scrollSnapStop: 'always',
       }}
     >
       {/* Fixed content that stays in view during scrolling */}
@@ -321,26 +252,41 @@ export default function StackingActivitiesSection({
         </div>
 
         {/* Activity cards stack */}
-        <div className="relative h-[500px] w-full max-w-7xl overflow-visible">
-          {activities.map((activity, index) => {
-            const isEven = index % 2 === 1;
+        <div className="relative h-150 w-full max-w-7xl overflow-visible">
+          {/* Sort cards by active index for proper stacking order */}
+          {[...activities].map((activity, originalIndex) => {
+            const isEven = originalIndex % 2 === 1;
+
+            // Calculate dynamic z-index
+            // Active card should be on top (highest z-index)
+            // Cards that will appear next should be below
+            // Cards that have already been shown should be at the bottom
+            const zIndexValue = (() => {
+              if (originalIndex === activeCardIndex) {
+                return activities.length; // Current card on top
+              }
+              if (originalIndex > activeCardIndex) {
+                // Future cards: the closer to active, the higher z-index
+                return activities.length - (originalIndex - activeCardIndex);
+              }
+              // Past cards: lowest z-index, but maintain order among themselves
+              return originalIndex;
+            })();
 
             return (
               <motion.div
-                key={index}
+                key={originalIndex}
                 className="absolute inset-0 will-change-transform"
                 style={{
-                  y: transformsArray[index].yTransform,
-                  opacity: transformsArray[index].opacityTransform,
-                  scale: transformsArray[index].scaleTransform,
-                  rotate: transformsArray[index].rotateTransform,
-                  filter: `blur(${transformsArray[index].blurTransform})`,
-                  zIndex: index,
+                  opacity: transformsArray[originalIndex].opacityTransform,
+                  scale: transformsArray[originalIndex].scaleTransform,
+                  rotate: transformsArray[originalIndex].rotateTransform,
+                  filter: `blur(${transformsArray[originalIndex].blurTransform})`,
+                  zIndex: zIndexValue,
                   transformOrigin: 'center center',
                   perspective: '1200px',
                   backfaceVisibility: 'hidden',
                   transform: 'translate3d(0,0,0)',
-                  transition: 'all 0.05s linear',
                 }}
                 initial={false}
               >
@@ -358,11 +304,6 @@ export default function StackingActivitiesSection({
             );
           })}
         </div>
-
-        <div
-          className="h-32 sm:h-48 md:h-96 lg:h-48 xl:h-24"
-          aria-hidden="true"
-        />
       </div>
     </section>
   );

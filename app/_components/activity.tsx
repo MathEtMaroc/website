@@ -4,7 +4,7 @@ import { cn } from '~/app/utils/cn';
 import ChevronRightIcon from '../../public/icons/chevron-right.svg';
 import HandDrawnArrow from '../../public/icons/hand-drawn-arrow.svg';
 
-interface ActivityProps {
+export type Activity = {
   title: string;
   description: string;
   linkText: string;
@@ -13,7 +13,7 @@ interface ActivityProps {
   imageAlt: string;
   highlight?: string;
   isEven?: boolean;
-}
+};
 
 export const Activity = ({
   title,
@@ -24,11 +24,11 @@ export const Activity = ({
   imageAlt,
   highlight,
   isEven = false,
-}: ActivityProps) => {
+}: Activity) => {
   return (
     <div
       className={cn(
-        'group mx-auto flex w-full max-w-7xl flex-col lg:shadow-xl lg:drop-shadow-2xl',
+        'group mx-auto flex w-full max-w-7xl flex-col lg:shadow-lg lg:drop-shadow-xl',
         isEven ? 'bg-white' : 'bg-primary-900',
         'lg:flex-row',
         isEven ? 'lg:flex-row-reverse' : ''
