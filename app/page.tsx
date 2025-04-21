@@ -3,12 +3,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Activity } from '~/app/_components/activity';
 import AnimatedStat from '~/app/_components/animated-stat';
+import MagnetLines from '~/app/_components/magnetic-lines';
 import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
 import TestimonialsGrid, {
   type Testimonial,
 } from '~/app/_components/testimonials-grid';
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
+import AtSignIcon from '../public/icons/at-sign.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
+import PhoneIcon from '../public/icons/phone.svg';
+import SmileyFace from '../public/smiley-face.png';
 import BounceCardsSection from './_components/bounce-cards-section';
 
 // Define metadata for this page
@@ -176,7 +180,7 @@ export default function Page() {
       />
       {/* Partners Section */}
       <section className="flex w-full flex-col items-center pt-16 lg:pt-24">
-        <div className="flex w-full max-w-7xl flex-col items-center gap-y-16 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:flex-row lg:justify-between lg:gap-x-16 lg:gap-y-0 lg:px-16">
+        <div className="flex w-full max-w-7xl flex-col items-center gap-y-16 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:flex-row lg:justify-between lg:gap-x-16 lg:gap-y-0 lg:px-8">
           <div className="flex flex-col gap-y-8 lg:max-w-xl">
             <h2 className="font-semibold text-4xl text-white tracking-tighter md:text-5xl">
               Our Partners
@@ -280,13 +284,13 @@ export default function Page() {
         <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
           <div className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
-              Don’t take just our word for it
+              Don't take just our word for it
             </h2>
             <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
               Hear first-hand from our incredible participants
             </p>
           </div>
-          <div className="mask-b-from-40% flex w-full px-4 pb-16 md:px-8 lg:pb-24">
+          <div className="sm:mask-b-from-40% flex w-full px-4 pb-16 md:px-8 lg:pb-24">
             <TestimonialsGrid testimonials={testimonials} />
           </div>
         </div>
@@ -297,8 +301,150 @@ export default function Page() {
         </div>
       </section>
       {/* Contact Section */}
-      <section className="flex h-200 w-full flex-col items-center bg-primary-900">
-        <div className="flex w-full max-w-7xl">.</div>
+      <section className="flex w-full flex-col items-center bg-white">
+        <div className="relative flex w-full max-w-360 flex-col items-center gap-y-12 bg-primary-900 pt-16 md:gap-y-16 md:py-24">
+          <div className="flex w-full max-w-7xl flex-col items-start gap-y-4 px-4 md:gap-y-8 md:px-8">
+            <div className="flex flex-col gap-y-3 md:gap-y-8">
+              <p className="font-semibold text-primary-100 text-sm md:text-base">
+                Contact us
+              </p>
+              <h2 className="flex gap-x-3 font-semibold text-3xl text-white tracking-tighter md:text-4xl">
+                <span>Chat to our</span>
+                <Image
+                  src={SmileyFace}
+                  alt="Smiley Face"
+                  width={75}
+                  height={39}
+                  className="h-[36px] md:h-[39px] "
+                />
+                <span>team</span>
+              </h2>
+            </div>
+            <p className="text-balance text-lg text-primary-50 md:text-xl">
+              We'd love to hear from you. Please fill out this form or shoot us
+              an email.
+            </p>
+          </div>
+          <div className="flex w-full max-w-7xl flex-col gap-y-12 md:flex-row md:gap-x-16">
+            <div className="grid grid-cols-1 gap-y-10 px-4 md:grid-cols-2 md:gap-8 md:px-8">
+              <div className="flex w-full flex-col gap-y-3 md:gap-y-4">
+                <AtSignIcon className="size-6 text-primary-50" />
+                <h3 className="font-semibold text-lg text-white md:text-xl">
+                  Email
+                </h3>
+                <p className="text-balance text-primary-100">
+                  Our friendly team is here to help.
+                </p>
+                <Link
+                  href="mailto:mathemaroc.officiel@gmail.com"
+                  className="w-fit border-transparent border-b font-krypton font-semibold text-white transition-colors duration-300 hover:border-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                >
+                  mathemaroc.officiel@gmail.com
+                </Link>
+              </div>
+              <div className="flex w-full flex-col gap-y-3 md:gap-y-4">
+                <PhoneIcon className="size-6 text-primary-50" />
+                <h3 className="font-semibold text-lg text-white md:text-xl">
+                  Phone
+                </h3>
+                <p className="text-balance text-primary-100">
+                  Mon-Fri from 8am to 5pm.
+                </p>
+                <Link
+                  href="tel:+216612345678"
+                  className="w-fit border-transparent border-b font-krypton font-semibold text-white transition-colors duration-300 hover:border-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                >
+                  +216 6 12 34 56 78
+                </Link>
+              </div>
+            </div>
+            <div className="w-full max-w-xl bg-white px-4 py-8 md:px-8 md:py-10">
+              <form
+                action=""
+                className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 md:gap-y-6"
+              >
+                <div className="flex flex-col gap-y-2">
+                  <label
+                    htmlFor="firstName"
+                    className="font-medium text-gray-700"
+                  >
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-y-2">
+                  <label
+                    htmlFor="lastName"
+                    className="font-medium text-gray-700"
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-y-2 md:col-span-2">
+                  <label htmlFor="email" className="font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-y-2 md:col-span-2">
+                  <label
+                    htmlFor="message"
+                    className="font-medium text-gray-700"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    required
+                  />
+                </div>
+                <div className="flex items-end justify-end md:col-span-2">
+                  <button
+                    type="submit"
+                    className="flex items-center gap-x-2 bg-primary-800 px-6 py-3 font-semibold text-shadow text-white shadow transition-all hover:bg-primary-900 hover:text-shadow-lg hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-800"
+                  >
+                    <span>Send Message</span>
+                    <ArrowRightIcon className="size-5" />
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* MagnetLines Component (hidden on mobile) */}
+          <div className="absolute bottom-0 left-0 hidden md:block">
+            <MagnetLines
+              rows={10}
+              columns={10}
+              containerSize="40vmin"
+              lineWidth="0.4vmin"
+              lineHeight="4vmin"
+              lineColor="#a3b2fe"
+            />
+          </div>
+        </div>
       </section>
     </main>
   );

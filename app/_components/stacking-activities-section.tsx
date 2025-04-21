@@ -1,7 +1,8 @@
 'use client';
 
-import { cubicBezier, motion, useScroll, useTransform } from 'motion/react';
+import { AnimatePresence, cubicBezier, motion, useScroll } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import type React from 'react';
 import { Activity } from './activity';
 
 interface ActivityData {
@@ -31,20 +32,34 @@ export default function StackingActivitiesSection({
   activities,
 }: StackingActivitiesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Add state for client-side rendering check
+  const [cardRefs, setCardRefs] = useState<Array<HTMLDivElement | null>>(
+    new Array(activities.length).fill(null)
+  );
   const [isClient, setIsClient] = useState(false);
-  // Track the current active card index to adjust z-indices
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
 
-  // Set isClient to true on component mount
+  // Update refs array when activities length changes
+  useEffect(() => {
+    setCardRefs(new Array(activities.length).fill(null));
+  }, [activities.length]);
+
+  // Ref callback function
+  const updateCardRef = (element: HTMLDivElement | null, index: number) => {
+    setCardRefs((prevRefs) => {
+      const newRefs = [...prevRefs];
+      newRefs[index] = element;
+      return newRefs;
+    });
+  };
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Use client-side only media queries
+  // Media query detection
   const [useSimpleLayout, setUseSimpleLayout] = useState(false);
 
-  // Move media query detection to useEffect to prevent hydration mismatch
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth <= 767;
@@ -52,123 +67,82 @@ export default function StackingActivitiesSection({
       setUseSimpleLayout(isMobile || isSmallHeight);
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fixed height for scroll container in animated mode
-  const SCROLL_CONTAINER_HEIGHT = 8000;
+  // Scroll tracking
+  const { scrollY } = useScroll({ target: containerRef });
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  // Update active card based on scroll position
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (latest) => {
-      const cardCount = activities.length;
-      // Calculate which card should be active based on scroll position
-      const segmentSize = 1 / cardCount;
-      const newActiveIndex = Math.min(
-        cardCount - 1,
-        Math.floor(latest / segmentSize)
+    if (!isClient) {
+      return;
+    }
+
+    let lastScrollY = 0;
+    const unsubscribe = scrollY.on('change', (latest) => {
+      const sectionHeight = window.innerHeight * 1.2;
+      const newIndex = Math.min(
+        activities.length - 1,
+        Math.floor(latest / sectionHeight)
       );
-      if (newActiveIndex !== activeCardIndex) {
-        setActiveCardIndex(newActiveIndex);
+
+      setScrollDirection(latest > lastScrollY ? 'down' : 'up');
+      lastScrollY = latest;
+
+      if (newIndex !== activeIndex) {
+        setActiveIndex(newIndex);
       }
     });
 
     return () => unsubscribe();
-  }, [activities.length, scrollYProgress, activeCardIndex]);
+  }, [scrollY, activities.length, activeIndex, isClient]);
 
-  // Create all transforms outside the render loop
-  const transformsArray = activities.map((_, index) => {
-    const cardCount = activities.length;
+  // Navigation
+  const navigateToCard = (index: number) => {
+    if (!containerRef.current) {
+      return;
+    }
 
-    // Divide scroll progress evenly between cards
-    const segmentSize = 1 / cardCount;
+    const targetPos = window.innerHeight * 1.2 * index;
+    window.scrollTo({
+      top: containerRef.current.offsetTop + targetPos,
+      behavior: 'smooth',
+    });
 
-    // Calculate start and end points for this card's animation
-    const startProgress = index * segmentSize;
-    const midProgress = startProgress + segmentSize * 0.5;
-    const endProgress = (index + 1) * segmentSize;
+    setActiveIndex(index);
 
-    // Generate unique rotation pattern based on index
-    const getRotationPattern = (idx: number) => {
-      const baseRotation = idx % 2 === 0 ? 4 : -4;
-      return {
-        start: `${baseRotation}deg`,
-        mid: `${baseRotation * 0.6}deg`,
-        end: `${baseRotation * 0.3}deg`,
-      };
-    };
+    // Focus the newly active card if it exists
+    setTimeout(() => {
+      if (cardRefs[index]) {
+        cardRefs[index]?.focus();
+      }
+    }, 500);
+  };
 
-    const rotationPattern = getRotationPattern(index);
+  // Focus handling for Tab navigation
+  const handleFocus = (index: number) => {
+    if (index !== activeIndex) {
+      navigateToCard(index);
+    }
+  };
 
-    return {
-      opacityTransform: useTransform(
-        scrollYProgress,
-        [
-          startProgress,
-          startProgress + segmentSize * 0.1,
-          startProgress + segmentSize * 0.2,
-          endProgress,
-        ],
-        [index === 0 ? 1 : 0, index === 0 ? 1 : 0.7, index === 0 ? 1 : 1, 1],
-        { ease: silkyEaseInOut }
-      ),
-      scaleTransform: useTransform(
-        scrollYProgress,
-        [
-          startProgress,
-          startProgress + segmentSize * 0.1,
-          startProgress + segmentSize * 0.3,
-          midProgress,
-          endProgress - segmentSize * 0.3,
-          endProgress,
-        ],
-        [
-          index === 0 ? 1 : 0.85,
-          index === 0 ? 1 : 0.9,
-          index === 0 ? 1 : 0.95,
-          index === 0 ? 1 : 1,
-          index === 0 ? 1 : 1,
-          index === 0 ? 1 : 1,
-        ],
-        { ease: softBounce }
-      ),
-      blurTransform: useTransform(
-        scrollYProgress,
-        [
-          startProgress,
-          startProgress + segmentSize * 0.1,
-          startProgress + segmentSize * 0.2,
-        ],
-        [index === 0 ? '0px' : '4px', index === 0 ? '0px' : '2px', '0px'],
-        { ease: silkyEaseInOut }
-      ),
-      rotateTransform: useTransform(
-        scrollYProgress,
-        [
-          startProgress,
-          startProgress + segmentSize * 0.2,
-          midProgress,
-          endProgress,
-        ],
-        [
-          index === 0 ? '0deg' : rotationPattern.start,
-          index === 0 ? '0deg' : rotationPattern.mid,
-          index === 0 ? '0deg' : rotationPattern.end,
-          index === 0 ? '0deg' : rotationPattern.end,
-        ],
-        { ease: luxuryEaseOut }
-      ),
-    };
-  });
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (activeIndex < activities.length - 1) {
+        navigateToCard(activeIndex + 1);
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (activeIndex > 0) {
+        navigateToCard(activeIndex - 1);
+      }
+    }
+  };
 
-  // Initial server-side render with skeleton/placeholder
+  // Server-side render placeholder
   if (!isClient) {
     return (
       <section className="relative w-full pt-16 md:pt-24">
@@ -189,6 +163,7 @@ export default function StackingActivitiesSection({
     );
   }
 
+  // Simple layout for mobile/small screens
   if (useSimpleLayout) {
     return (
       <section className="relative w-full pt-16 md:pt-24">
@@ -204,7 +179,6 @@ export default function StackingActivitiesSection({
             </div>
           </div>
 
-          {/* Activity cards stacked without gaps */}
           <div className="flex w-full max-w-7xl flex-col">
             {activities.map((activity, index) => {
               const isEven = index % 2 === 1;
@@ -229,80 +203,147 @@ export default function StackingActivitiesSection({
     );
   }
 
+  // Scroll-driven animated layout
   return (
     <section
       ref={containerRef}
-      className="relative w-full scroll-mt-16 pt-16 md:pt-24"
+      className="relative scroll-mt-24"
       style={{
-        height: `${SCROLL_CONTAINER_HEIGHT}px`,
-        scrollSnapAlign: 'start',
+        height: `${activities.length * 120}vh`,
       }}
+      onKeyDown={handleKeyDown}
+      aria-roledescription="carousel"
+      aria-label={title}
     >
-      {/* Fixed content that stays in view during scrolling */}
-      <div className="sticky top-20 z-10 flex flex-col items-center md:top-24">
-        <div className="flex w-full max-w-7xl flex-col items-center px-8">
-          <div className="mb-8 flex w-full max-w-3xl flex-col items-center gap-5 lg:mb-16">
-            <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
-              {title}
-            </h2>
-            <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
-              {subtitle}
-            </p>
+      <div className="sticky top-0 flex h-screen w-full flex-col pt-16 md:pt-20">
+        {/* Header */}
+        <div className="z-20 py-6 md:py-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-8">
+            <div className="flex w-full max-w-3xl flex-col items-center gap-5">
+              <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
+                {title}
+              </h2>
+              <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
+                {subtitle}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Activity cards stack */}
-        <div className="relative h-150 w-full max-w-7xl overflow-visible">
-          {/* Sort cards by active index for proper stacking order */}
-          {[...activities].map((activity, originalIndex) => {
-            const isEven = originalIndex % 2 === 1;
+        {/* Card animation container */}
+        <div className="relative flex flex-1 items-center justify-center px-4">
+          <AnimatePresence mode="sync">
+            {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: */}
+            {activities.map((activity, index) => {
+              const isEven = index % 2 === 1;
+              // Instead of filtering out non-active, we'll render all but position them
+              return (
+                <motion.div
+                  key={`activity-${index}`}
+                  ref={(el) => updateCardRef(el, index)}
+                  className="w-full max-w-7xl"
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                    rotate: isEven ? '-6deg' : '6deg',
+                    y: scrollDirection === 'down' ? 30 : -30,
+                    filter: 'blur(10px)',
+                    position: 'absolute',
+                    zIndex: 1,
+                  }}
+                  animate={
+                    index === activeIndex
+                      ? {
+                          opacity: 1,
+                          scale: 1,
+                          rotate: '0deg',
+                          y: 0,
+                          filter: 'blur(0px)',
+                          position: 'relative',
+                          zIndex: 10,
+                          transition: {
+                            opacity: { duration: 0.6, ease: silkyEaseInOut },
+                            scale: { duration: 0.7, ease: softBounce },
+                            rotate: { duration: 0.7, ease: luxuryEaseOut },
+                            y: { duration: 0.6, ease: silkyEaseInOut },
+                            filter: { duration: 0.5, ease: silkyEaseInOut },
+                          },
+                        }
+                      : {
+                          opacity: 0,
+                          scale: 0.9,
+                          rotate: isEven ? '4deg' : '-4deg',
+                          y: scrollDirection === 'down' ? -30 : 30,
+                          filter: 'blur(6px)',
+                          position: 'absolute',
+                          zIndex: 1,
+                        }
+                  }
+                  exit={{
+                    opacity: 0,
+                    scale: 0.9,
+                    rotate: isEven ? '6deg' : '-6deg',
+                    y: scrollDirection === 'down' ? -30 : 30,
+                    filter: 'blur(10px)',
+                    position: 'absolute',
+                    zIndex: 1,
+                    transition: {
+                      opacity: { duration: 1.0, ease: silkyEaseInOut },
+                      scale: { duration: 1.1, ease: softBounce },
+                      rotate: { duration: 1.1, ease: luxuryEaseOut },
+                      y: { duration: 1.0, ease: silkyEaseInOut },
+                      filter: { duration: 0.9, ease: silkyEaseInOut },
+                    },
+                  }}
+                  onFocus={() => handleFocus(index)}
+                  aria-label={`Activity ${index + 1} of ${activities.length}: ${activity.title}`}
+                  style={{
+                    display:
+                      Math.abs(index - activeIndex) <= 1 ? 'block' : 'none', // Only render adjacent cards for performance
+                    pointerEvents: index === activeIndex ? 'auto' : 'none', // Only active card can receive pointer events
+                  }}
+                >
+                  <Activity
+                    title={activity.title}
+                    description={activity.description}
+                    linkText={activity.linkText}
+                    linkHref={activity.linkHref}
+                    imageSrc={activity.imageSrc}
+                    imageAlt={activity.imageAlt}
+                    highlight={activity.highlight}
+                    isEven={isEven}
+                  />
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
 
-            // Calculate dynamic z-index
-            // Active card should be on top (highest z-index)
-            // Cards that will appear next should be below
-            // Cards that have already been shown should be at the bottom
-            const zIndexValue = (() => {
-              if (originalIndex === activeCardIndex) {
-                return activities.length; // Current card on top
+        {/* Hidden navigation buttons for tab sequence - Only render if not the last card */}
+        <div className="sr-only">
+          {activities.map((_, index) => (
+            // Only show buttons for navigation that aren't the current card or immediately after the last card
+            // This helps prevent tab trapping and allows focus to escape after the last card
+            <button
+              key={index}
+              type="button"
+              tabIndex={
+                activeIndex === index ||
+                (activeIndex === activities.length - 1 && index > activeIndex)
+                  ? -1
+                  : 0
               }
-              if (originalIndex > activeCardIndex) {
-                // Future cards: the closer to active, the higher z-index
-                return activities.length - (originalIndex - activeCardIndex);
-              }
-              // Past cards: lowest z-index, but maintain order among themselves
-              return originalIndex;
-            })();
+              onFocus={() => navigateToCard(index)}
+              aria-label={`Go to activity ${index + 1}`}
+            />
+          ))}
+        </div>
 
-            return (
-              <motion.div
-                key={originalIndex}
-                className="absolute inset-0 will-change-transform"
-                style={{
-                  opacity: transformsArray[originalIndex].opacityTransform,
-                  scale: transformsArray[originalIndex].scaleTransform,
-                  rotate: transformsArray[originalIndex].rotateTransform,
-                  filter: `blur(${transformsArray[originalIndex].blurTransform})`,
-                  zIndex: zIndexValue,
-                  transformOrigin: 'center center',
-                  perspective: '1200px',
-                  backfaceVisibility: 'hidden',
-                  transform: 'translate3d(0,0,0)',
-                }}
-                initial={false}
-              >
-                <Activity
-                  title={activity.title}
-                  description={activity.description}
-                  linkText={activity.linkText}
-                  linkHref={activity.linkHref}
-                  imageSrc={activity.imageSrc}
-                  imageAlt={activity.imageAlt}
-                  highlight={activity.highlight}
-                  isEven={isEven}
-                />
-              </motion.div>
-            );
-          })}
+        {/* Navigation helper - updates when activeIndex changes */}
+        <div className="sr-only" aria-live="polite">
+          {isClient && (
+            <div>{`Showing activity ${activeIndex + 1} of ${activities.length}. Use arrow keys to navigate.`}</div>
+          )}
         </div>
       </div>
     </section>
