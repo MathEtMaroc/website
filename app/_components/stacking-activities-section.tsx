@@ -193,6 +193,7 @@ export default function StackingActivitiesSection({
                     imageAlt={activity.imageAlt}
                     highlight={activity.highlight}
                     isEven={isEven}
+                    simpleLayout={true}
                   />
                 </div>
               );
@@ -312,6 +313,7 @@ export default function StackingActivitiesSection({
                     imageAlt={activity.imageAlt}
                     highlight={activity.highlight}
                     isEven={isEven}
+                    simpleLayout={false}
                   />
                 </motion.div>
               );

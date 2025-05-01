@@ -4,6 +4,12 @@ import Link from 'next/link';
 import type { Activity } from '~/app/_components/activity';
 import AnimatedStat from '~/app/_components/animated-stat';
 import MagnetLines from '~/app/_components/magnetic-lines';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '~/app/_components/motion-primitives/accordion';
 import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
 import TestimonialsGrid, {
   type Testimonial,
@@ -12,6 +18,7 @@ import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import AtSignIcon from '../public/icons/at-sign.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import PhoneIcon from '../public/icons/phone.svg';
+import PlusCircleIcon from '../public/icons/plus-circle.svg';
 import SmileyFace from '../public/smiley-face.png';
 import BounceCardsSection from './_components/bounce-cards-section';
 
@@ -156,6 +163,39 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+const faq: { question: string; answer: string }[] = [
+  {
+    question: 'What is Math & Maroc?',
+    answer:
+      'Math & Maroc is a non-profit organization that aims to promote mathematical education and research in Morocco.',
+  },
+  {
+    question: 'How can my child participate in Math & Maroc activities?',
+    answer:
+      'Students can join our activities by registering through our website. We offer programs for different age groups and skill levels throughout the academic year and during summer breaks.',
+  },
+  {
+    question: 'Do you offer scholarships or financial aid?',
+    answer:
+      'Yes, we provide scholarships and financial assistance to talented students with limited resources. Applications are reviewed on a case-by-case basis, and we strive to make our programs accessible to all motivated students.',
+  },
+  {
+    question: 'What qualifications do your instructors have?',
+    answer:
+      'Our instructors include university professors, research mathematicians, and experienced teachers with strong backgrounds in mathematics education. Many have advanced degrees and experience in competitive mathematics.',
+  },
+  {
+    question:
+      'Can Math & Maroc help prepare students for international competitions?',
+    answer:
+      'Absolutely! We offer specialized training programs for various international mathematics competitions, including the International Mathematical Olympiad (IMO). Our curriculum is designed to develop problem-solving skills at the highest levels.',
+  },
+  {
+    question: 'How can I support Math & Maroc as a volunteer or donor?',
+    answer:
+      'We welcome support in many forms. You can volunteer as a mentor, instructor, or event organizer. Financial contributions help us expand our programs and provide scholarships. Please contact us through our website for more information on how to get involved.',
+  },
+];
 export default function Page() {
   return (
     <main>
@@ -179,7 +219,7 @@ export default function Page() {
         activities={activities}
       />
       {/* Partners Section */}
-      <section className="flex w-full flex-col items-center pt-16 lg:pt-24">
+      <section className="flex w-full justify-center pt-16 lg:pt-24">
         <div className="flex w-full max-w-7xl flex-col items-center gap-y-16 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:flex-row lg:justify-between lg:gap-x-16 lg:gap-y-0 lg:px-8">
           <div className="flex flex-col gap-y-8 lg:max-w-xl">
             <h2 className="font-semibold text-4xl text-white tracking-tighter md:text-5xl">
@@ -209,7 +249,7 @@ export default function Page() {
               </Link>
             </div>
           </div>
-          <ul className="grid min-w-fit grid-cols-2 gap-x-8 gap-y-4 sm:gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-0 lg:grid-cols-2 lg:gap-10 lg:gap-x-8 xl:gap-x-12 xl:gap-y-16">
+          <ul className="grid min-w-fit grid-cols-2 gap-x-8 gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-0 lg:grid-cols-2 lg:gap-10 lg:gap-x-8 xl:gap-x-12 xl:gap-y-16">
             {partners.map((partner) => (
               <li
                 key={partner.name}
@@ -242,41 +282,39 @@ export default function Page() {
       </section>
       {/* Stats Section */}
       <section className="flex w-full flex-col items-center pt-16 lg:pt-24">
-        <div className="">
-          <div className="flex w-full max-w-7xl flex-col items-start gap-y-12 px-4 md:px-8 lg:flex-row-reverse lg:items-center lg:gap-x-16">
-            <div className="flex w-full flex-col items-start gap-y-8 md:gap-y-16">
-              <div className="flex flex-col gap-y-4 md:gap-y-5">
-                <p className="font-krypton font-semibold text-primary-800 text-shadow text-sm md:text-base">
-                  On your mark, get set, Maths !
-                </p>
-                <h2 className="font-semibold text-3xl text-gray-900 tracking-tighter md:text-5xl">
-                  Growing year after year
-                </h2>
-              </div>
-              <dl className="grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-y-16 lg:gap-x-8 lg:gap-y-12">
-                {stats.map((stat) => (
-                  <AnimatedStat
-                    key={stat.title}
-                    title={stat.title}
-                    targetValue={stat.number}
-                    suffix={stat.suffix}
-                    className="flex flex-col items-start gap-y-3 lg:gap-y-5"
-                    ddClassName="font-krypton font-semibold text-5xl text-primary-800 tracking-tighter md:text-6xl"
-                    springOptions={{ bounce: 0, duration: 5000 }}
-                  />
-                ))}
-              </dl>
+        <div className="flex w-full max-w-7xl flex-col items-start gap-y-12 px-4 md:px-8 lg:flex-row-reverse lg:items-center lg:gap-x-16">
+          <div className="flex w-full flex-col items-start gap-y-8 md:gap-y-16">
+            <div className="flex flex-col gap-y-4 md:gap-y-5">
+              <p className="font-krypton font-semibold text-primary-800 text-shadow text-sm md:text-base">
+                On your mark, get set, Maths !
+              </p>
+              <h2 className="font-semibold text-3xl text-gray-900 tracking-tighter md:text-5xl">
+                Growing year after year
+              </h2>
             </div>
-            <figure className="w-full">
-              <Image
-                src="/images/omar-with-flag.jpeg"
-                alt="Omar with flag"
-                width={600}
-                height={600}
-                className="h-70 w-full object-cover md:h-90 lg:h-140"
-              />
-            </figure>
+            <dl className="grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-y-16 lg:gap-x-8 lg:gap-y-12">
+              {stats.map((stat) => (
+                <AnimatedStat
+                  key={stat.title}
+                  title={stat.title}
+                  targetValue={stat.number}
+                  suffix={stat.suffix}
+                  className="flex flex-col items-start gap-y-3 lg:gap-y-5"
+                  ddClassName="font-krypton font-semibold text-5xl text-primary-800 tracking-tighter md:text-6xl"
+                  springOptions={{ bounce: 0, duration: 5000 }}
+                />
+              ))}
+            </dl>
           </div>
+          <figure className="w-full">
+            <Image
+              src="/images/omar-with-flag.jpeg"
+              alt="Omar with flag"
+              width={600}
+              height={600}
+              className="h-70 w-full object-cover md:h-90 lg:h-140"
+            />
+          </figure>
         </div>
       </section>
       {/* Testimonials Section */}
@@ -315,7 +353,7 @@ export default function Page() {
                   alt="Smiley Face"
                   width={75}
                   height={39}
-                  className="h-[36px] md:h-[39px] "
+                  quality={100}
                 />
                 <span>team</span>
               </h2>
@@ -325,9 +363,9 @@ export default function Page() {
               an email.
             </p>
           </div>
-          <div className="flex w-full max-w-7xl flex-col gap-y-12 md:flex-row md:gap-x-16">
-            <div className="grid grid-cols-1 gap-y-10 px-4 md:grid-cols-2 md:gap-8 md:px-8">
-              <div className="flex w-full flex-col gap-y-3 md:gap-y-4">
+          <div className="flex w-full max-w-7xl flex-col items-center gap-y-12 lg:flex-row lg:items-baseline lg:justify-between lg:gap-x-8 xl:gap-x-16">
+            <div className="grid grid-cols-1 gap-y-10 pl-4 max-sm:w-full md:grid-cols-2 md:gap-8 md:pl-8">
+              <div className="flex flex-col gap-y-3 md:gap-y-4">
                 <AtSignIcon className="size-6 text-primary-50" />
                 <h3 className="font-semibold text-lg text-white md:text-xl">
                   Email
@@ -342,7 +380,7 @@ export default function Page() {
                   mathemaroc.officiel@gmail.com
                 </Link>
               </div>
-              <div className="flex w-full flex-col gap-y-3 md:gap-y-4">
+              <div className="flex flex-col gap-y-3 md:gap-y-4">
                 <PhoneIcon className="size-6 text-primary-50" />
                 <h3 className="font-semibold text-lg text-white md:text-xl">
                   Phone
@@ -358,7 +396,7 @@ export default function Page() {
                 </Link>
               </div>
             </div>
-            <div className="w-full max-w-xl bg-white px-4 py-8 md:px-8 md:py-10">
+            <div className="w-full max-w-xl bg-white px-4 py-8 focus-within:drop-shadow-xl md:px-8 md:py-10">
               <form
                 action=""
                 className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 md:gap-y-6"
@@ -434,15 +472,55 @@ export default function Page() {
           </div>
 
           {/* MagnetLines Component (hidden on mobile) */}
-          <div className="absolute bottom-0 left-0 hidden md:block">
+          <div className="absolute bottom-0 left-0 hidden opacity-40 transition-opacity duration-300 hover:opacity-70 lg:block">
             <MagnetLines
-              rows={10}
-              columns={10}
-              containerSize="40vmin"
+              rows={8}
+              columns={8}
+              containerSize="36vmin"
               lineWidth="0.4vmin"
               lineHeight="4vmin"
               lineColor="#a3b2fe"
+              baseAngle={-45}
             />
+          </div>
+        </div>
+      </section>
+      {/* FAQ Section */}
+      <section className="relative flex w-full flex-col items-center bg-white py-16 lg:py-24">
+        <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
+          <div className="flex flex-col gap-y-5 px-4">
+            <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
+              Frequently asked questions
+            </h2>
+            <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
+              Everything you need to know about Math & Maroc.
+            </p>
+          </div>
+          <div className="flex w-full justify-center px-4 md:px-8">
+            <Accordion
+              className="flex w-full max-w-3xl flex-col gap-y-4"
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            >
+              {faq.map((item) => (
+                <AccordionItem
+                  key={item.question}
+                  value={item.question}
+                  className="flex w-full flex-col gap-y-2 rounded-lg bg-white py-5 data-[expanded]:bg-gray-50 md:gap-y-4 md:py-8"
+                >
+                  <AccordionTrigger className="group flex w-full flex-row items-center gap-x-2 px-5 md:flex-row-reverse md:gap-x-6 md:px-8">
+                    <div className="flex w-full items-center justify-between">
+                      <h3 className="text-pretty text-left font-medium text-gray-900 text-lg md:text-xl">
+                        {item.question}
+                      </h3>
+                    </div>
+                    <PlusCircleIcon className="size-6 flex-none text-gray-400 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[expanded]:rotate-45" />
+                  </AccordionTrigger>
+                  <AccordionContent className="overflow-hidden pr-6 pl-5 text-gray-600 md:pr-5 md:pl-20 md:text-lg">
+                    <div className="pt-2">{item.answer}</div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>

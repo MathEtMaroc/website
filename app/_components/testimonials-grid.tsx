@@ -20,7 +20,7 @@ export default function TestimonialsGrid({
   return (
     <div
       ref={masonryContainer}
-      className="grid items-start gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8"
+      className="grid items-start gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8 [&>*:nth-child(-n+4)]:flex md:[&>*:nth-child(-n+6)]:flex [&>*]:hidden lg:[&>*]:flex"
     >
       {testimonials.map((testimonial) => (
         <div

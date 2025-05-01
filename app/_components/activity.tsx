@@ -13,6 +13,14 @@ export type Activity = {
   imageAlt: string;
   highlight?: string;
   isEven?: boolean;
+  simpleLayout?: boolean;
+};
+
+const getBgColor = (isEven: boolean, simpleLayout: boolean) => {
+  if (isEven) {
+    return simpleLayout ? 'bg-transparent' : 'bg-white';
+  }
+  return 'bg-primary-900';
 };
 
 export const Activity = ({
@@ -24,12 +32,14 @@ export const Activity = ({
   imageAlt,
   highlight,
   isEven = false,
+  simpleLayout = true,
 }: Activity) => {
   return (
     <div
       className={cn(
-        'group mx-auto flex w-full max-w-7xl flex-col lg:shadow-lg lg:drop-shadow-xl',
-        isEven ? 'bg-white' : 'bg-primary-900',
+        'group mx-auto flex w-full max-w-7xl flex-col',
+        simpleLayout ? '' : 'lg:shadow-lg lg:drop-shadow-xl',
+        getBgColor(isEven, simpleLayout),
         'lg:flex-row',
         isEven ? 'lg:flex-row-reverse' : ''
       )}

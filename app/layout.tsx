@@ -5,6 +5,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Navbar } from '~/app/_components/navbar';
 import { ScreenSize } from '~/app/_components/screen-size';
+import { ScrollToTop } from '~/app/_components/scroll-to-top';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -94,6 +95,7 @@ export default function RootLayout({
           <main className="flex w-full flex-col bg-white/60 pb-100">
             <Navbar />
             {children}
+            <ScrollToTop />
             {process.env.NODE_ENV === 'development' && <ScreenSize />}
             {/* <Banner /> */}
           </main>

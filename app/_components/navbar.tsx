@@ -1,11 +1,10 @@
 'use client';
 
-import * as Accordion from '@radix-ui/react-accordion';
-import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMotionTemplate, useTransform } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Accordion, Dialog } from 'radix-ui';
 import { useState } from 'react';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
