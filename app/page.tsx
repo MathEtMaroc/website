@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import type { Activity } from '~/app/_components/activity';
 import AnimatedStat from '~/app/_components/animated-stat';
 import MagnetLines from '~/app/_components/magnetic-lines';
@@ -10,15 +11,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/app/_components/motion-primitives/accordion';
+import ScrollToTopLink from '~/app/_components/scroll-to-top-link';
 import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
 import TestimonialsGrid, {
   type Testimonial,
 } from '~/app/_components/testimonials-grid';
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import AtSignIcon from '../public/icons/at-sign.svg';
+import DownloadCloudIcon from '../public/icons/download-cloud.svg';
+import FacebookIcon from '../public/icons/facebook.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
+import InstagramIcon from '../public/icons/instagram.svg';
+import LinkedInIcon from '../public/icons/linkedin.svg';
 import PhoneIcon from '../public/icons/phone.svg';
 import PlusCircleIcon from '../public/icons/plus-circle.svg';
+import YouTubeIcon from '../public/icons/youtube.svg';
 import SmileyFace from '../public/smiley-face.png';
 import BounceCardsSection from './_components/bounce-cards-section';
 
@@ -196,11 +203,82 @@ const faq: { question: string; answer: string }[] = [
       'We welcome support in many forms. You can volunteer as a mentor, instructor, or event organizer. Financial contributions help us expand our programs and provide scholarships. Please contact us through our website for more information on how to get involved.',
   },
 ];
+
+type FooterLink = {
+  name: string;
+  href: string;
+  trailingIcon?: JSX.Element;
+};
+
+const socials: { name: string; href: string; icon: JSX.Element }[] = [
+  {
+    name: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/mathemaroc/',
+    icon: <LinkedInIcon />,
+  },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/mathmaroc/',
+    icon: <InstagramIcon />,
+  },
+  {
+    name: 'YouTube',
+    href: 'https://www.youtube.com/@mathmaroc1396',
+    icon: <YouTubeIcon />,
+  },
+  {
+    name: 'Facebook',
+    href: 'https://www.facebook.com/MathsMaroc2',
+    icon: <FacebookIcon />,
+  },
+];
+
+const footer: { name: string; links: FooterLink[] }[] = [
+  {
+    name: 'Actions',
+    links: [
+      { name: 'MMC', href: '#' },
+      { name: 'MTYM', href: '#' },
+      { name: 'AI Hackathon', href: '#' },
+      { name: 'MDM', href: '#' },
+      { name: 'Summer Camp', href: '#' },
+    ],
+  },
+  {
+    name: 'Divisions',
+    links: [
+      { name: 'Olympiads', href: '#' },
+      { name: 'Orientation', href: '#' },
+      { name: 'Conferences', href: '#' },
+      { name: 'Prepa', href: '#' },
+    ],
+  },
+  {
+    name: 'How we are',
+    links: [
+      { name: 'Team', href: '#' },
+      { name: 'Partners', href: '#' },
+      {
+        name: 'Media kit',
+        href: '#',
+        trailingIcon: <DownloadCloudIcon className="size-5" />,
+      },
+    ],
+  },
+  {
+    name: 'Social',
+    links: socials.map((social) => ({
+      name: social.name,
+      href: social.href,
+    })),
+  },
+];
+
 export default function Page() {
   return (
     <main>
       {/* Hero Section */}
-      <header className="flex w-full justify-center py-8 md:py-16">
+      <section className="flex w-full justify-center py-8 md:py-16">
         <div className="mx-auto flex h-fit w-full max-w-7xl flex-col items-end gap-4 px-6 sm:px-8 md:flex-row md:gap-8">
           <h1 className="h-fit w-full max-w-176 text-pretty font-semibold text-4xl text-primary-950 tracking-tighter md:text-5xl">
             Unlocking the scientific potential of Moroccan youth
@@ -209,7 +287,7 @@ export default function Page() {
             1st Moroccan non-profit math related educational association
           </p>
         </div>
-      </header>
+      </section>
       {/* Bounce Cards Section */}
       <BounceCardsSection />
       {/* Activities Section */}
@@ -241,7 +319,7 @@ export default function Page() {
                 <HeartHandIcon className="size-5" />
               </Link>
               <Link
-                href="#"
+                href="#contact"
                 className="flex items-center gap-x-1.5 font-semibold text-primary-50 outline-none transition-all hover:text-primary-200 focus:text-primary-200 focus-visible:px-1.5 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               >
                 <span>Contact us</span>
@@ -269,10 +347,10 @@ export default function Page() {
                     className="h-20 w-auto object-contain brightness-0 invert transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px] "
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-transparent p-2 text-center">
-                    <div className="inline-flex items-center font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="inline-flex items-center font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                       Visit Site
                       <ArrowRightIcon className="ml-1.5 size-4" />
-                    </div>
+                    </span>
                   </div>
                 </Link>
               </li>
@@ -320,14 +398,14 @@ export default function Page() {
       {/* Testimonials Section */}
       <section className="relative flex w-full flex-col items-center pt-16 lg:pt-24">
         <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
-          <div className="flex flex-col gap-y-5 px-4">
+          <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
               Don't take just our word for it
             </h2>
             <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
               Hear first-hand from our incredible participants
             </p>
-          </div>
+          </header>
           <div className="sm:mask-b-from-40% flex w-full px-4 pb-16 md:px-8 lg:pb-24">
             <TestimonialsGrid testimonials={testimonials} />
           </div>
@@ -339,9 +417,12 @@ export default function Page() {
         </div>
       </section>
       {/* Contact Section */}
-      <section className="flex w-full flex-col items-center bg-white">
-        <div className="relative flex w-full max-w-360 flex-col items-center gap-y-12 bg-primary-900 pt-16 md:gap-y-16 md:py-24">
-          <div className="flex w-full max-w-7xl flex-col items-start gap-y-4 px-4 md:gap-y-8 md:px-8">
+      <section
+        className="flex w-full flex-col items-center bg-white"
+        id="contact"
+      >
+        <div className="relative flex w-full max-w-360 flex-col items-center gap-y-12 bg-primary-900 py-16 md:gap-y-16 md:py-24">
+          <header className="flex w-full max-w-7xl flex-col items-start gap-y-4 px-4 md:gap-y-8 md:px-8">
             <div className="flex flex-col gap-y-3 md:gap-y-8">
               <p className="font-semibold text-primary-100 text-sm md:text-base">
                 Contact us
@@ -362,10 +443,10 @@ export default function Page() {
               We'd love to hear from you. Please fill out this form or shoot us
               an email.
             </p>
-          </div>
-          <div className="flex w-full max-w-7xl flex-col items-center gap-y-12 lg:flex-row lg:items-baseline lg:justify-between lg:gap-x-8 xl:gap-x-16">
+          </header>
+          <div className="flex w-full max-w-7xl flex-col items-center gap-y-12 lg:flex-row lg:items-baseline lg:justify-between xl:gap-x-16">
             <div className="grid grid-cols-1 gap-y-10 pl-4 max-sm:w-full md:grid-cols-2 md:gap-8 md:pl-8">
-              <div className="flex flex-col gap-y-3 md:gap-y-4">
+              <article className="flex flex-col gap-y-3 md:gap-y-4">
                 <AtSignIcon className="size-6 text-primary-50" />
                 <h3 className="font-semibold text-lg text-white md:text-xl">
                   Email
@@ -379,8 +460,8 @@ export default function Page() {
                 >
                   mathemaroc.officiel@gmail.com
                 </Link>
-              </div>
-              <div className="flex flex-col gap-y-3 md:gap-y-4">
+              </article>
+              <article className="flex flex-col gap-y-3 md:gap-y-4">
                 <PhoneIcon className="size-6 text-primary-50" />
                 <h3 className="font-semibold text-lg text-white md:text-xl">
                   Phone
@@ -394,7 +475,7 @@ export default function Page() {
                 >
                   +216 6 12 34 56 78
                 </Link>
-              </div>
+              </article>
             </div>
             <div className="w-full max-w-xl bg-white px-4 py-8 focus-within:drop-shadow-xl md:px-8 md:py-10">
               <form
@@ -461,7 +542,7 @@ export default function Page() {
                 <div className="flex items-end justify-end md:col-span-2">
                   <button
                     type="submit"
-                    className="flex items-center gap-x-2 bg-primary-800 px-6 py-3 font-semibold text-shadow text-white shadow transition-all hover:bg-primary-900 hover:text-shadow-lg hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-800"
+                    className="flex items-center gap-x-2 bg-primary-800 px-6 py-3 font-semibold text-shadow text-white shadow transition-all hover:bg-primary-900 hover:text-shadow-lg hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     <span>Send Message</span>
                     <ArrowRightIcon className="size-5" />
@@ -488,14 +569,14 @@ export default function Page() {
       {/* FAQ Section */}
       <section className="relative flex w-full flex-col items-center bg-white py-16 lg:py-24">
         <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
-          <div className="flex flex-col gap-y-5 px-4">
+          <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
               Frequently asked questions
             </h2>
             <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
               Everything you need to know about Math & Maroc.
             </p>
-          </div>
+          </header>
           <div className="flex w-full justify-center px-4 md:px-8">
             <Accordion
               className="flex w-full max-w-3xl flex-col gap-y-4"
@@ -507,16 +588,16 @@ export default function Page() {
                   value={item.question}
                   className="flex w-full flex-col gap-y-2 rounded-lg bg-white py-5 data-[expanded]:bg-gray-50 md:gap-y-4 md:py-8"
                 >
-                  <AccordionTrigger className="group flex w-full flex-row items-center gap-x-2 px-5 md:flex-row-reverse md:gap-x-6 md:px-8">
+                  <AccordionTrigger className="group flex w-full flex-row items-center gap-x-2 rounded-md px-5 focus-visible:outline-none md:flex-row-reverse md:gap-x-6 md:px-8">
                     <div className="flex w-full items-center justify-between">
-                      <h3 className="text-pretty text-left font-medium text-gray-900 text-lg md:text-xl">
+                      <h3 className="text-pretty text-left font-medium text-gray-900 text-lg group-focus-visible:outline-none group-focus-visible:ring-2 group-focus-visible:ring-primary-800 group-focus-visible:ring-offset-2 md:text-xl">
                         {item.question}
                       </h3>
                     </div>
-                    <PlusCircleIcon className="size-6 flex-none text-gray-400 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[expanded]:rotate-45" />
+                    <PlusCircleIcon className="size-6 flex-none text-gray-400 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-focus-visible:text-primary-500 group-data-[expanded]:rotate-45 group-data-[expanded]:text-primary-500" />
                   </AccordionTrigger>
                   <AccordionContent className="overflow-hidden pr-6 pl-5 text-gray-600 md:pr-5 md:pl-20 md:text-lg">
-                    <div className="pt-2">{item.answer}</div>
+                    <p className="pt-2">{item.answer}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}
@@ -524,6 +605,72 @@ export default function Page() {
           </div>
         </div>
       </section>
+      {/* Footer */}
+      <footer className="relative z-20 flex w-full justify-center bg-primary-900 py-12 md:pt-8">
+        <div className="flex w-full max-w-7xl flex-col gap-y-12 px-4 md:px-8">
+          <div className="flex w-full flex-col gap-y-12 md:flex-row md:gap-x-16">
+            <div className="flex flex-col items-start gap-y-8 md:max-w-80">
+              <Image
+                alt="Math Maroc Logo"
+                src="/logo-white.png"
+                width={136}
+                height={48}
+                priority
+                className="h-12 w-auto"
+              />
+              <div className="flex flex-col gap-y-4">
+                <p className="text-pretty text-primary-50 md:text-lg">
+                  Empowering the next generation of Moroccan mathematicians
+                </p>
+                <ScrollToTopLink />
+              </div>
+            </div>
+            <nav className="grid w-full grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
+              {footer.map((category) => (
+                <div key={category.name} className="flex flex-col gap-y-4">
+                  <h3 className="font-semibold text-primary-200 text-sm">
+                    {category.name}
+                  </h3>
+                  <ul className="flex flex-col gap-y-3">
+                    {category.links.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-x-2 font-semibold text-primary-100 transition-colors hover:text-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                        >
+                          {link.name}
+                          {link.trailingIcon}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </nav>
+          </div>
+          <div className="flex w-full flex-col gap-y-8 border-primary-200 border-t pt-8 md:flex-row-reverse md:justify-between">
+            <nav className="flex flex-row items-center justify-center gap-x-6">
+              {socials.map((social) => (
+                <Link
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-200 transition-colors hover:text-primary-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                  aria-label={social.name}
+                >
+                  {social.icon}
+                </Link>
+              ))}
+            </nav>
+            <p className="text-center text-primary-200">
+              &copy; 2016 — 2025 Math & Maroc. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

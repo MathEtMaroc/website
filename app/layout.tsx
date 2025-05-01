@@ -92,7 +92,7 @@ export default function RootLayout({
     >
       <body>
         <div className="flex w-full flex-col bg-[url('/paper.jpg')] bg-repeat">
-          <main className="flex w-full flex-col bg-white/60 pb-100">
+          <main className="flex w-full flex-col bg-white/60">
             <Navbar />
             {children}
             <ScrollToTop />
