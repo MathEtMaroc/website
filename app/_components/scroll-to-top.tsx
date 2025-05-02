@@ -82,7 +82,7 @@ export function ScrollToTop() {
             transition: { duration: 0.2 },
           }}
           whileTap={{ scale: 1 }}
-          className="fixed right-6 bottom-6 z-10 flex size-10 select-none flex-col justify-center rounded-2xl bg-primary-800 font-semibold text-sm text-white shadow-sm hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-primary-800 focus-visible:outline-offset-2"
+          className="fixed right-6 bottom-6 z-[15] flex size-10 select-none flex-col justify-center rounded-2xl bg-primary-800 font-semibold text-sm text-white shadow-sm hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-primary-800 focus-visible:outline-offset-2"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ArrowRightIcon className="-rotate-90 mx-auto size-5" />

@@ -397,7 +397,7 @@ export default function Page() {
       </section>
       {/* Testimonials Section */}
       <section className="relative flex w-full flex-col items-center pt-16 lg:pt-24">
-        <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
+        <div className="z-[5] flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
           <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
               Don't take just our word for it
@@ -411,7 +411,7 @@ export default function Page() {
           </div>
         </div>
         {/* overlay */}
-        <div className="pointer-events-none absolute inset-0 z-10">
+        <div className="pointer-events-none absolute inset-0 z-[4]">
           <div className="h-1/2 bg-transparent" />
           <div className="h-1/2 bg-white" />
         </div>
@@ -421,7 +421,7 @@ export default function Page() {
         className="flex w-full flex-col items-center bg-white"
         id="contact"
       >
-        <div className="relative flex w-full max-w-360 flex-col items-center gap-y-12 bg-primary-900 py-16 md:gap-y-16 md:py-24">
+        <div className="relative flex w-full max-w-360 flex-col items-center gap-y-12 bg-primary-900 pt-16 sm:py-16 md:gap-y-16 md:py-24">
           <header className="flex w-full max-w-7xl flex-col items-start gap-y-4 px-4 md:gap-y-8 md:px-8">
             <div className="flex flex-col gap-y-3 md:gap-y-8">
               <p className="font-semibold text-primary-100 text-sm md:text-base">
@@ -568,7 +568,7 @@ export default function Page() {
       </section>
       {/* FAQ Section */}
       <section className="relative flex w-full flex-col items-center bg-white py-16 lg:py-24">
-        <div className="z-20 flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
+        <div className="z-[5] flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
           <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
               Frequently asked questions
@@ -606,7 +606,7 @@ export default function Page() {
         </div>
       </section>
       {/* Footer */}
-      <footer className="relative z-20 flex w-full justify-center bg-primary-900 py-12 md:pt-8">
+      <footer className="relative z-[20] flex w-full justify-center bg-primary-900 py-12 md:pt-8">
         <div className="flex w-full max-w-7xl flex-col gap-y-12 px-4 md:px-8">
           <div className="flex w-full flex-col gap-y-12 md:flex-row md:gap-x-16">
             <div className="flex flex-col items-start gap-y-8 md:max-w-80">
@@ -665,7 +665,7 @@ export default function Page() {
                 </Link>
               ))}
             </nav>
-            <p className="text-center text-primary-200">
+            <p className="text-balance text-center text-primary-200">
               &copy; 2016 — 2025 Math & Maroc. All rights reserved.
             </p>
           </div>

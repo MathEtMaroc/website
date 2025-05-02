@@ -82,7 +82,7 @@ const accordionContentVariants = {
     transition: {
       height: {
         duration: 0.4,
-        ease: [0.22, 1, 0.36, 1], // Custom easing for natural motion
+        ease: 'easeInOut',
       },
       opacity: {
         duration: 0.2,
