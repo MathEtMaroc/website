@@ -24,7 +24,7 @@ export default function TestimonialsGrid({
     >
       {testimonials.map((testimonial) => (
         <div
-          className="flex flex-col gap-y-12 border border-gray-200 bg-white p-8 shadow-gray-200 shadow-xs"
+          className="flex flex-col gap-y-12 border border-gray-950/10 bg-white p-8 shadow-gray-200 shadow-xs"
           key={testimonial.name}
         >
           <p className="text-gray-600">{testimonial.text}</p>

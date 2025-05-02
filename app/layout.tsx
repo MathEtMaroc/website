@@ -24,7 +24,7 @@ const krypton = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Math & Maroc',
+    template: 'Math & Maroc | %s',
     default:
       'Math & Maroc | Unlocking the scientific potential of Moroccan youth',
   },

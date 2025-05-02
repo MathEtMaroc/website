@@ -32,8 +32,6 @@ import BounceCardsSection from './_components/bounce-cards-section';
 // Define metadata for this page
 export const metadata: Metadata = {
   title: 'Math & Maroc | Home',
-  description:
-    'First Moroccan non-profit math related educational association.',
 };
 
 const partners: { name: string; image: string; href: string }[] = [
@@ -276,7 +274,7 @@ const footer: { name: string; links: FooterLink[] }[] = [
 
 export default function Page() {
   return (
-    <main>
+    <>
       {/* Hero Section */}
       <section className="flex w-full justify-center py-8 md:py-16">
         <div className="mx-auto flex h-fit w-full max-w-7xl flex-col items-end gap-4 px-6 sm:px-8 md:flex-row md:gap-8">
@@ -493,7 +491,7 @@ export default function Page() {
                     type="text"
                     id="firstName"
                     name="firstName"
-                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    className="border border-gray-950/20 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     required
                   />
                 </div>
@@ -508,7 +506,7 @@ export default function Page() {
                     type="text"
                     id="lastName"
                     name="lastName"
-                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    className="border border-gray-950/20 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     required
                   />
                 </div>
@@ -520,7 +518,7 @@ export default function Page() {
                     type="email"
                     id="email"
                     name="email"
-                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    className="border border-gray-950/20 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     required
                   />
                 </div>
@@ -535,7 +533,7 @@ export default function Page() {
                     id="message"
                     name="message"
                     rows={4}
-                    className="border border-gray-300 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    className="border border-gray-950/20 p-3 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     required
                   />
                 </div>
@@ -636,8 +634,12 @@ export default function Page() {
                       <li key={link.name}>
                         <Link
                           href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          {...(link.href.startsWith('http')
+                            ? {
+                                target: '_blank',
+                                rel: 'noopener noreferrer',
+                              }
+                            : {})}
                           className="flex items-center gap-x-2 font-semibold text-primary-100 transition-colors hover:text-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
                         >
                           {link.name}
@@ -656,8 +658,12 @@ export default function Page() {
                 <Link
                   key={social.name}
                   href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(social.href.startsWith('http')
+                    ? {
+                        target: '_blank',
+                        rel: 'noopener noreferrer',
+                      }
+                    : {})}
                   className="text-primary-200 transition-colors hover:text-primary-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
                   aria-label={social.name}
                 >
@@ -671,6 +677,6 @@ export default function Page() {
           </div>
         </div>
       </footer>
-    </main>
+    </>
   );
 }
