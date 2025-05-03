@@ -17,3 +17,37 @@
   --font-caveat: var(--font-caveat), sans-serif;
   --font-krypton: var(--font-krypton), monospace;
 }
+
+@keyframes fade-scale-blur-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes fade-scale-blur-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+}
+
+::view-transition-old(page) {
+  animation: fade-scale-blur-out 0.3s ease-in-out;
+}
+
+::view-transition-new(page) {
+  animation: fade-scale-blur-in 0.3s ease-in-out;
+}

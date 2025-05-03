@@ -1,6 +1,23 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "extends": ["ultracite"],
+  "overrides": [
+    {
+      "include": ["app/globals.css"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noUnknownPseudoElement": {
+              "level": "off"
+            },
+            "noUnknownTypeSelector": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    }
+  ],
   "files": {
     "ignore": ["next.config.ts"]
   }

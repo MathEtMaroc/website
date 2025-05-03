@@ -741,7 +741,7 @@ export function Navbar() {
           </nav>
 
           <div className="relative">
-            <Link href="#" className={dropdownButtonStyles}>
+            <Link href="/about   " className={dropdownButtonStyles}>
               Who We Are
             </Link>
           </div>
@@ -938,7 +938,10 @@ export function Navbar() {
 
                               {/* Separate from layout animations to prevent bouncing */}
                               <div className="mt-2">
-                                <Link href="#" className={mobileNavLinkStyles}>
+                                <Link
+                                  href="/about"
+                                  className={mobileNavLinkStyles}
+                                >
                                   Who We Are
                                 </Link>
                               </div>
