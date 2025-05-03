@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { JSX } from 'react';
-import type { Activity } from '~/app/_components/activity';
 import AnimatedStat from '~/app/_components/animated-stat';
 import MagnetLines from '~/app/_components/magnetic-lines';
 import {
@@ -11,266 +9,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/app/_components/motion-primitives/accordion';
-import ScrollToTopLink from '~/app/_components/scroll-to-top-link';
 import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
-import TestimonialsGrid, {
-  type Testimonial,
-} from '~/app/_components/testimonials-grid';
+import TestimonialsGrid from '~/app/_components/testimonials-grid';
+import { activities } from '~/app/_data/activities';
+import { faq } from '~/app/_data/faq';
+import { partners } from '~/app/_data/partners';
+import { stats } from '~/app/_data/stats';
+import { testimonials } from '~/app/_data/testimonials';
 import ArrowRightIcon from '../public/icons/arrow-right.svg';
 import AtSignIcon from '../public/icons/at-sign.svg';
-import DownloadCloudIcon from '../public/icons/download-cloud.svg';
-import FacebookIcon from '../public/icons/facebook.svg';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
-import InstagramIcon from '../public/icons/instagram.svg';
-import LinkedInIcon from '../public/icons/linkedin.svg';
 import PhoneIcon from '../public/icons/phone.svg';
 import PlusCircleIcon from '../public/icons/plus-circle.svg';
-import YouTubeIcon from '../public/icons/youtube.svg';
 import SmileyFace from '../public/smiley-face.png';
 import BounceCardsSection from './_components/bounce-cards-section';
 
-// Define metadata for this page
 export const metadata: Metadata = {
   title: 'Math & Maroc | Home',
 };
-
-const partners: { name: string; image: string; href: string }[] = [
-  {
-    name: 'Adria',
-    image: '/images/partners/adria.png',
-    href: '#',
-  },
-  {
-    name: 'UM6P',
-    image: '/images/partners/um6p.svg',
-    href: '#',
-  },
-  {
-    name: 'Evasan',
-    image: '/images/partners/evasan.png',
-    href: '#',
-  },
-  {
-    name: 'Royal Air Maroc',
-    image: '/images/partners/ram.svg',
-    href: '#',
-  },
-];
-
-const stats: { title: string; number: number; suffix?: string }[] = [
-  {
-    title: 'Members & volunteers',
-    number: 100,
-    suffix: '+',
-  },
-  {
-    title: 'Participants in the last 12 months',
-    number: 500,
-    suffix: '+',
-  },
-  {
-    title: 'Divisions',
-    number: 14,
-    suffix: '+',
-  },
-  {
-    title: 'Followers on social media',
-    number: 50000,
-    suffix: '+',
-  },
-];
-
-const activities: Activity[] = [
-  {
-    title: 'Moroccan Day of Mathematics',
-    description:
-      'An annual celebration bringing together students, teachers, and researchers to explore the beauty of mathematics through interactive workshops, engaging lectures, and collaborative problem-solving activities. This nationwide event aims to inspire a love for mathematics in Moroccan youth.',
-    linkText: 'Explore MDM',
-    linkHref: '/',
-    imageSrc: '/images/activities/mdm.png',
-    imageAlt: 'Moroccan Day of Mathematics',
-    highlight: 'coming later this year !',
-  },
-  {
-    title: 'Moroccan Tournament of Young Mathematicians',
-    description:
-      'A team-based competition challenging high school students to solve complex, open-ended mathematical problems. Participants develop research skills, creative thinking, and collaborative abilities while preparing written solutions and defending them in mathematical debates against other teams.',
-    linkText: 'Explore MTYM',
-    linkHref: '/',
-    imageSrc: '/images/activities/mtym.jpg',
-    imageAlt: 'Moroccan Tournament of Young Mathematicians',
-  },
-  {
-    title: 'Maths & Maroc Competition',
-    description:
-      'Our flagship individual competition designed to discover and nurture mathematical talent across Morocco. Through multiple rounds of increasingly challenging problems, participants develop critical thinking skills and mathematical reasoning while competing for recognition and prizes.',
-    linkText: 'Explore MMC',
-    linkHref: '/',
-    imageSrc: '/images/activities/mmc.jpg',
-    imageAlt: 'Maths & Maroc Competition',
-  },
-  {
-    title: 'Summer Camp',
-    description:
-      'An immersive week-long residential experience where talented students explore advanced mathematical concepts beyond the school curriculum. Guided by expert mentors, participants engage in intensive workshops, problem-solving sessions, and recreational activities in a supportive community of peers.',
-    linkText: 'Explore Summer Camp',
-    linkHref: '/',
-    imageSrc: '/images/activities/summer-camp.jpg',
-    imageAlt: 'Summer Camp',
-  },
-];
-
-const testimonials: Testimonial[] = [
-  {
-    name: 'Yasmine Benali',
-    school: 'Mohammed V High School, Casablanca',
-    text: 'Thanks to Maths & Maroc, I discovered a passion for mathematics that I never suspected. The activities helped me develop my logic and creativity. I highly recommend this association to all young people who want to explore the fascinating world of mathematics.',
-  },
-  {
-    name: 'Karim Tazi',
-    school: 'National School of Computer Science',
-    text: 'Participating in the Maths & Maroc summer camp was a transformative experience. The mentorship was exceptional and I was able to meet other passionate students like myself. This experience gave me the confidence to pursue my studies in computer science.',
-  },
-  {
-    name: 'Fatima Zahra El Alaoui',
-    school: 'Al Jabr College, Rabat',
-    text: "The competitions organized by Maths & Maroc taught me to persevere in the face of challenges. I've made great progress in problem-solving and mathematical reasoning. The instructors are always available to help and encourage us.",
-  },
-  {
-    name: 'Mehdi Ouazzani',
-    school: 'Descartes High School, Rabat',
-    text: 'Maths & Maroc completely changed my perception of mathematics. What was once a difficult subject has become a daily pleasure. The workshops are interactive and stimulating, and the atmosphere is always supportive and encouraging.',
-  },
-  {
-    name: 'Salma Bennani',
-    school: 'Faculty of Sciences, Marrakech',
-    text: 'As a first-year undergraduate student, I can say that my participation in Maths & Maroc activities during my high school years gave me a considerable advantage. I acquired a rigor and methodology that serve me today in my higher education.',
-  },
-  {
-    name: 'Omar Benjelloun',
-    school: 'Ibn Sina High School, Tangier',
-    text: 'The problem-solving techniques I learned through Maths & Maroc competitions have been invaluable. The collaborative environment fostered critical thinking skills that extend beyond mathematics into all areas of my academic life.',
-  },
-  {
-    name: 'Leila Mansouri',
-    school: 'Hassan II University, Casablanca',
-    text: 'Being part of the Maths & Maroc community opened doors to international opportunities I never thought possible. The rigorous training and supportive network helped me secure a scholarship for my graduate studies abroad.',
-  },
-  {
-    name: 'Youssef El Amrani',
-    school: 'Ibn Khaldoun High School, Fez',
-    text: 'What sets Maths & Maroc apart is how they make complex mathematical concepts accessible and engaging. Their innovative teaching approaches transformed my relationship with mathematics and inspired me to pursue engineering.',
-  },
-  {
-    name: 'Nadia Chaoui',
-    school: 'Al Khawarizmi School, Agadir',
-    text: 'The mentorship I received through Maths & Maroc was life-changing. Beyond mathematical knowledge, I gained confidence, perseverance, and problem-solving skills that have been crucial for my success in competitive examinations.',
-  },
-];
-
-const faq: { question: string; answer: string }[] = [
-  {
-    question: 'What is Math & Maroc?',
-    answer:
-      'Math & Maroc is a non-profit organization that aims to promote mathematical education and research in Morocco.',
-  },
-  {
-    question: 'How can my child participate in Math & Maroc activities?',
-    answer:
-      'Students can join our activities by registering through our website. We offer programs for different age groups and skill levels throughout the academic year and during summer breaks.',
-  },
-  {
-    question: 'Do you offer scholarships or financial aid?',
-    answer:
-      'Yes, we provide scholarships and financial assistance to talented students with limited resources. Applications are reviewed on a case-by-case basis, and we strive to make our programs accessible to all motivated students.',
-  },
-  {
-    question: 'What qualifications do your instructors have?',
-    answer:
-      'Our instructors include university professors, research mathematicians, and experienced teachers with strong backgrounds in mathematics education. Many have advanced degrees and experience in competitive mathematics.',
-  },
-  {
-    question:
-      'Can Math & Maroc help prepare students for international competitions?',
-    answer:
-      'Absolutely! We offer specialized training programs for various international mathematics competitions, including the International Mathematical Olympiad (IMO). Our curriculum is designed to develop problem-solving skills at the highest levels.',
-  },
-  {
-    question: 'How can I support Math & Maroc as a volunteer or donor?',
-    answer:
-      'We welcome support in many forms. You can volunteer as a mentor, instructor, or event organizer. Financial contributions help us expand our programs and provide scholarships. Please contact us through our website for more information on how to get involved.',
-  },
-];
-
-type FooterLink = {
-  name: string;
-  href: string;
-  trailingIcon?: JSX.Element;
-};
-
-const socials: { name: string; href: string; icon: JSX.Element }[] = [
-  {
-    name: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/mathemaroc/',
-    icon: <LinkedInIcon />,
-  },
-  {
-    name: 'Instagram',
-    href: 'https://www.instagram.com/mathmaroc/',
-    icon: <InstagramIcon />,
-  },
-  {
-    name: 'YouTube',
-    href: 'https://www.youtube.com/@mathmaroc1396',
-    icon: <YouTubeIcon />,
-  },
-  {
-    name: 'Facebook',
-    href: 'https://www.facebook.com/MathsMaroc2',
-    icon: <FacebookIcon />,
-  },
-];
-
-const footer: { name: string; links: FooterLink[] }[] = [
-  {
-    name: 'Actions',
-    links: [
-      { name: 'MMC', href: '#' },
-      { name: 'MTYM', href: '#' },
-      { name: 'AI Hackathon', href: '#' },
-      { name: 'MDM', href: '#' },
-      { name: 'Summer Camp', href: '#' },
-    ],
-  },
-  {
-    name: 'Divisions',
-    links: [
-      { name: 'Olympiads', href: '#' },
-      { name: 'Orientation', href: '#' },
-      { name: 'Conferences', href: '#' },
-      { name: 'Prepa', href: '#' },
-    ],
-  },
-  {
-    name: 'How we are',
-    links: [
-      { name: 'Team', href: '#' },
-      { name: 'Partners', href: '#' },
-      {
-        name: 'Media kit',
-        href: '#',
-        trailingIcon: <DownloadCloudIcon className="size-5" />,
-      },
-    ],
-  },
-  {
-    name: 'Social',
-    links: socials.map((social) => ({
-      name: social.name,
-      href: social.href,
-    })),
-  },
-];
 
 export default function Page() {
   return (
@@ -603,80 +359,6 @@ export default function Page() {
           </div>
         </div>
       </section>
-      {/* Footer */}
-      <footer className="relative z-[20] flex w-full justify-center bg-primary-900 py-12 md:pt-8">
-        <div className="flex w-full max-w-7xl flex-col gap-y-12 px-4 md:px-8">
-          <div className="flex w-full flex-col gap-y-12 md:flex-row md:gap-x-16">
-            <div className="flex flex-col items-start gap-y-8 md:max-w-80">
-              <Image
-                alt="Math Maroc Logo"
-                src="/logo-white.png"
-                width={136}
-                height={48}
-                priority
-                className="h-12 w-auto"
-              />
-              <div className="flex flex-col gap-y-4">
-                <p className="text-pretty text-primary-50 md:text-lg">
-                  Empowering the next generation of Moroccan mathematicians
-                </p>
-                <ScrollToTopLink />
-              </div>
-            </div>
-            <nav className="grid w-full grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {footer.map((category) => (
-                <div key={category.name} className="flex flex-col gap-y-4">
-                  <h3 className="font-semibold text-primary-200 text-sm">
-                    {category.name}
-                  </h3>
-                  <ul className="flex flex-col gap-y-3">
-                    {category.links.map((link) => (
-                      <li key={link.name}>
-                        <Link
-                          href={link.href}
-                          {...(link.href.startsWith('http')
-                            ? {
-                                target: '_blank',
-                                rel: 'noopener noreferrer',
-                              }
-                            : {})}
-                          className="flex items-center gap-x-2 font-semibold text-primary-100 transition-colors hover:text-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
-                        >
-                          {link.name}
-                          {link.trailingIcon}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </nav>
-          </div>
-          <div className="flex w-full flex-col gap-y-8 border-primary-200 border-t pt-8 md:flex-row-reverse md:justify-between">
-            <nav className="flex flex-row items-center justify-center gap-x-6">
-              {socials.map((social) => (
-                <Link
-                  key={social.name}
-                  href={social.href}
-                  {...(social.href.startsWith('http')
-                    ? {
-                        target: '_blank',
-                        rel: 'noopener noreferrer',
-                      }
-                    : {})}
-                  className="text-primary-200 transition-colors hover:text-primary-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </Link>
-              ))}
-            </nav>
-            <p className="text-balance text-center text-primary-200">
-              &copy; 2016 — 2025 Math & Maroc. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </>
   );
 }

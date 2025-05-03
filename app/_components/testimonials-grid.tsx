@@ -1,14 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import type { Testimonial } from '~/app/_data/testimonials';
 import useMasonry from '~/app/utils/use-masonry';
-
-export type Testimonial = {
-  name: string;
-  school?: string;
-  image?: string;
-  text: string;
-};
 
 export default function TestimonialsGrid({
   testimonials,

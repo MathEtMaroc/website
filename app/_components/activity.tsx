@@ -1,17 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ActivityType } from '~/app/_data/activities';
 import { cn } from '~/app/utils/cn';
 import ChevronRightIcon from '../../public/icons/chevron-right.svg';
 import HandDrawnArrow from '../../public/icons/hand-drawn-arrow.svg';
 
-export type Activity = {
-  title: string;
-  description: string;
-  linkText: string;
-  linkHref: string;
-  imageSrc: string;
-  imageAlt: string;
-  highlight?: string;
+type ActivityProps = ActivityType & {
   isEven?: boolean;
   simpleLayout?: boolean;
 };
@@ -33,7 +27,7 @@ export const Activity = ({
   highlight,
   isEven = false,
   simpleLayout = true,
-}: Activity) => {
+}: ActivityProps) => {
   return (
     <div
       className={cn(
