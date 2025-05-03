@@ -99,7 +99,6 @@ export default function RootLayout({
             <Footer />
             <ScrollToTop />
             {process.env.NODE_ENV === 'development' && <ScreenSize />}
-            {/* <Banner /> */}
           </main>
         </div>
       </body>
