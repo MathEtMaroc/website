@@ -8,9 +8,8 @@ import { Accordion, Dialog } from 'radix-ui';
 import { useState } from 'react';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import useBoundedScroll from '~/app/utils/use-bounded-scroll';
-
 import { cn } from '~/app/utils/cn';
+import useBoundedScroll from '~/app/utils/use-bounded-scroll';
 import BracketsEllipsesIcon from '../../public/icons/brackets-ellipses.svg';
 import BuildingIcon from '../../public/icons/building.svg';
 import CalendarIcon from '../../public/icons/calendar.svg';
@@ -778,7 +777,7 @@ export function Navbar() {
                     }
                     style={mobileMenuStyles}
                     className={cn(
-                      'fixed z-50 overflow-y-auto border px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
+                      'fixed z-50 flex flex-col gap-y-6 border px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
                       isSm
                         ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh]'
                         : 'inset-y-0 right-0 w-full sm:max-w-sm'
@@ -806,150 +805,97 @@ export function Navbar() {
                         <XCloseIcon aria-hidden="true" className="size-6" />
                       </Dialog.Close>
                     </div>
-
-                    {/* Mobile menu content with smoother layout animations */}
-                    <motion.div
-                      className="mt-6 flow-root"
-                      layout="position"
-                      layoutRoot
-                      transition={{
-                        duration: 0.5,
-                        ease: [0.16, 1, 0.3, 1], // Custom spring-like easing without bounce
-                      }}
+                    <Accordion.Root
+                      type="single"
+                      collapsible
+                      onValueChange={handleAccordionChange}
                     >
-                      <motion.div className="-my-6">
-                        <motion.div
-                          className="space-y-2 py-6"
-                          layout="position"
+                      <div className="space-y-2">
+                        <Link
+                          href="/"
+                          className={cn('mb-2', mobileNavLinkStyles)}
                         >
-                          <Accordion.Root
-                            type="single"
-                            collapsible
-                            onValueChange={handleAccordionChange}
-                          >
-                            <motion.div
-                              className="space-y-2"
-                              transition={{
-                                duration: 0.35,
-                                ease: [0.25, 1, 0.5, 1],
-                              }}
+                          Home
+                        </Link>
+                        <Accordion.Item value="actions" className="mb-2">
+                          <Accordion.Header>
+                            <Accordion.Trigger
+                              className={mobileAccordionTriggerStyles}
                             >
-                              <Link
-                                href="/"
-                                className={cn('mb-2', mobileNavLinkStyles)}
+                              Our Programs
+                              <ChevronDownIcon
+                                aria-hidden="true"
+                                className="size-5 flex-none text-gray-400 transition-transform duration-300 ease-out group-hover:text-primary-600 group-data-[state=open]:rotate-180"
+                              />
+                            </Accordion.Trigger>
+                          </Accordion.Header>
+                          <Accordion.Content>
+                            <div className="mt-2 space-y-1 p-2">
+                              <motion.div
+                                className="space-y-1"
+                                variants={staggeredContainerVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
                               >
-                                Home
-                              </Link>
-
-                              <Accordion.Item value="actions" className="mb-2">
-                                <Accordion.Header>
-                                  <Accordion.Trigger
-                                    className={mobileAccordionTriggerStyles}
-                                  >
-                                    Our Programs
-                                    <ChevronDownIcon
-                                      aria-hidden="true"
-                                      className="size-5 flex-none text-gray-400 transition-transform duration-300 ease-out group-hover:text-primary-600 group-data-[state=open]:rotate-180"
-                                    />
-                                  </Accordion.Trigger>
-                                </Accordion.Header>
-                                <Accordion.Content asChild>
+                                {actions.map((item) => (
                                   <motion.div
-                                    className="overflow-hidden bg-transparent"
-                                    initial={accordionContentVariants.hidden}
-                                    animate={accordionContentVariants.visible}
-                                    exit={accordionContentVariants.hidden}
-                                    layout="position"
+                                    key={item.name}
+                                    variants={staggeredChildrenVariants}
                                   >
-                                    <div className="mt-2 space-y-1 p-2">
-                                      <motion.div
-                                        className="space-y-1"
-                                        variants={staggeredContainerVariants}
-                                        initial="hidden"
-                                        animate="visible"
-                                        exit="hidden"
-                                      >
-                                        {actions.map((item) => (
-                                          <motion.div
-                                            key={item.name}
-                                            variants={staggeredChildrenVariants}
-                                          >
-                                            <ActionItem
-                                              item={item}
-                                              isMobile={true}
-                                              isScrolled={isScrolled}
-                                            />
-                                          </motion.div>
-                                        ))}
-                                      </motion.div>
-                                    </div>
+                                    <ActionItem
+                                      item={item}
+                                      isMobile={true}
+                                      isScrolled={isScrolled}
+                                    />
                                   </motion.div>
-                                </Accordion.Content>
-                              </Accordion.Item>
-
-                              <Accordion.Item
-                                value="divisions"
-                                className="mb-2"
+                                ))}
+                              </motion.div>
+                            </div>
+                          </Accordion.Content>
+                        </Accordion.Item>
+                        <Accordion.Item value="divisions" className="mb-2">
+                          <Accordion.Header>
+                            <Accordion.Trigger
+                              className={mobileAccordionTriggerStyles}
+                            >
+                              Our Divisions
+                              <ChevronDownIcon
+                                aria-hidden="true"
+                                className="size-5 flex-none text-gray-400 transition-transform duration-300 ease-out group-hover:text-primary-600 group-data-[state=open]:rotate-180"
+                              />
+                            </Accordion.Trigger>
+                          </Accordion.Header>
+                          <Accordion.Content>
+                            <div className="mt-2 space-y-1 p-2">
+                              <motion.div
+                                className="space-y-1"
+                                variants={staggeredContainerVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
                               >
-                                <Accordion.Header>
-                                  <Accordion.Trigger
-                                    className={mobileAccordionTriggerStyles}
-                                  >
-                                    Our Divisions
-                                    <ChevronDownIcon
-                                      aria-hidden="true"
-                                      className="size-5 flex-none text-gray-400 transition-transform duration-300 ease-out group-hover:text-primary-600 group-data-[state=open]:rotate-180"
-                                    />
-                                  </Accordion.Trigger>
-                                </Accordion.Header>
-                                <Accordion.Content asChild>
+                                {divisions.map((item) => (
                                   <motion.div
-                                    className="overflow-hidden bg-transparent"
-                                    initial={accordionContentVariants.hidden}
-                                    animate={accordionContentVariants.visible}
-                                    exit={accordionContentVariants.hidden}
-                                    layout="position"
+                                    key={item.name}
+                                    variants={staggeredChildrenVariants}
                                   >
-                                    <div className="mt-2 space-y-1 p-2">
-                                      <motion.div
-                                        className="space-y-1"
-                                        variants={staggeredContainerVariants}
-                                        initial="hidden"
-                                        animate="visible"
-                                        exit="hidden"
-                                      >
-                                        {divisions.map((item) => (
-                                          <motion.div
-                                            key={item.name}
-                                            variants={staggeredChildrenVariants}
-                                          >
-                                            <ActionItem
-                                              item={item}
-                                              isMobile={true}
-                                              isScrolled={isScrolled}
-                                            />
-                                          </motion.div>
-                                        ))}
-                                      </motion.div>
-                                    </div>
+                                    <ActionItem
+                                      item={item}
+                                      isMobile={true}
+                                      isScrolled={isScrolled}
+                                    />
                                   </motion.div>
-                                </Accordion.Content>
-                              </Accordion.Item>
-
-                              {/* Separate from layout animations to prevent bouncing */}
-                              <div className="mt-2">
-                                <Link
-                                  href="/about"
-                                  className={mobileNavLinkStyles}
-                                >
-                                  Who We Are
-                                </Link>
-                              </div>
-                            </motion.div>
-                          </Accordion.Root>
-                        </motion.div>
-                      </motion.div>
-                    </motion.div>
+                                ))}
+                              </motion.div>
+                            </div>
+                          </Accordion.Content>
+                        </Accordion.Item>
+                        <Link href="/about" className={mobileNavLinkStyles}>
+                          Who We Are
+                        </Link>
+                      </div>
+                    </Accordion.Root>
                   </motion.div>
                 </Dialog.Content>
               </Dialog.Portal>

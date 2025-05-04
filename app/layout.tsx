@@ -3,8 +3,6 @@ import localFont from 'next/font/local';
 import type React from 'react';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Footer } from '~/app/_components/footer';
-import { Navbar } from '~/app/_components/navbar';
 import { ScreenSize } from '~/app/_components/screen-size';
 import { ScrollToTop } from '~/app/_components/scroll-to-top';
 
@@ -92,11 +90,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} scroll-smooth font-sans antialiased`}
     >
       <body>
-        <div className="flex w-full flex-col bg-[url('/paper.jpg')] bg-repeat">
+        <div className="flex w-full flex-col bg-[url('/paper.jpeg')] bg-repeat">
           <main className="flex w-full flex-col bg-white/60">
-            <Navbar />
             {children}
-            <Footer />
             <ScrollToTop />
             {process.env.NODE_ENV === 'development' && <ScreenSize />}
           </main>
