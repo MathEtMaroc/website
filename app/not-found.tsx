@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="relative flex min-h-[calc(100dvh-5rem)] justify-center ">
-      <div className="absolute inset-0 z-0 flex h-full w-full select-none items-center justify-center font-bold font-krypton text-[28rem] text-gray-200/40">
+    <div className="relative flex min-h-[calc(100dvh-5rem)] w-full justify-center">
+      <div className="absolute inset-0 z-0 flex h-full w-full select-none items-center justify-center font-bold font-krypton text-[28rem] text-gray-200/40 [writing-mode:vertical-lr] md:[writing-mode:horizontal-tb]">
         404
       </div>
       <div className="z-10 flex w-full max-w-7xl flex-col items-center justify-center gap-y-8 md:gap-y-12">
-        <h1 className="font-bold font-caveat text-5xl text-primary-900 md:text-8xl">
+        <h1 className="font-bold font-caveat text-6xl text-primary-900 md:text-8xl">
           Page ∈ ∅
         </h1>
         <p className="text-balance text-center text-gray-600 text-xl">
@@ -24,7 +24,7 @@ export default function NotFound() {
           <BackButton />
           <Link
             href="/"
-            className="flex items-center gap-x-2 bg-primary-800 px-5 py-3 font-semibold text-shadow text-white shadow-xs transition-all hover:bg-primary-900 hover:text-shadow-lg hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            className="flex w-full items-center justify-center gap-x-2 bg-primary-800 px-5 py-3 font-semibold text-shadow text-white shadow-xs transition-all hover:bg-primary-900 hover:text-shadow-lg hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 md:w-fit"
           >
             <span>Go Home</span>
           </Link>

@@ -42,7 +42,7 @@ export const Footer = () => {
                               rel: 'noopener noreferrer',
                             }
                           : {})}
-                        className="flex items-center gap-x-2 font-semibold text-primary-100 transition-colors hover:text-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                        className="flex w-fit items-center gap-x-2 font-semibold text-primary-100 transition-colors hover:text-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
                       >
                         {link.name}
                         {link.trailingIcon}

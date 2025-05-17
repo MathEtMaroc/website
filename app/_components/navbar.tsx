@@ -53,44 +53,6 @@ const mobileMenuVariants = {
     isSm ? { opacity: 1, scale: 1, y: 0 } : { x: 0 },
 };
 
-/**
- * Animation variants for accordion content in mobile menu
- * Handles smooth appearance with opacity and height changes
- */
-const accordionContentVariants = {
-  hidden: {
-    opacity: 0,
-    height: 0,
-    overflow: 'hidden',
-    filter: 'blur(0px)',
-    transition: {
-      height: {
-        duration: 0.3,
-        ease: [0.32, 0.72, 0, 1], // Custom easing for natural motion
-      },
-      opacity: {
-        duration: 0.15,
-      },
-    },
-  },
-  visible: {
-    opacity: 1,
-    height: 'auto',
-    overflow: 'visible',
-    filter: 'blur(0px)',
-    transition: {
-      height: {
-        duration: 0.4,
-        ease: 'easeInOut',
-      },
-      opacity: {
-        duration: 0.2,
-        delay: 0.1,
-      },
-    },
-  },
-};
-
 // Staggered children animation for accordion content items
 const staggeredChildrenVariants = {
   hidden: {
