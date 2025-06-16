@@ -18,6 +18,13 @@
   --font-krypton: var(--font-krypton), monospace;
 }
 
+@layer base {
+  ::selection {
+    background-color: var(--color-primary-900);
+    color: var(--color-white);
+  }
+}
+
 @keyframes fade-scale-blur-in {
   from {
     opacity: 0;
