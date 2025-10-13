@@ -25,4 +25,9 @@ export const stats: Stat[] = [
     number: 50000,
     suffix: '+',
   },
+  {
+    title: 'Events organized',
+    number: 100,
+    suffix: '+',
+  },
 ];

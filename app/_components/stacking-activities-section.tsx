@@ -21,7 +21,7 @@ interface StackingActivitiesSectionProps {
   activities: ActivityData[];
 }
 
-// Custom easing functions for animations
+// Custom easing functions
 const luxuryEaseOut = cubicBezier(0.33, 1, 0.68, 1);
 const silkyEaseInOut = cubicBezier(0.76, 0, 0.24, 1);
 const softBounce = cubicBezier(0.22, 1.2, 0.36, 1);
@@ -38,13 +38,13 @@ export default function StackingActivitiesSection({
   const [isClient, setIsClient] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
+  const [useSimpleLayout, setUseSimpleLayout] = useState(false);
 
-  // Update refs array when activities length changes
+  // Update refs when activities length changes
   useEffect(() => {
     setCardRefs(new Array(activities.length).fill(null));
   }, [activities.length]);
 
-  // Ref callback function
   const updateCardRef = (element: HTMLDivElement | null, index: number) => {
     setCardRefs((prevRefs) => {
       const newRefs = [...prevRefs];
@@ -53,32 +53,26 @@ export default function StackingActivitiesSection({
     });
   };
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // Client detection
+  useEffect(() => setIsClient(true), []);
 
-  // Media query detection
-  const [useSimpleLayout, setUseSimpleLayout] = useState(false);
-
+  // Responsive layout detection
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth <= 767;
       const isSmallHeight = window.innerHeight <= 899;
       setUseSimpleLayout(isMobile || isSmallHeight);
     };
-
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Scroll tracking
-  const { scrollY } = useScroll({ target: containerRef });
-
+  // Scroll tracking (client-only)
   useEffect(() => {
-    if (!isClient) {
-      return;
-    }
+    if (!isClient || !containerRef.current) return;
+
+    const { scrollY } = useScroll({ target: containerRef });
 
     let lastScrollY = 0;
     const unsubscribe = scrollY.on('change', (latest) => {
@@ -97,52 +91,39 @@ export default function StackingActivitiesSection({
     });
 
     return () => unsubscribe();
-  }, [scrollY, activities.length, activeIndex, isClient]);
+  }, [isClient, containerRef.current, activities.length, activeIndex]);
 
   // Navigation
   const navigateToCard = (index: number) => {
-    if (!containerRef.current) {
-      return;
-    }
+    if (!containerRef.current) return;
 
     const targetPos = window.innerHeight * 1.2 * index;
     window.scrollTo({
       top: containerRef.current.offsetTop + targetPos,
       behavior: 'smooth',
     });
-
     setActiveIndex(index);
 
-    // Focus the newly active card if it exists
     setTimeout(() => {
-      if (cardRefs[index]) {
-        cardRefs[index]?.focus();
-      }
+      cardRefs[index]?.focus();
     }, 500);
   };
 
-  // Focus handling for Tab navigation
   const handleFocus = (index: number) => {
-    if (index !== activeIndex) {
-      navigateToCard(index);
-    }
+    if (index !== activeIndex) navigateToCard(index);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      if (activeIndex < activities.length - 1) {
-        navigateToCard(activeIndex + 1);
-      }
+      if (activeIndex < activities.length - 1) navigateToCard(activeIndex + 1);
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
-      if (activeIndex > 0) {
-        navigateToCard(activeIndex - 1);
-      }
+      if (activeIndex > 0) navigateToCard(activeIndex - 1);
     }
   };
 
-  // Server-side render placeholder
+  // SSR fallback
   if (!isClient) {
     return (
       <section className="relative w-full pt-16 md:pt-24">
@@ -163,7 +144,7 @@ export default function StackingActivitiesSection({
     );
   }
 
-  // Simple layout for mobile/small screens
+  // Simple mobile layout
   if (useSimpleLayout) {
     return (
       <section className="relative w-full pt-16 md:pt-24">
@@ -180,38 +161,27 @@ export default function StackingActivitiesSection({
           </div>
 
           <div className="flex w-full max-w-7xl flex-col">
-            {activities.map((activity, index) => {
-              const isEven = index % 2 === 1;
-              return (
-                <div key={index} className="w-full">
-                  <Activity
-                    title={activity.title}
-                    description={activity.description}
-                    linkText={activity.linkText}
-                    linkHref={activity.linkHref}
-                    imageSrc={activity.imageSrc}
-                    imageAlt={activity.imageAlt}
-                    highlight={activity.highlight}
-                    isEven={isEven}
-                    simpleLayout={true}
-                  />
-                </div>
-              );
-            })}
+            {activities.map((activity, index) => (
+              <div key={index} className="w-full">
+                <Activity
+                  {...activity}
+                  isEven={index % 2 === 1}
+                  simpleLayout={true}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
     );
   }
 
-  // Scroll-driven animated layout
+  // Scroll-driven layout
   return (
     <section
       ref={containerRef}
       className="relative scroll-mt-24"
-      style={{
-        height: `${activities.length * 120}vh`,
-      }}
+      style={{ height: `${activities.length * 120}vh` }}
       onKeyDown={handleKeyDown}
       aria-roledescription="carousel"
       aria-label={title}
@@ -231,13 +201,11 @@ export default function StackingActivitiesSection({
           </div>
         </div>
 
-        {/* Card animation container */}
+        {/* Cards */}
         <div className="relative flex flex-1 items-center justify-center px-4">
           <AnimatePresence mode="sync">
-            {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: */}
             {activities.map((activity, index) => {
               const isEven = index % 2 === 1;
-              // Instead of filtering out non-active, we'll render all but position them
               return (
                 <motion.div
                   key={`activity-${index}`}
@@ -299,33 +267,20 @@ export default function StackingActivitiesSection({
                   onFocus={() => handleFocus(index)}
                   aria-label={`Activity ${index + 1} of ${activities.length}: ${activity.title}`}
                   style={{
-                    display:
-                      Math.abs(index - activeIndex) <= 1 ? 'block' : 'none', // Only render adjacent cards for performance
-                    pointerEvents: index === activeIndex ? 'auto' : 'none', // Only active card can receive pointer events
+                    display: Math.abs(index - activeIndex) <= 1 ? 'block' : 'none',
+                    pointerEvents: index === activeIndex ? 'auto' : 'none',
                   }}
                 >
-                  <Activity
-                    title={activity.title}
-                    description={activity.description}
-                    linkText={activity.linkText}
-                    linkHref={activity.linkHref}
-                    imageSrc={activity.imageSrc}
-                    imageAlt={activity.imageAlt}
-                    highlight={activity.highlight}
-                    isEven={isEven}
-                    simpleLayout={false}
-                  />
+                  <Activity {...activity} isEven={isEven} simpleLayout={false} />
                 </motion.div>
               );
             })}
           </AnimatePresence>
         </div>
 
-        {/* Hidden navigation buttons for tab sequence - Only render if not the last card */}
+        {/* Screen reader navigation */}
         <div className="sr-only">
           {activities.map((_, index) => (
-            // Only show buttons for navigation that aren't the current card or immediately after the last card
-            // This helps prevent tab trapping and allows focus to escape after the last card
             <button
               key={index}
               type="button"
@@ -341,11 +296,8 @@ export default function StackingActivitiesSection({
           ))}
         </div>
 
-        {/* Navigation helper - updates when activeIndex changes */}
         <div className="sr-only" aria-live="polite">
-          {isClient && (
-            <div>{`Showing activity ${activeIndex + 1} of ${activities.length}. Use arrow keys to navigate.`}</div>
-          )}
+          {`Showing activity ${activeIndex + 1} of ${activities.length}. Use arrow keys to navigate.`}
         </div>
       </div>
     </section>

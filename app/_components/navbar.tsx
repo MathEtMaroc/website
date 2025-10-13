@@ -94,32 +94,32 @@ const actions = [
   {
     name: 'Math & Maroc Competition',
     description: 'Mathematics competition for university students',
-    href: '#',
+    href: 'https://mmc.mathmaroc.org/',
     icon: TrophyIcon,
   },
   {
     name: 'MTYM',
     description: 'Mathematics research competition for high school students',
-    href: '#',
+    href: 'https://mtym.mathmaroc.org/',
     icon: StarsIcon,
   },
   {
     name: 'Think AI Hackathon',
     description: 'Artificial intelligence competition for university students',
-    href: '#',
+    href: 'https://thinkai.ma/',
     icon: BracketsEllipsesIcon,
   },
   {
     name: 'Summer Camp',
     description:
       'A week-long camp for middle school students focused on mathematics and science',
-    href: '#',
+    href: 'https://summercamp.mathmaroc.org/',
     icon: SunriseIcon,
   },
   {
     name: 'Moroccan day of mathematics',
     description: 'The largest mathematics event in Morocco',
-    href: '#',
+    href: 'https://mdm.mathmaroc.org/',
     icon: CalendarIcon,
   },
 ];
@@ -128,27 +128,53 @@ const divisions = [
   {
     name: 'Olympiads',
     description: "Maths' Olympiads preparation",
-    href: '#',
+    href: '/divisions/olympiads',
     icon: InfinityIcon,
   },
   {
     name: 'Orientation',
     description:
       'Making content to give more insight to young Moroccans about their career prospects',
-    href: '#',
+    href: '/divisions/orientation',
     icon: FlagIcon,
   },
   {
     name: 'Conferences',
     description: 'Mathematical conferences in person and online',
-    href: '#',
+    href: '/divisions/conferences',
     icon: PresentationChartIcon,
   },
   {
     name: 'Prepa',
     description: 'Initiatives to help CPGE students all over Morocco',
-    href: '#',
+    href: '/divisions/prepa',
     icon: BuildingIcon,
+  },
+
+  // Added divisions
+  {
+    name: 'Artificial Intelligence',
+    description: 'Projets, compétitions et ressources en IA',
+    href: '/divisions/ai',
+    icon: BracketsEllipsesIcon,
+  },
+  {
+    name: 'Publications',
+    description: 'Revues, articles et notes pédagogiques',
+    href: '/divisions/publications',
+    icon: PresentationChartIcon,
+  },
+  {
+    name: 'Physics',
+    description: 'Initiatives et ressources en physique',
+    href: '/divisions/physics',
+    icon: StarsIcon,
+  },
+  {
+    name: 'Communications',
+    description: 'Relations publiques, médias et réseaux',
+    href: '/divisions/communications',
+    icon: CalendarIcon,
   },
 ];
 
@@ -165,20 +191,10 @@ function ActionItem({
   isMobile?: boolean;
   isScrolled?: boolean;
 }) {
-  return (
-    <Link
-      href={item.href}
-      className={cn(
-        'group flex items-start gap-3 p-3 transition-all',
-        !isMobile &&
-          isScrolled &&
-          'hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
-        !isMobile && !isScrolled && 'hover:bg-gray-50',
-        (isMobile || !isScrolled) && 'hover:text-primary-600',
-        className
-      )}
-      tabIndex={tabIndex}
-    >
+  const isExternal = /^https?:\/\//.test(item.href);
+
+  const content = (
+    <>
       <div className="relative h-7 w-7 overflow-hidden">
         <item.icon
           aria-hidden="true"
@@ -191,6 +207,36 @@ function ActionItem({
         </span>
         <p className="text-base text-gray-600">{item.description}</p>
       </div>
+    </>
+  );
+
+  const baseClass = cn(
+    'group flex items-start gap-3 p-3 transition-all',
+    !isMobile &&
+      isScrolled &&
+      'hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
+    !isMobile && !isScrolled && 'hover:bg-gray-50',
+    (isMobile || !isScrolled) && 'hover:text-primary-600',
+    className
+  );
+
+  if (isExternal) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={baseClass}
+        tabIndex={tabIndex}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={item.href} className={baseClass} tabIndex={tabIndex}>
+      {content}
     </Link>
   );
 }
@@ -212,7 +258,7 @@ function DivisionListItem({
     <Link
       href={item.href}
       className={cn(
-        'group flex gap-x-3 p-4 transition-all',
+        'group flex gap-x-3 p-3 transition-all',
         !isMobile &&
           isScrolled &&
           'hover:bg-gradient-to-r hover:from-white/90 hover:to-white/75 hover:shadow-sm',
@@ -651,50 +697,20 @@ export function Navbar() {
                   exit="hidden"
                   transition={{ duration: 0.25 }}
                   style={dropdownStyles}
-                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] overflow-hidden border ring-1 ring-gray-900/5"
-                  id="divisions-dropdown"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="divisions-menu-button"
-                  onMouseEnter={() => {
-                    if (mouseLeaveTimeoutId) {
-                      clearTimeout(mouseLeaveTimeoutId);
-                      setMouseLeaveTimeoutId(null);
-                    }
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Escape') {
-                      e.preventDefault();
-                      setActiveDesktopItem(null);
-                      divisionsButtonRef.current?.focus();
-                    } else if (
-                      e.key === 'Tab' &&
-                      !e.shiftKey &&
-                      e.target === e.currentTarget.querySelector('a:last-child')
-                    ) {
-                      setActiveDesktopItem(null);
-                    } else if (
-                      e.key === 'Tab' &&
-                      e.shiftKey &&
-                      e.target ===
-                        e.currentTarget.querySelector('a:first-child')
-                    ) {
-                      e.preventDefault();
-                      setActiveDesktopItem(null);
-                      divisionsButtonRef.current?.focus();
-                    }
-                  }}
+                  className="absolute right-0 z-50 mt-3 mr-[-4rem] w-screen max-w-[32rem] border ring-1 ring-gray-900/5 rounded-lg"
                 >
-                  <div className="p-4">
-                    {divisions.map((item) => (
-                      <DivisionListItem
-                        key={item.name}
-                        item={item}
-                        isMobile={false}
-                        isScrolled={isScrolled}
-                      />
-                    ))}
+                  {/* limit vertical size and make content scrollable to avoid overflowing the viewport */}
+                  <div className="max-h-[calc(100vh-6rem)] overflow-auto">
+                    <div className="p-3">
+                      {divisions.map((item) => (
+                        <DivisionListItem
+                          key={item.name}
+                          item={item}
+                          isMobile={false}
+                          isScrolled={isScrolled}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -702,7 +718,7 @@ export function Navbar() {
           </nav>
 
           <div className="relative">
-            <Link href="/about   " className={dropdownButtonStyles}>
+            <Link href="/about" className={dropdownButtonStyles}>
               Who We Are
             </Link>
           </div>
