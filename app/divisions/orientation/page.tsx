@@ -28,70 +28,87 @@ export default function Page() {
             </div>
             <div>
               <h1 className="text-3xl font-semibold text-gray-900">Orientation</h1>
-              <p className="mt-1 text-sm text-gray-500">Orientation pour les études, les carrières et la suite — vidéos, podcasts et entretiens.</p>
+              <p className="mt-1 text-sm text-gray-500">Guidance for studies, careers, and what comes next — videos, podcasts, and interviews.</p>
               <p className="mt-3 text-gray-700 max-w-3xl">
-                À travers des vidéos, podcasts et interviews, Math&Maroc Orientation aide les jeunes Marocains à prendre des décisions
-                éclairées sur leurs études, leur carrière et leur avenir. Nous mêlons formats courts et longs, témoignages concrets et
-                playlists pratiques pour explorer des parcours, comparer les options et préparer les étapes suivantes.
+                Through videos, podcasts, and interviews, Math&Maroc Orientation division helps young Moroccans make informed decisions about
+                their studies, careers, and future. We mix short and long formats, concrete testimonials, and curated playlists to explore
+                pathways, compare options, and prepare for the next steps.
               </p>
               <div className="mt-4 flex gap-3">
                 <a
                   href="mailto:orientation@mathmaroc.org"
                   className="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-white text-sm font-medium hover:bg-primary-700"
                 >
-                  Contacter Orientation
+                  Contact Orientation
                 </a>
                 <Link href="/divisions" className="inline-flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  ← Retour aux divisions
+                  ← Back to divisions
                 </Link>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Latest orientation video (playlist player) */}
+        {/* Latest orientation video (two featured playlists) */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-3">Dernière sélection — Playlist en vedette</h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="md:col-span-2 rounded-lg overflow-hidden border border-gray-100 bg-white shadow-sm">
-              <div className="relative pb-[50%]">
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src={`https://www.youtube.com/embed/videoseries?list=${PLAYLISTS.lycée}`}
-                  title="Playlist Orientation"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+          <h2 className="text-2xl font-semibold text-gray-900 mb-3">Latest picks — Featured playlists</h2>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Playlist 1: High School */}
+            <div className="rounded-lg overflow-hidden border border-gray-100 bg-white shadow-sm">
+              <div className="w-full">
+                <div className="px-4 pt-4">
+                  <div className="relative pb-[56.25%]">{/* 16:9 aspect ratio */}
+                    <iframe
+                      className="absolute inset-0 w-full h-full rounded-md"
+                      src={`https://www.youtube.com/embed/videoseries?list=${PLAYLISTS.lycée}`}
+                      title="Featured playlist - High School"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
               </div>
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">À la une : Orientation — Lycée</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Featured: Orientation — High School</h3>
                 <p className="mt-2 text-gray-700 text-sm">
-                  Une sélection de vidéos choisies pour aider les lycéens à mieux comprendre leurs options, découvrir des filières
-                  et préparer leurs choix post-bac avec confiance.
+                  A curated selection of videos to help high school students understand their options, discover study tracks, and prepare
+                  for post-secondary choices with confidence.
                 </p>
+                <div className="mt-4">
+                  <a href={`https://www.youtube.com/playlist?list=${PLAYLISTS.lycée}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
+                    Open playlist
+                  </a>
+                </div>
               </div>
             </div>
 
-            <aside className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-              <div className="text-sm text-gray-500">Liens rapides</div>
-              <ul className="mt-3 space-y-2">
-                <li>
-                  <a href={`https://www.youtube.com/playlist?list=${PLAYLISTS.lycée}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline text-sm">
-                    Playlist Lycée
+            {/* Playlist 2: Prep Classes */}
+            <div className="rounded-lg overflow-hidden border border-gray-100 bg-white shadow-sm">
+              <div className="w-full">
+                <div className="px-4 pt-4">
+                  <div className="relative pb-[56.25%]">{/* 16:9 aspect ratio */}
+                    <iframe
+                      className="absolute inset-0 w-full h-full rounded-md"
+                      src={`https://www.youtube.com/embed/videoseries?list=${PLAYLISTS.prepa}`}
+                      title="Featured playlist - Prep Classes"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Featured: Orientation — Prep Classes</h3>
+                <p className="mt-2 text-gray-700 text-sm">
+                  Mentors and tips to navigate preparatory classes: how to choose centers, prepare for exams and stay motivated.
+                </p>
+                <div className="mt-4">
+                  <a href={`https://www.youtube.com/playlist?list=${PLAYLISTS.prepa}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
+                    Open playlist
                   </a>
-                </li>
-                <li>
-                  <a href={`https://www.youtube.com/playlist?list=${PLAYLISTS.prepa}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline text-sm">
-                    Playlist Prépa
-                  </a>
-                </li>
-                <li>
-                  <a href={`https://www.youtube.com/playlist?list=${PLAYLISTS.jobs}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline text-sm">
-                    Playlist Métiers
-                  </a>
-                </li>
-              </ul>
-            </aside>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -104,16 +121,16 @@ export default function Page() {
                 <FlagIcon className="w-6 h-6 text-primary-700" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900">Orientation Lycée</h3>
+                <h3 className="text-xl font-semibold text-gray-900">High School Orientation</h3>
                 <p className="mt-2 text-gray-700">
-                  Au lycée, les possibilités sont vastes mais parfois déroutantes. Nous proposons une sélection de vidéos pour aider
-                  les lycéens à faire des choix éclairés, découvrir des parcours alternatifs et se projeter dans différentes filières.
+                  In high school, options can be abundant and sometimes confusing. We offer a selection of videos to help students make
+                  informed choices, discover alternative pathways, and envision different study tracks.
                 </p>
 
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {['/images/divisions/orientation/lycee1.png','/images/divisions/orientation/lycee2.png','/images/divisions/orientation/lycee3.png'].map((s) => (
                     <div key={s} className="rounded-lg overflow-hidden bg-gray-100">
-                      <Image src={s} alt="lycée" width={560} height={480} className="object-cover w-full h-45" />
+                      <Image src={s} alt="high school" width={560} height={480} className="object-cover w-full h-45" />
                     </div>
                   ))}
                 </div>
@@ -125,7 +142,7 @@ export default function Page() {
                     rel="noopener noreferrer"
                     className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
                   >
-                    Voir la playlist Lycée
+                    View High School playlist
                   </a>
                 </div>
               </div>
@@ -139,16 +156,16 @@ export default function Page() {
                 <FlagIcon className="w-6 h-6 text-primary-700" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900">Orientation Prépa</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Prep Classes Orientation</h3>
                 <p className="mt-2 text-gray-700">
-                  Les CPGE peuvent sembler difficiles à appréhender seul. Des mentors expérimentés répondent aux questions, conseillent
-                  sur le choix des centres, la préparation aux oraux et donnent des astuces pour rester motivé tout au long du parcours.
+                  Preparatory classes can be hard to navigate alone. Experienced mentors answer questions, advise on choosing centers,
+                  preparing for oral exams, and share tips to stay motivated throughout the journey.
                 </p>
 
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {['/images/divisions/orientation/prepa1.png','/images/divisions/orientation/prepa2.png','/images/divisions/orientation/prepa3.png'].map((s) => (
                     <div key={s} className="rounded-lg overflow-hidden bg-gray-100">
-                      <Image src={s} alt="prépa" width={560} height={480} className="object-cover w-full h-45" />
+                      <Image src={s} alt="prep class" width={560} height={480} className="object-cover w-full h-45" />
                     </div>
                   ))}
                 </div>
@@ -160,7 +177,7 @@ export default function Page() {
                     rel="noopener noreferrer"
                     className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
                   >
-                    Voir la playlist Prépa
+                    View Prep Classes playlist
                   </a>
                 </div>
               </div>
@@ -174,16 +191,16 @@ export default function Page() {
                 <FlagIcon className="w-6 h-6 text-primary-700" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900">Orientation Métiers</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Career Orientation</h3>
                 <p className="mt-2 text-gray-700">
-                  Choisir un métier, c'est trouver ce qui correspond à ses intérêts, ses valeurs et ses compétences. Nos podcasts et
-                  témoignages montrent le quotidien des professions, les trajectoires possibles et offrent des conseils concrets.
+                  Choosing a career means finding what aligns with your interests, values, and skills. Our podcasts and testimonials
+                  showcase day-to-day work, possible career paths, and offer practical advice.
                 </p>
 
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {['/images/divisions/orientation/jobs1.png','/images/divisions/orientation/jobs2.png','/images/divisions/orientation/jobs3.jpg'].map((s) => (
                     <div key={s} className="rounded-lg overflow-hidden bg-gray-100">
-                      <Image src={s} alt="métiers" width={560} height={480} className="object-cover w-full h-45" />
+                      <Image src={s} alt="careers" width={560} height={480} className="object-cover w-full h-45" />
                     </div>
                   ))}
                 </div>
@@ -195,7 +212,7 @@ export default function Page() {
                     rel="noopener noreferrer"
                     className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
                   >
-                    Voir la playlist Métiers
+                    View Careers playlist
                   </a>
                 </div>
               </div>
