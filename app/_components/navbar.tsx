@@ -104,12 +104,6 @@ const actions = [
     icon: StarsIcon,
   },
   {
-    name: 'Think AI Hackathon',
-    description: 'Artificial intelligence competition for university students',
-    href: 'https://thinkai.ma/',
-    icon: BracketsEllipsesIcon,
-  },
-  {
     name: 'Summer Camp',
     description:
       'A week-long camp for middle school students focused on mathematics and science',
@@ -122,12 +116,19 @@ const actions = [
     href: 'https://mdm.mathmaroc.org/',
     icon: CalendarIcon,
   },
+  {
+    name: 'Feynman Moroccan\u00a0Adventure',
+    description:
+      'A six-day summer physics camp for high-school students (final years).',
+    href: 'https://fma.mathmaroc.org',
+    icon: BracketsEllipsesIcon,
+  },
 ];
 
 const divisions = [
   {
     name: 'Olympiads',
-    description: "Maths' Olympiads preparation",
+    description: "Maths Olympiads preparation",
     href: '/divisions/olympiads',
     icon: InfinityIcon,
   },
@@ -151,30 +152,11 @@ const divisions = [
     icon: BuildingIcon,
   },
 
-  // Added divisions
   {
-    name: 'Artificial Intelligence',
-    description: 'Projets, compétitions et ressources en IA',
-    href: '/divisions/ai',
-    icon: BracketsEllipsesIcon,
-  },
-  {
-    name: 'Publications',
-    description: 'Revues, articles et notes pédagogiques',
-    href: '/divisions/publications',
-    icon: PresentationChartIcon,
-  },
-  {
-    name: 'Physics',
-    description: 'Initiatives et ressources en physique',
-    href: '/divisions/physics',
+    name: 'Physics Olympiads',
+    description: 'Preparation and resources for Physics Olympiads',
+    href: '/divisions/physics-olympiads',
     icon: StarsIcon,
-  },
-  {
-    name: 'Communications',
-    description: 'Relations publiques, médias et réseaux',
-    href: '/divisions/communications',
-    icon: CalendarIcon,
   },
 ];
 

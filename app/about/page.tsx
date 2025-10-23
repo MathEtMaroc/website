@@ -30,9 +30,9 @@ const BOARD: Member[] = [
   },
   {
     id: 'b3',
-    name: 'Ismail Bouhaj',
+    name: 'Mohamed Taha Afif',
     role: 'Treasurer',
-    img: '/images/members/bouhaj.jpeg',
+    img: '/images/members/default-profile-picture.png',
     desc: '',
   },
   {
@@ -44,13 +44,6 @@ const BOARD: Member[] = [
       "Ziad studies at École Polytechnique. IMO 2019 bronze medalist and IMC 2022 First Prize winner. He is VP Olympiads and has helped launch MMC and the Summer Camp.",
   },
   {
-    id: 'b5',
-    name: 'Abderrahmane Echaarani',
-    role: 'Board Member',
-    img: '/images/members/echaarani.jpeg',
-    desc: '',
-  },
-  {
     id: 'b6',
     name: 'Fatima Zahra Moudakir',
     role: 'Vice Secretary General',
@@ -59,16 +52,16 @@ const BOARD: Member[] = [
   },
   {
     id: 'b7',
-    name: 'Manal Saoui',
+    name: 'Abderrahmane Echaarani',
     role: 'Vice Treasurer',
-    img: '/images/members/saoui.jpeg',
+    img: '/images/members/echaarani.jpeg',
     desc: '',
   },
   {
-    id: 'b8',
-    name: 'Khalil El Azri',
+    id: 'b5',
+    name: 'Samy Essebbabi',
     role: 'Board Member',
-    img: '/images/members/el_azri.jpeg',
+    img: '/images/members/default-profile-picture.png',
     desc: '',
   },
 ];
@@ -76,30 +69,6 @@ const BOARD: Member[] = [
 const VPS: Member[] = [
   {
     id: 'v1',
-    name: 'Mohammed Bahhad',
-    role: 'VP Orientation',
-    img: '/images/members/default-profile-picture.png',
-    desc:
-      "Mohammed studies at CentraleSupélec Paris. He has served as VP Orientation since November 2023 and joined Math&Maroc in 2022.",
-  },
-  {
-    id: 'v2',
-    name: 'Mohamed Baoudra',
-    role: 'VP Conferences',
-    img: '/images/members/baoudra.png',
-    desc:
-      "Mohamed graduated from EMI and works at UM6P as Program Management Officer. He joined Math&Maroc in 2021 and helped launch the Moroccan Day of Mathematics (MDM).",
-  },
-  {
-    id: 'v3',
-    name: 'Mohamed Ali Benchekroun',
-    role: 'VP MMC, VP Summer Camp & VP Orientation',
-    img: '/images/members/benchekroun.png',
-    desc:
-      "Mohamed Ali holds a Master's from MIT and an engineering degree from CentraleSupélec. He coordinates MMC, the Summer Camp and Orientation.",
-  },
-  {
-    id: 'v4',
     name: 'Omar Bennouna',
     role: 'VP Communication',
     img: '/images/members/bennouna.png',
@@ -107,76 +76,114 @@ const VPS: Member[] = [
       "Omar is completing a PhD at MIT and leads communications. He is active on ThinkAI Hackathon, MTYM and MMC and supports Orientation.",
   },
   {
-    id: 'v5',
-    name: 'Ahmed Chahlaoui',
-    role: 'VP Physics',
-    img: '/images/members/chahlaoui.png',
+    id: 'v2',
+    name: 'Mohamed Ali Benchekroun',
+    role: 'VP MMC & VP Summer Camp',
+    img: '/images/members/benchekroun.png',
     desc:
-      "Ahmed studies engineering at CentraleSupélec and serves as VP Physics.",
+      "Mohamed Ali holds a Master's from MIT and an engineering degree from CentraleSupélec. He coordinates MMC & the Summer Camp.",
+  },
+  {
+    id: 'v3',
+    name: 'Mohamed Taha Afif',
+    role: 'VP FMA2025',
+    img: '/images/members/default-profile-picture.png',
+    desc: '',
+  },
+  {
+    id: 'v4',
+    name: 'Abderrahmane Echaarani',
+    role: 'VP Prepa',
+    img: '/images/members/echaarani.jpeg',
+    desc: '',
+  },
+  {
+    id: 'v5',
+    name: 'Ziad Oumzil',
+    role: 'VP Olympiads & VP MMC',
+    img: '/images/members/oumzil.png',
+    desc:
+      "Ziad studies at École Polytechnique. IMO 2019 bronze medalist and IMC 2022 First Prize winner. He is VP Olympiads and has helped launch MMC and the Summer Camp.",
   },
   {
     id: 'v6',
-    name: 'Hala Gamouh',
-    role: 'VP MTYM',
+    name: 'Hiba Elkasimi',
+    role: 'VP Orientation',
     img: '/images/members/default-profile-picture.png',
     desc:
-      "Hala studies at École Polytechnique and leads the team organising the Moroccan Tournament of Young Mathematicians (MTYM).",
+      "",
   },
   {
     id: 'v7',
-    name: 'Abir Harrasse',
-    role: 'VP MDM',
-    img: '/images/members/harrasse.png',
+    name: 'Moaad Elmoutassim',
+    role: 'VP Olympiads',
+    img: '/images/members/default-profile-picture.png',
     desc:
-      "Abir studies at UM6P EMINES and co-leads conferences; she played a key role in launching the Moroccan Day of Mathematics (MDM).",
+      "",
   },
   {
     id: 'v8',
-    name: 'Safaa Khadim',
-    role: 'VP Conferences & VP MDM',
+    name: 'Ali Hakim',
+    role: 'VP Prepa',
     img: '/images/members/default-profile-picture.png',
     desc:
-      "Safaa graduated from ENSIAS and works as a Research Consultant at OCP Solutions. She co-led the team organising MDM and contributes to ThinkAI.",
+      "",
   },
   {
     id: 'v9',
-    name: 'Aymane Maaitat',
-    role: 'VP Physics',
-    img: '/images/members/maaitat.png',
+    name: 'Mohammed-Younes Gueddari',
+    role: 'VP MTYM',
+    img: '/images/members/default-profile-picture.png',
     desc:
-      "Aymane studies at École Polytechnique, won IMC 2022 First Prize and represented Morocco in PLANKS 2023. He is Assessor and VP Physics.",
+      "",
   },
   {
     id: 'v10',
-    name: 'Hasnaa Ouadoudi Belabzioui',
-    role: 'VP Artificial Intelligence & VP Hackathon',
+    name: 'Zineb Madani',
+    role: 'VP Conferences',
     img: '/images/members/default-profile-picture.png',
     desc:
-      "Hasnaa is a PhD candidate in AI at ENS Rennes and leads the ThinkAI Hackathon team.",
+      "",
   },
   {
     id: 'v11',
-    name: 'Ziad Oumzil',
-    role: 'VP Olympiads & VP Summer Camp',
-    img: '/images/members/oumzil.png',
+    name: 'Chaymaa Loutfi',
+    role: 'VP MDM2026',
+    img: '/images/members/default-profile-picture.png',
     desc:
-      "Ziad studies at École Polytechnique, IMO 2019 bronze medalist and IMC 2022 prizewinner. He is VP Olympiads and co-leads the Summer Camp.",
+      "",
   },
   {
     id: 'v12',
-    name: 'Rachida Saroui',
-    role: 'VP Publications',
+    name: 'Lasri Hamza',
+    role: 'VP MDM2026',
     img: '/images/members/default-profile-picture.png',
     desc:
-      "Rachida studies at École Normale Supérieure Paris-Saclay and has served as VP Publications since November 2023.",
+      "",
   },
   {
     id: 'v13',
-    name: 'Oussama Zouhry',
-    role: 'VP Prepa',
-    img: '/images/members/zouhry.png',
+    name: 'Ahmed Chahlaoui',
+    role: 'VP FMA2025',
+    img: '/images/members/default-profile-picture.png',
     desc:
-      "Oussama studies at École Polytechnique, won a bronze medal at MYMC 2019, and serves as VP Prepa and Treasurer, contributing to ThinkAI and MTYM.",
+      "",
+  },
+  {
+    id: 'v14',
+    name: 'Yassir Amazouz',
+    role: 'VP Physics Olympiad',
+    img: '/images/members/default-profile-picture.png',
+    desc:
+      "",
+  },
+  {
+    id: 'v15',
+    name: 'Saad Chairi',
+    role: 'VP Maths Olympiad',
+    img: '/images/members/default-profile-picture.png',
+    desc:
+      "",
   },
 ];
 
