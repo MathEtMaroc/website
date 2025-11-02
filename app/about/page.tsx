@@ -55,14 +55,14 @@ const BOARD: Member[] = [
     name: 'Abderrahmane Echaarani',
     role: 'Vice Treasurer',
     img: '/images/members/echaarani.jpeg',
-    desc: '',
+    desc: 'Abderrahmane Echaarani studied at CentraleSupélec. He is currently conducting his research at the intersection of artificial intelligence and computational mechanics.',
   },
   {
     id: 'b5',
     name: 'Samy Essebbabi',
     role: 'Board Member',
-    img: '/images/members/default-profile-picture.png',
-    desc: '',
+    img: '/images/members/essebbabi.png',
+    desc: 'Samy Essebbabi is a physics student at EPFL. He joined Math&Maroc in 2024 and became a board member in June 2025. He is part of the organizing committee for the Moroccan Day of Mathematics.',
   },
 ];
 
@@ -85,16 +85,17 @@ const VPS: Member[] = [
   },
   {
     id: 'v3',
-    name: 'Mohamed Taha Afif',
-    role: 'VP FMA2025',
-    img: '/images/members/default-profile-picture.png',
-    desc: '',
+    name: 'Aymane Maaitat',
+    role: 'VP MMC',
+    img: '/images/members/maaitat.png',
+    desc:
+      "Currently a Ph.D Student at INRIA Saclay in quantum physics. Alumnus of Lydex, École polytechnique and ENS Ulm. IMC First Prize Winner and CGST lauréat in physics. Co-VP and cofounder of MMC and involved in other projects in physics.",
   },
   {
     id: 'v4',
-    name: 'Abderrahmane Echaarani',
-    role: 'VP Prepa',
-    img: '/images/members/echaarani.jpeg',
+    name: 'Mohamed Taha Afif',
+    role: 'VP FMA2025',
+    img: '/images/members/default-profile-picture.png',
     desc: '',
   },
   {
@@ -115,38 +116,30 @@ const VPS: Member[] = [
   },
   {
     id: 'v7',
-    name: 'Moaad Elmoutassim',
-    role: 'VP Olympiads',
-    img: '/images/members/default-profile-picture.png',
+    name: 'Ali Hakim',
+    role: 'VP Prepa',
+    img: '/images/members/hakim.png',
     desc:
-      "",
+      "Ali Hakim is currently in his second year at École Polytechnique. He joined Math&Maroc in January 2025 and serves as VP of Pole Prépa. He is an active member of the FMA and contributes to the Physics Olympiad and MMC teams.",
   },
   {
     id: 'v8',
-    name: 'Ali Hakim',
-    role: 'VP Prepa',
-    img: '/images/members/default-profile-picture.png',
+    name: 'Mohammed-Younes Gueddari',
+    role: 'VP MTYM',
+    img: '/images/members/gueddari.png',
     desc:
-      "",
+      "Younes is a PhD student at Université Gustave Eiffel and an MEng graduate from CentraleSupélec. A member of Math&Maroc since 2019, he has led the Olympiads division for several years and now coordinates the MTYM program.",
   },
   {
     id: 'v9',
-    name: 'Mohammed-Younes Gueddari',
-    role: 'VP MTYM',
-    img: '/images/members/default-profile-picture.png',
+    name: 'Zineb Madani',
+    role: 'VP Conferences',
+    img: '/images/members/madani.png',
     desc:
       "",
   },
   {
     id: 'v10',
-    name: 'Zineb Madani',
-    role: 'VP Conferences',
-    img: '/images/members/default-profile-picture.png',
-    desc:
-      "",
-  },
-  {
-    id: 'v11',
     name: 'Chaymaa Loutfi',
     role: 'VP MDM2026',
     img: '/images/members/default-profile-picture.png',
@@ -154,15 +147,15 @@ const VPS: Member[] = [
       "",
   },
   {
-    id: 'v12',
+    id: 'v11',
     name: 'Lasri Hamza',
     role: 'VP MDM2026',
-    img: '/images/members/default-profile-picture.png',
+    img: '/images/members/lasri.png',
     desc:
-      "",
+      "Hamza is studying mathematics at EPFL. He was part of the organizing team team for the last edition of the Moroccan Day of Mathematics and is now VP MDM.",
   },
   {
-    id: 'v13',
+    id: 'v12',
     name: 'Ahmed Chahlaoui',
     role: 'VP FMA2025',
     img: '/images/members/default-profile-picture.png',
@@ -170,30 +163,22 @@ const VPS: Member[] = [
       "",
   },
   {
-    id: 'v14',
+    id: 'v13',
     name: 'Yassir Amazouz',
     role: 'VP Physics Olympiad',
-    img: '/images/members/default-profile-picture.png',
+    img: '/images/members/amazouz.png',
     desc:
-      "",
+      "Yassir Amazouz completed his studies at the Institut d'Optique and later at ENS Paris-Saclay. He is now pursuing a PhD in quantum physics. A former finalist in the Physics Olympiad, he contributed to the creation of the  Olympiad of Physics pole and currently leads it.",
   },
   {
-    id: 'v15',
+    id: 'v14',
     name: 'Saad Chairi',
     role: 'VP Maths Olympiad',
-    img: '/images/members/default-profile-picture.png',
+    img: '/images/members/chairi.png',
     desc:
-      "",
+      "I am Saad CHAIRI. I received an honorable mention at the International Mathematical Olympiad (IMO 2022) and am a laureate of the CGST 2022. I am currently a second-year engineering student at École Polytechnique.",
   },
 ];
-
-function IconSparkle(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden {...props}>
-      <path d="M12 3l1.9 4.8L19 9l-4.5 2L14.1 16 12 13.7 9.9 16l-.4-5L5 9l5.1-1.2L12 3z" stroke="currentColor" strokeWidth="0.6" />
-    </svg>
-  );
-}
 
 function MemberCard({ m, onOpen }: { m: Member; onOpen: (m: Member) => void }) {
   return (
@@ -239,7 +224,7 @@ export default function AboutPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-semibold text-gray-900">Math&Maroc</h1>
-                <p className="mt-1 text-sm text-gray-500">Association | Olympiads · Orientation · Conferences · Prepa</p>
+                <p className="mt-1 text-sm text-gray-500">Association</p>
               </div>
             </div>
 
@@ -247,10 +232,6 @@ export default function AboutPage() {
               <div className="rounded-md bg-white px-3 py-2 text-center border border-gray-100 shadow-sm">
                 <div className="text-sm text-gray-500">Since</div>
                 <div className="text-lg font-semibold text-gray-900">2016</div>
-              </div>
-              <div className="rounded-md bg-white px-3 py-2 text-center border border-gray-100 shadow-sm">
-                <div className="text-sm text-gray-500">Presence</div>
-                <div className="text-lg font-semibold text-gray-900">{continents} continents</div>
               </div>
               <div className="rounded-md bg-white px-3 py-2 text-center border border-gray-100 shadow-sm">
                 <div className="text-sm text-gray-500">Active members</div>
