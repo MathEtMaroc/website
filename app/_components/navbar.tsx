@@ -737,7 +737,7 @@ export function Navbar() {
                     }
                     style={mobileMenuStyles}
                     className={cn(
-                      'fixed z-50 flex flex-col gap-y-6 border px-6 py-6 sm:ring-1 sm:ring-gray-900/10',
+                      'fixed z-50 flex flex-col gap-y-6 border px-6 py-6 sm:ring-1 sm:ring-gray-900/10 overflow-auto',
                       isSm
                         ? '-translate-y-1/2 inset-x-4 top-1/2 max-h-[96vh]'
                         : 'inset-y-0 right-0 w-full sm:max-w-sm'
