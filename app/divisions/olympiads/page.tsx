@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
-// Use the same InfinityIcon as the navbar
+
 import InfinityIcon from '../../../public/icons/infinity.svg';
 
 const IMAGES = [
-  '/images/divisions/olympiads/photo1.jpg', // replace with your actual filenames
-  '/images/divisions/olympiads/photo2.jpg',
-  '/images/divisions/olympiads/photo3.jpg',
+  '/images/divisions/olympiads/photo1.jpg',
+  '/images/divisions/olympiads/2.webp',
+  '/images/divisions/olympiads/3.webp',
 ];
 
 export default function Page() {
