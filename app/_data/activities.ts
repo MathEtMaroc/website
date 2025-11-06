@@ -43,7 +43,7 @@ export const activities: ActivityType[] = [
       'An immersive week-long residential experience where talented students explore advanced mathematical concepts beyond the school curriculum. Guided by expert mentors, participants engage in intensive workshops, problem-solving sessions, and recreational activities in a supportive community of peers.',
     linkText: 'Explore Summer Camp',
     linkHref: 'https://summercamp.mathmaroc.org/',
-    imageSrc: '/images/activities/summer-camp.jpg',
+    imageSrc: '/images/activities/summer-camp.webp',
     imageAlt: 'Summer Camp',
   },
 ];

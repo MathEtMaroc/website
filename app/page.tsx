@@ -147,7 +147,7 @@ export default function Page() {
         </div>
       </section>
       {/* Testimonials Section */}
-      <section className="relative flex w-full flex-col items-center pt-16 lg:pt-24">
+      {/* <section className="relative flex w-full flex-col items-center pt-16 lg:pt-24">
         <div className="z-[5] flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
           <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
@@ -162,11 +162,12 @@ export default function Page() {
           </div>
         </div>
         {/* overlay */}
+        {/*
         <div className="pointer-events-none absolute inset-0 z-[4]">
           <div className="h-1/2 bg-transparent" />
           <div className="h-1/2 bg-white" />
         </div>
-      </section>
+      </section> */}
       {/* Contact Section */}
       <section
         className="flex w-full flex-col items-center bg-white"
