@@ -58,10 +58,10 @@ export default function BounceCardsSection() {
   const cards: Card[] = [
     {
       id: 0,
-      imageSrc: '/images/defilement/1.jpg',
+      imageSrc: '/images/defilement/1.webp',
       caption: {
-        title: 'Morocco Delegation at IMO',
-        subtitle: 'Oslo, 2022',
+        title: 'International Math Olympiad Training',
+        subtitle: 'Benguerir, Morocco',
       },
       baseSize: { width: 380, height: 220 },
       baseRotation: 12,
@@ -69,10 +69,10 @@ export default function BounceCardsSection() {
     },
     {
       id: 1,
-      imageSrc: '/images/defilement/2.jpg',
+      imageSrc: '/images/defilement/2.webp',
       caption: {
-        title: 'Title',
-        subtitle: 'Location, 20XX',
+        title: 'Workshop at Math&Maroc Summer Camp',
+        subtitle: 'Martil, Morocco',
       },
       baseSize: { width: 280, height: 240 },
       baseRotation: -8,
@@ -80,9 +80,10 @@ export default function BounceCardsSection() {
     },
     {
       id: 2,
-      imageSrc: '/images/defilement/3.png',
+      imageSrc: '/images/defilement/3.webp',
       caption: {
-        title: 'Podcast : Study in the US',
+        title: 'Math Sprint Competition at the Moroccan day of mathematics',
+        subtitle: 'Fes, Morocco'
       },
       baseSize: { width: 450, height: 280 },
       baseRotation: 4,
@@ -90,10 +91,10 @@ export default function BounceCardsSection() {
     },
     {
       id: 3,
-      imageSrc: '/images/defilement/4.jpg',
+      imageSrc: '/images/defilement/4.webp',
       caption: {
-        title: 'Title',
-        subtitle: 'Location, 20XX',
+        title: 'Moroccan Tournament of Young Mathematicians',
+        subtitle: 'Ifrane, Morocco',
       },
       baseSize: { width: 320, height: 240 },
       baseRotation: -5,
@@ -101,10 +102,10 @@ export default function BounceCardsSection() {
     },
     {
       id: 4,
-      imageSrc: '/images/defilement/6.jpg',
+      imageSrc: '/images/defilement/5.webp',
       caption: {
-        title: 'Title',
-        subtitle: 'Location, 20XX',
+        title: 'Activities at Math&Maroc competition',
+        subtitle: 'Benguerir, Morocco',
       },
       baseSize: { width: 280, height: 240 },
       baseRotation: 10,
@@ -112,10 +113,10 @@ export default function BounceCardsSection() {
     },
     {
       id: 5,
-      imageSrc: '/images/defilement/5.jpg',
+      imageSrc: '/images/defilement/6.webp',
       caption: {
-        title: 'Title',
-        subtitle: 'Location, 20XX',
+        title: 'Math&Maroc team at UM6P',
+        subtitle: 'Benguerir, Morocco',
       },
       baseSize: { width: 280, height: 280 },
       baseRotation: -10,
