@@ -72,6 +72,7 @@ export const Activity = ({
           </p>
           <Link
             href={linkHref}
+            target='_blank'
             className={cn(
               'group/link inline-flex w-fit items-center gap-1 px-2 py-1 font-semibold text-base outline-none transition-colors',
               isEven
