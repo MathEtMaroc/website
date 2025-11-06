@@ -340,7 +340,7 @@ export default function AboutPage() {
         </section>
 
         {/* Team tabs */}
-        <section className="mb-12">
+        <section className="mb-12" id='mathletes'>
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">The Mathletes</h2>
             <div className="flex gap-2">
