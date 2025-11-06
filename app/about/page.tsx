@@ -174,7 +174,7 @@ const VPS: Member[] = [
     id: 'v14',
     name: 'Saad Chairi',
     role: 'VP Maths Olympiad',
-    img: '/images/members/chairi.png',
+    img: '/images/members/chairi.webp',
     desc:
       "I am Saad CHAIRI. I received an honorable mention at the International Mathematical Olympiad (IMO 2022) and am a laureate of the CGST 2022. I am currently a second-year engineering student at École Polytechnique.",
   },
