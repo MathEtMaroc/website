@@ -110,9 +110,9 @@ const VPS: Member[] = [
     id: 'v6',
     name: 'Hiba Elkasimi',
     role: 'VP Orientation',
-    img: '/images/members/default-profile-picture.png',
+    img: '/images/members/elkasimi.webp',
     desc:
-      "",
+      "Hiba is currently enrolled in the first year of the engineering program at CentraleSupélec Paris after her two years of “classes prépa” at LM6E. She leads the Orientation team of Math&Maroc that she joined in September 2024. Besides this role, she is also part of the sponsorship and the Moroccan Tournament of Young Mathematicians teams.",
   },
   {
     id: 'v7',
