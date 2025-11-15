@@ -37,6 +37,9 @@ export default function Page() {
           <h1 className="h-fit w-full max-w-176 text-pretty font-semibold text-4xl text-primary-950 tracking-tighter md:text-5xl">
             Unlocking the scientific potential of Moroccan youth
           </h1>
+          <p className="h-fit text-pretty text-gray-600 text-lg md:text-right md:text-xl">
+            One of the leading NGOs promoting mathematics and science in Morocco
+          </p>
         </div>
       </section>
       {/* Bounce Cards Section */}
@@ -44,7 +47,7 @@ export default function Page() {
       {/* Activities Section */}
       <StackingActivitiesSection
         title="What activities can Math & Maroc offer you?"
-        subtitle="Explore some of the various activities we offer for students of all levels"
+        subtitle="Explore some of the various activities we offer for students of all levels for free"
         activities={activities}
       />
       {/* Partners Section */}
@@ -114,9 +117,6 @@ export default function Page() {
         <div className="flex w-full max-w-7xl flex-col items-start gap-y-12 px-4 md:px-8 lg:flex-row-reverse lg:items-center lg:gap-x-16">
           <div className="flex w-full flex-col items-start gap-y-8 md:gap-y-16">
             <div className="flex flex-col gap-y-4 md:gap-y-5">
-              <p className="font-krypton font-semibold text-primary-800 text-shadow text-sm md:text-base">
-                On your mark, get set, Maths !
-              </p>
               <h2 className="font-semibold text-3xl text-gray-900 tracking-tighter md:text-5xl">
                 Growing year after year
               </h2>
@@ -319,7 +319,7 @@ export default function Page() {
         </div>
       </section>
       {/* FAQ Section */}
-      <section className="relative flex w-full flex-col items-center bg-white py-16 lg:py-24">
+      {/* <section className="relative flex w-full flex-col items-center bg-white py-16 lg:py-24">
         <div className="z-[5] flex w-full max-w-7xl flex-col items-center gap-y-8 md:gap-y-16">
           <header className="flex flex-col gap-y-5 px-4">
             <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
@@ -356,7 +356,7 @@ export default function Page() {
             </Accordion>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }
