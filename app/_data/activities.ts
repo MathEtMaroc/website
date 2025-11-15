@@ -19,9 +19,9 @@ export const activities: ActivityType[] = [
     imageAlt: 'Moroccan Tournament of Young Mathematicians',
   },
   {
-    title: 'Maths & Maroc Competition',
+    title: 'Maths&Maroc Competition (MMC)',
     description:
-      'Our flagship individual competition designed to discover and nurture mathematical talent across Morocco. Through multiple rounds of increasingly challenging problems, participants develop critical thinking skills and mathematical reasoning while competing for recognition and prizes.',
+      'An olympiad-style mathematics competition for university students from across Morocco, featuring individual problem-solving contests, lectures by world-class speakers, and interactive mathematical activities over several days.',
     linkText: 'Explore MMC',
     linkHref: 'https://mmc.mathmaroc.org/',
     imageSrc: '/images/activities/MMC.webp',
@@ -35,12 +35,11 @@ export const activities: ActivityType[] = [
     linkHref: 'https://mdm.mathmaroc.org/',
     imageSrc: '/images/activities/MDM.webp',
     imageAlt: 'Moroccan Day of Mathematics',
-    highlight: 'coming later this year !',
   },
   {
     title: 'Summer Camp',
     description:
-      'An immersive week-long residential experience where talented students explore advanced mathematical concepts beyond the school curriculum. Guided by expert mentors, participants engage in intensive workshops, problem-solving sessions, and recreational activities in a supportive community of peers.',
+      'An immersive week-long residential experience where talented middle and high school students explore advanced mathematical concepts beyond the school curriculum. Guided by expert mentors, participants engage in intensive workshops, problem-solving sessions, and recreational activities in a supportive community of peers.',
     linkText: 'Explore Summer Camp',
     linkHref: 'https://summercamp.mathmaroc.org/',
     imageSrc: '/images/activities/summer-camp.webp',

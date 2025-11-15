@@ -5,7 +5,7 @@ import { useMotionTemplate, useTransform } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Accordion, Dialog } from 'radix-ui';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { cn } from '~/app/utils/cn';
@@ -83,6 +83,19 @@ const staggeredContainerVariants = {
   },
 };
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm
+ * Returns a new shuffled array without modifying the original
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 const dropdownButtonStyles =
   'group flex items-center gap-x-1 font-semibold text-base text-gray-600 outline-none transition-colors hover:text-gray-900 focus:text-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 px-2 py-1';
 const mobileNavLinkStyles =
@@ -92,7 +105,7 @@ const mobileAccordionTriggerStyles =
 
 const actions = [
   {
-    name: 'Math & Maroc Competition',
+    name: 'Math&Maroc Competition (MMC)',
     description: 'Mathematics competition for university students',
     href: 'https://mmc.mathmaroc.org/',
     icon: TrophyIcon,
@@ -276,6 +289,10 @@ function DivisionListItem({
  * - Glassmorphic effect that intensifies on scroll
  */
 export function Navbar() {
+  // Shuffle arrays on mount using useMemo to ensure consistency during render
+  const shuffledActions = useMemo(() => shuffleArray(actions), []);
+  const shuffledDivisions = useMemo(() => shuffleArray(divisions), []);
+
   // State for tracking mobile menu and accordion state
   const [mobileState, setMobileState] = useState({
     isOpen: false,
@@ -626,7 +643,7 @@ export function Navbar() {
                   }}
                 >
                   <div className="flex flex-col gap-0.5 p-3">
-                    {actions.map((item) => (
+                    {shuffledActions.map((item) => (
                       <ActionItem
                         key={item.name}
                         item={item}
@@ -684,7 +701,7 @@ export function Navbar() {
                   {/* limit vertical size and make content scrollable to avoid overflowing the viewport */}
                   <div className="max-h-[calc(100vh-6rem)] overflow-auto">
                     <div className="p-3">
-                      {divisions.map((item) => (
+                      {shuffledDivisions.map((item) => (
                         <DivisionListItem
                           key={item.name}
                           item={item}
@@ -798,7 +815,7 @@ export function Navbar() {
                                 animate="visible"
                                 exit="hidden"
                               >
-                                {actions.map((item) => (
+                                {shuffledActions.map((item) => (
                                   <motion.div
                                     key={item.name}
                                     variants={staggeredChildrenVariants}
@@ -835,7 +852,7 @@ export function Navbar() {
                                 animate="visible"
                                 exit="hidden"
                               >
-                                {divisions.map((item) => (
+                                {shuffledDivisions.map((item) => (
                                   <motion.div
                                     key={item.name}
                                     variants={staggeredChildrenVariants}
