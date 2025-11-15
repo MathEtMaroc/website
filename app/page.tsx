@@ -37,8 +37,7 @@ export default function Page() {
         subtitle="Explore some of the various activities we offer for students of all levels for free"
         activities={activities}
       >
-        <p className="text-s text-gray-500 font-caveat italic text-center flex items-center justify-center gap-2">
-          <ArrowLeftIcon className="size-3 hidden lg:inline" />
+        <p className="text-s text-gray-500 font-caveat italic text-center">
           Follow us on social media to stay updated
         </p>
       </StackingActivitiesSection>

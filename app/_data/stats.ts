@@ -6,7 +6,7 @@ export type Stat = {
 
 export const stats: Stat[] = [
   {
-    title: 'members from top universities worldwide',
+    title: 'Members from top universities worldwide',
     number: 170,
     suffix: '+',
   },
