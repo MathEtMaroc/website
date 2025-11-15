@@ -199,7 +199,6 @@ function MemberCard({ m, onOpen }: { m: Member; onOpen: (m: Member) => void }) {
 export default function AboutPage() {
   const [tab, setTab] = useState<'board' | 'vps'>('board');
   const [selected, setSelected] = useState<Member | null>(null);
-  const [expanded, setExpanded] = useState(false);
 
   const members = useMemo(() => (tab === 'board' ? BOARD : VPS), [tab]);
 
@@ -240,59 +239,15 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 items-start">
-            <div className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900">Our mission</h2>
-              <p className="mt-2 text-gray-700 italic">“Unlocking the scientific potential of Moroccan youth”</p>
-              <div className="mt-3 text-gray-700 text-sm">
-                {!expanded ? (
-                  <>
-                    Math&Maroc promotes excellence in mathematics: olympiads, orientation, tutoring, conferences and publications.
-                    <div className="mt-3">
-                      <button
-                        onClick={() => setExpanded(true)}
-                        className="text-primary-600 text-sm font-medium"
-                      >
-                        Read more →
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      Math&Maroc is a non-profit association founded in 2016 by former olympiad participants. We started by training
-                      the national team and expanded into orientation, national competitions, CPGE tutoring, events and a mathematics journal.
-                      Our members are active across continents and come from leading universities.
-                    </p>
-                    <div className="mt-3">
-                      <button
-                        onClick={() => setExpanded(false)}
-                        className="text-gray-600 text-sm"
-                      >
-                        Show less
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900">Impact at a glance</h3>
-              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-primary-600">{format(eventsStat)}</div>
-                  <div className="text-xs text-gray-500">Events</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-primary-600">{format(participantsStat)}</div>
-                  <div className="text-xs text-gray-500">Participants<br/>(last 12 months)</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-primary-600">{format(followersStat)}</div>
-                  <div className="text-xs text-gray-500">Followers on social media</div>
-                </div>
-              </div>
+          <div className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm mt-2">
+            <h2 className="text-lg font-semibold text-gray-900">Our mission</h2>
+            <p className="mt-2 text-gray-700 italic">"Unlocking the scientific potential of Moroccan youth"</p>
+            <div className="mt-3 text-gray-700 text-sm">
+              <p>
+                Math&Maroc is a non-profit association founded in 2016 by former olympiad participants. We started by training
+                the national team and expanded into orientation, national competitions, CPGE tutoring, events and a mathematics journal.
+                Our members are active across continents and come from leading universities.
+              </p>
             </div>
           </div>
         </header>
