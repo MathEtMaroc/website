@@ -294,6 +294,24 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Team Photo Section */}
+        <section className="mb-10 flex flex-col items-center">
+          <div className="relative w-full max-w-3xl rounded-xl overflow-hidden shadow-lg border border-gray-200">
+            <Image
+              src="/images/members/team_photo.jpg"
+              alt="Math&Maroc Team"
+              width={1200}
+              height={600}
+              className="w-full h-auto object-cover"
+              priority
+            />
+            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-900/70 to-transparent p-4 text-center">
+              <span className="text-white text-lg font-semibold drop-shadow">The Math&Maroc Team</span>
+            </div>
+          </div>
+          <p className="mt-4 text-gray-700 italic text-center text-base md:text-lg">United by our passion for mathematics, science, and education.</p>
+        </section>
+        
         {/* Team tabs */}
         <section className="mb-12" id='mathletes'>
           <div className="flex items-center justify-between">
