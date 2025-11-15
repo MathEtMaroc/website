@@ -30,7 +30,7 @@ export const activities: ActivityType[] = [
   {
     title: 'Moroccan Day of Mathematics',
     description:
-      'An annual celebration bringing together students, teachers, and researchers to explore the beauty of mathematics through interactive workshops, engaging lectures, and collaborative problem-solving activities. This nationwide event aims to inspire a love for mathematics in Moroccan youth.',
+      'An annual celebration open to all ages—from middle school students to university students and the general public—bringing together learners, teachers, and researchers to explore the beauty of mathematics through interactive workshops, engaging lectures, and collaborative problem-solving activities. This nationwide event aims to inspire a love for mathematics across all levels.',
     linkText: 'Explore MDM',
     linkHref: 'https://mdm.mathmaroc.org/',
     imageSrc: '/images/activities/MDM.webp',
