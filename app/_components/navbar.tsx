@@ -716,9 +716,15 @@ export function Navbar() {
             </AnimatePresence>
           </nav>
 
-          <div className="relative">
+          <div className="relative flex gap-x-6">
             <Link href="/about" className={dropdownButtonStyles}>
               Who We Are
+            </Link>
+            <Link href="/partners" className={dropdownButtonStyles}>
+              Partners
+            </Link>
+            <Link href="/contact" className={dropdownButtonStyles}>
+              Contact
             </Link>
           </div>
         </div>
@@ -870,6 +876,12 @@ export function Navbar() {
                         </Accordion.Item>
                         <Link href="/about" className={mobileNavLinkStyles}>
                           Who We Are
+                        </Link>
+                        <Link href="/partners" className={mobileNavLinkStyles}>
+                          Partners
+                        </Link>
+                        <Link href="/contact" className={mobileNavLinkStyles}>
+                          Contact
                         </Link>
                       </div>
                     </Accordion.Root>
