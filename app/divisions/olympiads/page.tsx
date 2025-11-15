@@ -185,7 +185,7 @@ export default function Page() {
           <div className="space-y-6">
             <article className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
               <div>
-                <div className="sm:float-left block mx-auto sm:mx-0 rounded-full overflow-hidden mr-4 mb-4 sm:mb-0 w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100">
+                <div className="sm:float-left block mx-auto sm:mx-0 rounded-full overflow-hidden sm:mr-4 mb-4 sm:mb-0 w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100">
                   <Image
                     src="/images/divisions/olympiads/el_bouzaidi.webp"
                     alt="Ines EL BOUZAIDI TIALI"
@@ -207,9 +207,9 @@ export default function Page() {
 
             <article className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
               <div>
-                <div className="sm:float-left block mx-auto sm:mx-0 rounded-full overflow-hidden mr-4 mb-4 sm:mb-0 w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100">
+                  <div className="sm:float-left block mx-auto sm:mx-0 rounded-full overflow-hidden sm:mr-4 mb-4 sm:mb-0 w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100">
                    <Image
-                     src="/images/divisions/olympiads/gmouh.webp"
+                     src="/images/divisions/olympiads/gmouh.png"
                      alt="Yacine GMOUH"
                      width={96}
                      height={96}
