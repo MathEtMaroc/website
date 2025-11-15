@@ -19,6 +19,7 @@ interface StackingActivitiesSectionProps {
   title: string;
   subtitle: string;
   activities: ActivityData[];
+  children?: React.ReactNode;
 }
 
 // Custom easing functions
@@ -30,6 +31,7 @@ export default function StackingActivitiesSection({
   title,
   subtitle,
   activities,
+  children,
 }: StackingActivitiesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cardRefs, setCardRefs] = useState<Array<HTMLDivElement | null>>(
@@ -129,13 +131,14 @@ export default function StackingActivitiesSection({
       <section className="relative w-full pt-16 md:pt-24">
         <div className="flex flex-col items-center">
           <div className="mb-8 flex w-full max-w-7xl flex-col items-center">
-            <div className="flex w-full max-w-3xl flex-col items-center gap-5 px-4">
-              <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter md:text-4xl">
+            <div className="flex w-full max-w-3xl flex-col items-center px-4">
+              <h2 className="text-pretty text-center font-semibold text-3xl text-primary-900 tracking-tighter mb-3 md:text-4xl">
                 {title}
               </h2>
-              <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
+              <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 mb-0 md:text-[28px]">
                 {subtitle}
               </p>
+              {children}
             </div>
           </div>
           <div className="h-64 w-full animate-pulse bg-gray-100" />
@@ -157,6 +160,7 @@ export default function StackingActivitiesSection({
               <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
                 {subtitle}
               </p>
+              {children}
             </div>
           </div>
 
@@ -197,6 +201,7 @@ export default function StackingActivitiesSection({
               <p className="text-balance text-center font-bold font-caveat text-2xl text-gray-600 md:text-[28px]">
                 {subtitle}
               </p>
+              {children}
             </div>
           </div>
         </div>
