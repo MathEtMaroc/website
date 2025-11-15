@@ -5,6 +5,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { ScreenSize } from '~/app/_components/screen-size';
 import { ScrollToTop } from '~/app/_components/scroll-to-top';
+import FloatingSocials from '~/app/_components/floating-socials';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -90,9 +91,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${caveat.variable} ${krypton.variable} scroll-smooth font-sans antialiased`}
     >
       <body>
-        <div className="flex w-full flex-col bg-[url('/paper.jpeg')] bg-repeat">
+        <div className="flex w-full flex-col bg-[url('/paper.jpeg')] bg-fixed bg-cover">
           <main className="flex w-full flex-col bg-white/60">
             {children}
+            <FloatingSocials />
             <ScrollToTop />
             {process.env.NODE_ENV === 'development' && <ScreenSize />}
           </main>
