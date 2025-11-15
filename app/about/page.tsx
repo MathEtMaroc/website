@@ -22,11 +22,11 @@ const BOARD: Member[] = [
   },
   {
     id: 'b2',
-    name: 'Mohamed Ali Benchekroun',
+    name: 'Mohammed Ali Benchekroun',
     role: 'Secretary General',
     img: '/images/members/benchekroun.png',
     desc:
-      "Mohamed Ali holds a Master's from MIT and an engineering degree from CentraleSupélec. He works as a Data Scientist at Walmart Global Tech. He joined Math&Maroc in 2021 and coordinates MMC, the Summer Camp and Orientation alongside Mohammed Bahhad.",
+      "Mohammed Ali holds a Master's from MIT and an engineering degree from CentraleSupélec. He works as a Data Scientist at Walmart Global Tech. He joined Math&Maroc in 2021 and coordinates MMC and the Summer Camp.",
   },
   {
     id: 'b3',
@@ -136,7 +136,7 @@ const VPS: Member[] = [
     role: 'VP Conferences',
     img: '/images/members/madani.png',
     desc:
-      "",
+      "Aspiring Actuary and Finance Engineer at the National Institute of Statistics and Applied Economics (INSEA), I joined Math&Maroc in February 2025 and was responsible for organizing and moderating the 25 October 2025 conference. Currently in charge of Human Resources for Epik Leaders INSEA. Previously, served as Vice Secretary of the Engineering Students' Association and contributed to Fouad Laaroui's Friends Association.",
   },
   {
     id: 'v10',
