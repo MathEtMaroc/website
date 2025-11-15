@@ -6,28 +6,23 @@ export type Stat = {
 
 export const stats: Stat[] = [
   {
-    title: 'Members & volunteers',
-    number: 100,
+    title: 'members from top universities worldwide',
+    number: 170,
     suffix: '+',
   },
   {
     title: 'Participants in the last 12 months',
-    number: 500,
+    number: 2000,
     suffix: '+',
   },
   {
-    title: 'Divisions',
-    number: 14,
+    title: 'Divisions & Annual Events',
+    number: 10,
     suffix: '+',
   },
   {
     title: 'Followers on social media',
-    number: 50000,
-    suffix: '+',
-  },
-  {
-    title: 'Events organized',
-    number: 100,
+    number: 100_000,
     suffix: '+',
   },
 ];
