@@ -78,7 +78,7 @@ export default function Page() {
         </div>
       </section>
       {/* Stats Section */}
-      <section className="flex w-full flex-col items-center pt-16 lg:pt-24">
+      <section className="flex w-full flex-col items-center py-16">
         <div className="flex w-full max-w-7xl flex-col items-start gap-y-12 px-4 md:px-8 lg:flex-row-reverse lg:items-center lg:gap-x-16">
           <div className="flex w-full flex-col items-start gap-y-8 md:gap-y-16">
             <div className="flex flex-col gap-y-4 md:gap-y-5">
