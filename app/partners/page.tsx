@@ -36,7 +36,7 @@ export default function PartnersPage() {
               {/* Logo Container */}
               <div className="flex h-24 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-primary-50 transition-colors">
                 <Image
-                  src={partner.image}
+                  src={partner.preserveColor ? partner.image2 : partner.image}
                   alt={partner.name}
                   width={200}
                   height={100}

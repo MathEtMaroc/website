@@ -1,6 +1,7 @@
 export type PartnerWithDescription = {
   name: string;
   image: string;
+  image2?: string;
   href: string;
   description: string;
   preserveColor?: boolean;
@@ -52,6 +53,7 @@ export const partnersWithDescriptions: PartnerWithDescription[] = [
   {
     name: 'UM6P',
     image: '/images/partners/um6p.png',
+    image2: '/images/partners/um6p2.png',
     href: 'https://um6p.ma/',
     description: 'Mohammed VI Polytechnic University - a leading research and innovation institution in Morocco.',
     preserveColor: true
@@ -59,6 +61,7 @@ export const partnersWithDescriptions: PartnerWithDescription[] = [
   {
     name: 'UM6P College of Computing',
     image: '/images/partners/um6p_cc.png',
+    image2: '/images/partners/um6p_cc2.png',
     href: 'https://cc.um6p.ma/',
     description: 'Dedicated to advancing computer science and digital technology education in Africa.',
     preserveColor: true
