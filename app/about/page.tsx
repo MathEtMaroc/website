@@ -305,9 +305,6 @@ export default function AboutPage() {
               className="w-full h-auto object-cover"
               priority
             />
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-900/70 to-transparent p-4 text-center">
-              <span className="text-white text-lg font-semibold drop-shadow">The Math&Maroc Team</span>
-            </div>
           </div>
           <p className="mt-4 text-gray-700 italic text-center text-base md:text-lg">United by our passion for mathematics, science, and education.</p>
         </section>
