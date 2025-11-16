@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import type { PartnerWithDescription } from '~/app/_data/partners-descriptions';
 import ArrowRightIcon from '../../public/icons/arrow-right.svg';
+import { cn } from '~/app/utils/cn';
 
 interface PartnersCarouselProps {
   partners: PartnerWithDescription[];
@@ -81,7 +82,10 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
                 alt={partner.name}
                 width={440}
                 height={80}
-                className="h-20 w-auto object-contain invert grayscale brightness-110 contrast-300 transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px]"
+                className={cn(
+                  'h-20 w-auto object-contain transition-all duration-200 group-hover:opacity-50 group-hover:blur-[2px]',
+                  partner.preserveColor ? '' : 'brightness-0 invert',
+                )}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-transparent p-2 text-center">
                 <span className="inline-flex items-center font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
