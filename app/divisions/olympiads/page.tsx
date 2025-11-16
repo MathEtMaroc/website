@@ -53,14 +53,13 @@ export default function Page() {
         {/* Gallery + mission */}
         <section className="grid gap-6 lg:grid-cols-3 mb-8">
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Notre mission</h2>
             <h2 className="text-2xl font-semibold text-gray-900">Our Mission</h2>
             <p className="text-gray-700">
               Relying on our members, former participants in national and international olympiads, our mission is to improve Morocco's ranking in international mathematics competitions. The Olympiad division of Math&Maroc was the origin of the association's creation in 2016 by former Olympians and young engineers.
             </p>
 
             <div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900">Approche en 4 temps</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Four-Step Approach</h3>
               <ol className="mt-3 space-y-3 text-gray-700 list-decimal pl-5">
                 <li><strong>Identification</strong> — Selection is done nationally through tests organized by the Ministry (see ministerial note). We spread the olympiad culture and detect young talents through the Summer Camp and the Moroccan Day of Mathematics (MDM).</li>
                 <li><strong>Training</strong> — Around 100 high school students*, selected nationally, are part of the olympiad program, divided into three levels (N1, N2, N3). We train them alongside the Ministry's central committee, through six annual camps and online follow-up.</li>
@@ -72,21 +71,21 @@ export default function Page() {
 
             {/* <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-lg bg-primary-50 p-4 border border-primary-100">
-                <div className="text-sm text-primary-700 font-medium">Compétitions ciblées</div>
+                <div className="text-sm text-primary-700 font-medium">Targeted Competitions</div>
                 <div className="mt-2 text-gray-900 font-semibold">IMO · PAMO · RMO</div>
-                <p className="mt-1 text-sm text-gray-700">Préparation complète à l'épreuve individuelle et par équipe.</p>
+                <p className="mt-1 text-sm text-gray-700">Comprehensive preparation for individual and team events.</p>
               </div>
 
               <div className="rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
                 <div className="text-sm text-gray-500">Impact</div>
-                <div className="mt-2 text-gray-900 font-semibold">Médailles & Représentation</div>
-                <p className="mt-1 text-sm text-gray-700">Accompagnement durable pour construire les carrières mathématiques de demain.</p>
+                <div className="mt-2 text-gray-900 font-semibold">Medals & Representation</div>
+                <p className="mt-1 text-sm text-gray-700">Long-term support to build the mathematical careers of tomorrow.</p>
               </div>
             </div> */}
           </div>
 
           <aside className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Galerie</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Gallery</h3>
             <div className="grid grid-cols-1 gap-3">
               {IMAGES.map((src, i) => (
                 <div key={src} className="overflow-hidden rounded-lg relative bg-gray-100">
@@ -103,10 +102,10 @@ export default function Page() {
           </aside>
         </section>
 
-        {/* Livret de préparation */}
+        {/* Preparation booklet */}
         <section className="mb-8 grid gap-6 lg:grid-cols-6 items-start justify-items-center lg:justify-items-start">
           <div className="lg:col-span-5 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold text-gray-900">Livret de Préparation aux Olympiades Internationales de Mathématiques</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Preparation Booklet for the International Mathematical Olympiad</h2>
             <p className="mt-2 text-gray-700">Comprehensive report on preparation and results at IMO 2025.</p>
             <a
               href="http://go.runtimebug.com/MathMaroc_Livret_Olympiades"
@@ -121,7 +120,7 @@ export default function Page() {
           <div className="lg:col-span-1 rounded-lg overflow-hidden bg-gray-100 flex items-start justify-center w-40">
             <Image
               src="/images/divisions/olympiads/livret.webp"
-              alt="Livret de préparation"
+              alt="Preparation booklet"
               width={220}
               height={360}
               className="object-cover w-40 h-auto"
@@ -129,7 +128,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Olympiades Internationales de Mathématiques (IMO) */}
+        {/* International Mathematical Olympiad (IMO) */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-6">What is the International Mathematical Olympiad (IMO)?</h2>
           <div className="mb-3">
@@ -179,7 +178,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Témoignages */}
+        {/* Testimonials */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Testimonials</h2>
           <div className="space-y-6">
@@ -229,7 +228,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Références et documents */}
+        {/* References and Documents */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">References and Documents</h2>
           <ul className="mt-2 space-y-3 text-gray-700 list-disc pl-5">
