@@ -19,7 +19,7 @@ export const activities: ActivityType[] = [
     imageAlt: 'Moroccan Tournament of Young Mathematicians',
   },
   {
-    title: 'Maths&Maroc Competition (MMC)',
+    title: 'Math&Maroc Competition (MMC)',
     description:
       'An olympiad-style mathematics competition for university students from across Morocco, featuring individual problem-solving contests, lectures by world-class speakers, and interactive mathematical activities over several days.',
     linkText: 'Explore MMC',
