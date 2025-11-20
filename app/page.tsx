@@ -41,29 +41,29 @@ export default function Page() {
       </StackingActivitiesSection>
       {/* Partners Section */}
       <section className="flex w-full justify-center pt-16 lg:pt-24">
-        <div className="flex w-full max-w-7xl flex-col items-center gap-y-12 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:gap-y-16 lg:px-8">
-          <div className="flex w-full flex-col gap-y-8 lg:gap-y-6">
+        <div className="flex w-full max-w-7xl flex-col items-center gap-y-12 bg-primary-900 px-6 py-16 sm:px-8 md:px-12 lg:gap-y-16 lg:px-8 text-center">
+          <div className="flex w-full flex-col gap-y-8 lg:gap-y-6 items-center">
             <h2 className="font-semibold text-4xl text-white tracking-tighter md:text-5xl">
               Our Partners
             </h2>
-            <p className="text-pretty text-lg text-primary-100 lg:text-xl lg:max-w-2xl">
+            <p className="text-pretty text-lg text-primary-100 lg:text-xl lg:max-w-2xl mx-auto">
               We collaborate with leading academic institutions, corporations,
               and organizations that share our vision of advancing mathematical
               education in Morocco. Our partners provide essential resources,
               expertise, and opportunities that help us expand our reach and
               deepen our impact across the country.
             </p>
-            <div className="flex items-center gap-x-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-x-6">
               <Link
                 href="/contact"
-                className="flex items-center gap-x-1.5 bg-primary-500 px-5 py-3 font-semibold text-shadow text-white shadow outline-none transition-all hover:bg-primary-600 hover:text-shadow-lg hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                className="flex items-center justify-center gap-x-1.5 bg-primary-500 px-5 py-3 font-semibold text-shadow text-white shadow outline-none transition-all hover:bg-primary-600 hover:text-shadow-lg hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               >
                 <span>Become a Partner</span>
                 <HeartHandIcon className="size-5" />
               </Link>
               <Link
                 href="/partners"
-                className="flex items-center gap-x-1.5 border-2 border-primary-300 px-5 py-3 font-semibold text-primary-50 rounded-md outline-none transition-all hover:bg-primary-800 hover:border-primary-400 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
+                className="flex items-center justify-center gap-x-1.5 border-2 border-primary-300 px-5 py-3 font-semibold text-primary-50 rounded-md outline-none transition-all hover:bg-primary-800 hover:border-primary-400 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
               >
                 <span>View All Partners</span>
                 <ArrowLeftIcon className="size-5 rotate-180" />
@@ -75,6 +75,7 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       {/* Stats Section */}
       <section className="flex w-full flex-col items-center py-16">
         <div className="flex w-full max-w-7xl flex-col items-start gap-y-12 px-4 md:px-8 lg:flex-row-reverse lg:items-center lg:gap-x-16">

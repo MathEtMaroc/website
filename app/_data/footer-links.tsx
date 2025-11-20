@@ -15,12 +15,13 @@ export type FooterCategory = {
 
 export const footerLinks: FooterCategory[] = [
   {
-    name: 'Actions',
+    name: 'Programs',
     links: [
       { name: 'MTYM', href: 'https://mtym.mathmaroc.org/' },
       { name: 'MDM', href: 'https://mdm.mathmaroc.org/' },
       { name: 'MMC', href: 'https://mmc.mathmaroc.org/' },
       { name: 'Summer Camp', href: 'https://summercamp.mathmaroc.org/' },
+      { name: 'FMA', href: 'https://fma.mathmaroc.org/'}
     ],
   },
   {
