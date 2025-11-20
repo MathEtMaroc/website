@@ -44,11 +44,10 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
 
     intervalId = setInterval(scroll, 5);
 
-    // Pause on hover - attach to carousel wrapper
+    // Pause on hover
     carousel.addEventListener('mouseenter', () => {
       isAnimating = false;
     });
-
     carousel.addEventListener('mouseleave', () => {
       isAnimating = true;
     });
@@ -69,7 +68,14 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
         className="flex gap-x-8 lg:gap-x-12 xl:gap-x-16 will-change-transform"
       >
         {partners.map((partner) => (
-          <li key={partner.name} className="flex-shrink-0">
+          <li key={partner.name} className="flex-shrink-0 relative">
+            {/* Official Partner Badge - pushed higher */}
+            {partner.officialPartner && (
+              <span className="absolute -top-0.5 -right-2 z-10 bg-primary-700 text-white text-xs font-bold px-2 rounded-bl-md shadow-md">
+                Official Partner
+              </span>
+            )}
+
             <Link
               href={partner.href}
               target="_blank"

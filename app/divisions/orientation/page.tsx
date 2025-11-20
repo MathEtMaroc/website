@@ -10,9 +10,10 @@ const PLAYLISTS = {
   jobs: 'PLG573uUBOvv4zybEEZe-DY_gBkeYW5FYO',
 };
 
-function shuffle<T>(arr: T[]) {
-  return arr.slice().sort(() => Math.random() - 0.5);
-}
+
+export const metadata = {
+  title: 'Orientation Division',
+};
 
 export default function Page() {
   return (

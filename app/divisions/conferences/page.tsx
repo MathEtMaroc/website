@@ -1,3 +1,7 @@
+export const metadata = {
+  title: 'Conference Division',
+};
+
 export default function Page() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8 text-center">

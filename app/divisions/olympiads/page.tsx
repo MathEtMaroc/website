@@ -3,12 +3,17 @@ import Image from 'next/image';
 import React from 'react';
 
 import InfinityIcon from '../../../public/icons/infinity.svg';
+import { Metadata } from 'next';
 
 const IMAGES = [
   '/images/divisions/olympiads/photo1.jpg',
   '/images/divisions/olympiads/7.webp',
   '/images/divisions/olympiads/8.webp',
 ];
+
+export const metadata: Metadata = {
+  title: 'Mathematical Olympiad',
+};
 
 export default function Page() {
   return (
@@ -24,13 +29,15 @@ export default function Page() {
             </div>
 
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900">Mathematical Olympiad — Olympiads</h1>
-              <p className="mt-1 text-sm text-gray-500">Training the best Moroccan high school students for international mathematics competitions (IMO, PAMO, AMO, etc.)</p>
+              <h1 className="text-3xl font-semibold text-gray-900">Mathematical Olympiad</h1>
+              <p className="mt-1 text-sm text-gray-500">
+                Training the best Moroccan high school students for international mathematics competitions (IMO, PAMO, AMO, etc.)
+              </p>
               <p className="mt-3 text-gray-700 max-w-2xl">
                 Alongside the Ministry of National Education, we coach the top high school students selected nationally through preparation camps and online follow-up, training them to represent Morocco in major mathematics competitions: at the African level (PAMO), the Arab level (AMO), and internationally, the most prestigious of all, the IMO (International Mathematical Olympiad).
               </p>
 
-              <div className="mt-4 flex gap-3">
+              <div className="mt-4 flex gap-3 flex-wrap">
                 <a
                   href="https://drive.google.com/file/d/130OcKDl5aI3eD8fJgYduJu1O4s88ENd6/view?usp=sharing"
                   target="_blank"
@@ -39,6 +46,15 @@ export default function Page() {
                 >
                   Ministerial Note 2024/2025 for Math Olympiads
                 </a>
+
+                {/* Email Button */}
+                <a
+                  href="mailto:olympiads@mathmaroc.org"
+                  className="inline-flex items-center gap-2 rounded-md border border-primary-600 px-4 py-2 text-primary-600 text-sm font-medium hover:bg-primary-50"
+                >
+                  Contact Us: olympiads@mathmaroc.org
+                </a>
+
                 <Link
                   href="/divisions"
                   className="inline-flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -50,6 +66,7 @@ export default function Page() {
           </div>
         </header>
 
+
         {/* Gallery + mission */}
         <section className="grid gap-6 lg:grid-cols-3 mb-8">
           <div className="lg:col-span-2 space-y-4">
@@ -59,7 +76,7 @@ export default function Page() {
             </p>
 
             <div className="rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900">Four-Step Approach</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Approach</h3>
               <ol className="mt-3 space-y-3 text-gray-700 list-decimal pl-5">
                 <li><strong>Identification</strong> — Selection is done nationally through tests organized by the Ministry (see ministerial note). We spread the olympiad culture and detect young talents through the Summer Camp and the Moroccan Day of Mathematics (MDM).</li>
                 <li><strong>Training</strong> — Around 100 high school students*, selected nationally, are part of the olympiad program, divided into three levels (N1, N2, N3). We train them alongside the Ministry's central committee, through six annual camps and online follow-up.</li>

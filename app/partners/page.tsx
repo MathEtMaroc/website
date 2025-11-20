@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { partnersWithDescriptions } from '../_data/partners-descriptions';
+import { companyPartners, academicPartners } from '../_data/partners-descriptions';
 import ArrowRightIcon from '../../public/icons/arrow-right.svg';
+import PartnerCard from './partner-card';
 
 export const metadata = {
   title: 'Our Partners',
@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function PartnersPage() {
   return (
-    <main className="min-h-screen bg-gray-50 py-16 md:py-24">
+    <main className="min-h-screen bg-gray-50 py-16">
       <div className="mx-auto max-w-5xl px-6 sm:px-8">
         {/* Header */}
         <header className="mb-16 flex flex-col items-start gap-y-6">
@@ -23,44 +23,24 @@ export default function PartnersPage() {
           </div>
         </header>
 
-        {/* Partners Grid */}
-        <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {partnersWithDescriptions.map((partner) => (
-            <Link
-              key={partner.name}
-              href={partner.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex flex-col gap-y-4 rounded-xl bg-white p-6 shadow-sm border border-gray-100 transition-all hover:shadow-lg hover:border-primary-200"
-            >
-              {/* Logo Container */}
-              <div className="flex h-24 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-primary-50 transition-colors">
-                <Image
-                  src={partner.preserveColor ? partner.image2! : partner.image}
-                  alt={partner.name}
-                  width={200}
-                  height={100}
-                  className="h-full w-auto object-contain p-4"
-                />
-              </div>
+        {/* Companies */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-8">Companies</h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {companyPartners.map((partner) => (
+              <PartnerCard key={partner.name} partner={partner} />
+            ))}
+          </div>
+        </section>
 
-              {/* Content */}
-              <div className="flex flex-col gap-y-2 flex-1">
-                <h3 className="font-semibold text-lg text-gray-900 group-hover:text-primary-700 transition-colors line-clamp-2">
-                  {partner.name}
-                </h3>
-                <p className="text-sm text-gray-600 line-clamp-3 flex-1">
-                  {partner.description}
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div className="flex items-center gap-x-2 text-sm font-medium text-primary-700 group-hover:text-primary-800 transition-colors pt-2 border-t border-gray-100">
-                <span>Visit Website</span>
-                <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-              </div>
-            </Link>
-          ))}
+        {/* Academic Institutions */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-8">Academic Institutions</h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {academicPartners.map((partner) => (
+              <PartnerCard key={partner.name} partner={partner} />
+            ))}
+          </div>
         </section>
 
         {/* CTA Section */}
@@ -69,7 +49,8 @@ export default function PartnersPage() {
             Interested in becoming a partner?
           </h2>
           <p className="text-primary-800 mb-6 max-w-2xl">
-            Join us in our mission to unlock the scientific potential of Moroccan youth. We welcome partners who share our vision of advancing mathematics and science education.
+            Join us in our mission to unlock the scientific potential of Moroccan youth. We welcome partners who
+            share our vision of advancing mathematics and science education.
           </p>
           <Link
             href="/contact"

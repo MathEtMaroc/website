@@ -1,7 +1,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { stats as ABOUT_STATS } from '../_data/stats';
+import { stats } from '../_data/stats';
 
 type Member = {
   id: string;
@@ -202,15 +202,6 @@ export default function AboutPage() {
 
   const members = useMemo(() => (tab === 'board' ? BOARD : VPS), [tab]);
 
-  // use centralized stats data
-  const membersStat = ABOUT_STATS.find((s) => /members/i.test(s.title)) ?? { number: BOARD.length + VPS.length, suffix: '+' };
-  const eventsStat = ABOUT_STATS.find((s) => /events/i.test(s.title)) ?? { number: 120, suffix: '+' };
-  const divisionsStat = ABOUT_STATS.find((s) => /divisions/i.test(s.title)) ?? { number: 14, suffix: '+' };
-  const participantsStat = ABOUT_STATS.find((s) => /participant/i.test(s.title)) ?? { number: 0, suffix: '' };
-  const followersStat = ABOUT_STATS.find((s) => /followers/i.test(s.title)) ?? { number: 0, suffix: '' };
-  const format = (s: { number: number; suffix?: string }) => `${s.number}${s.suffix ?? ''}`;
-  const continents = 4;
-
   return (
     <main className="p-8 bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-5xl">
@@ -234,7 +225,7 @@ export default function AboutPage() {
               </div>
               <div className="rounded-md bg-white px-3 py-2 text-center border border-gray-100 shadow-sm">
                 <div className="text-sm text-gray-500">Active members</div>
-                <div className="text-lg font-semibold text-gray-900">{format(membersStat)}</div>
+                <div className="text-lg font-semibold text-gray-900">{stats[0].number}+</div>
               </div>
             </div>
           </div>

@@ -1,19 +1,17 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import AnimatedStat from '~/app/_components/animated-stat';
 import StackingActivitiesSection from '~/app/_components/stacking-activities-section';
 import PartnersCarousel from '~/app/_components/partners-carousel';
+import type { PartnerWithDescription } from '~/app/_data/partners-descriptions';
+import { companyPartners, academicPartners } from '~/app/_data/partners-descriptions';
 import { activities } from '~/app/_data/activities';
-import { partnersWithDescriptions } from '~/app/_data/partners-descriptions';
 import { stats } from '~/app/_data/stats';
 import HeartHandIcon from '../public/icons/heart-hand.svg';
 import ArrowLeftIcon from '../public/icons/arrow-left.svg';
 import BounceCardsSection from './_components/bounce-cards-section';
 
-export const metadata: Metadata = {
-  title: 'Math & Maroc | Home',
-};
+const allPartners: PartnerWithDescription[] = [...companyPartners, ...academicPartners];
 
 export default function Page() {
   return (
@@ -73,7 +71,7 @@ export default function Page() {
             </div>
           </div>
           <div className="w-full">
-            <PartnersCarousel partners={partnersWithDescriptions} />
+            <PartnersCarousel partners={allPartners} />
           </div>
         </div>
       </section>
