@@ -3,6 +3,8 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   // Enable strict mode to catch more issues
   reactStrictMode: true,
+  reactProductionProfiling: true,
+  productionBrowserSourceMaps: true,
   
   experimental: {
     viewTransition: true,
@@ -20,12 +22,9 @@ const nextConfig: NextConfig = {
     },
   },
   
-  // Disable minification for better stack traces (REMOVE AFTER DEBUGGING)
-  swcMinify: false,
-  
   // Show full error details in browser (REMOVE AFTER DEBUGGING)
   devIndicators: {
-    buildActivityPosition: 'bottom-right',
+    position: 'bottom-right',
   },
   
   // Optional: Add custom webpack config for source maps
